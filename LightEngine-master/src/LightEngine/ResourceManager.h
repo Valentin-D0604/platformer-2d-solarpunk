@@ -1,0 +1,31 @@
+
+#pragma region External Dependencies
+
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <string>
+#include <map>
+
+#pragma endregion
+
+class ResourceManager {
+public:
+	void loadTexture(std::string _name);
+	void unloadTexture(std::string _name);
+	sf::Texture* getTexture(std::string _name);
+
+	void loadFont(std::string _name);
+	void unloadFont(std::string _name);
+	sf::Font* getFont(std::string _name);
+
+private:
+	ResourceManager();
+
+	std::map<std::string, sf::Texture> m_textures;
+	std::map<std::string, sf::Font> m_fonts;
+
+	void addTexture(std::string _name, std::string _path);
+	void addFont(std::string _name, std::string _path);
+
+	friend class Application;
+};
