@@ -61,6 +61,7 @@ public:
 
 	friend Debug;
 	friend Scene;
+	friend class Managers;
 };
 
 #include "GameManager.inl"

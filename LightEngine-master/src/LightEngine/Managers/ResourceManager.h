@@ -1,14 +1,13 @@
-
-#pragma region External Dependencies
+#pragma once
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <string>
 #include <map>
 
-#pragma endregion
+#include "../Interfaces/IResourceProvider.h"
 
-class ResourceManager {
+class ResourceManager : IResourceProvider{
 public:
 	void loadTexture(std::string _name);
 	void unloadTexture(std::string _name);
@@ -27,5 +26,5 @@ private:
 	void addTexture(std::string _name, std::string _path);
 	void addFont(std::string _name, std::string _path);
 
-	friend class Application;
+	friend class Managers;
 };

@@ -1,7 +1,7 @@
 	#pragma once
 
 #include "Scene.h"
-#include "GameManager.h"
+#include "Managers/GameManager.h"
 #include "Entity.h"
 
 template<typename T>

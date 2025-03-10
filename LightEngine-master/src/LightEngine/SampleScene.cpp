@@ -3,6 +3,7 @@
 #include "DummyEntity.h"
 
 #include "Debug.h"
+#include "Managers.h"
 
 void SampleScene::OnInitialize()
 {
@@ -15,6 +16,8 @@ void SampleScene::OnInitialize()
 	pEntity2->SetRigidBody(true);
 
 	pEntitySelected = nullptr;
+
+	GET_MANAGER(ResourceManager)->loadTexture("test");
 }
 
 void SampleScene::OnEvent(const sf::Event& event)
