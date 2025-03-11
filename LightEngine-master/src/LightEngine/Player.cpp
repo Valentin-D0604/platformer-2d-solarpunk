@@ -26,7 +26,7 @@ void Player::OnInitialize() {
 	m_collider = new CircleCollider(pos,GetRadius());
 }
 
-void Player::OnCollision(Entity* other)
+void Player::onCollision(Entity* other)
 {
 	Collider* coll = dynamic_cast<Collider*>(other);
 	if (m_collider->isColliding(coll)) {

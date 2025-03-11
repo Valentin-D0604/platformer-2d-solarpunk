@@ -7,7 +7,7 @@ class Player : public PhysicsEntity
 	float OldY = 0;
 public:
 	void OnInitialize() override;
-	void OnCollision(Entity* other) override;
+	void onCollision(Entity* other) override;
 	void OnUpdate() override;
 
 	void Parry();

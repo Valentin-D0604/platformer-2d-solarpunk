@@ -9,7 +9,7 @@ void DummyEntity::OnInitialize() {
 	m_collider = new RectangleCollider(pos, size);
 }
 
-void DummyEntity::OnCollision(Entity* other)
+void DummyEntity::onCollision(Entity* other)
 {
 	Collider* coll = dynamic_cast<Collider*>(other);
 	if (m_collider->isColliding(coll)) {
