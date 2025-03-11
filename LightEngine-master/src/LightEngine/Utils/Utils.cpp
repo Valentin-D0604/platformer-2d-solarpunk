@@ -28,6 +28,14 @@ namespace Utils
 		return std::sqrt(x * x + y * y);
 	}
 
+	float GetDistance(sf::Vector2f _v1, sf::Vector2f _v2)
+	{
+		int x = _v2.x - _v1.x;
+		int y = _v2.y - _v1.y;
+
+		return std::sqrt(x * x + y * y);
+	}
+
 	float GetAngleDegree(const sf::Vector2f& v1, const sf::Vector2f& v2)
 	{
 		float dot = v1.x * v2.x + v1.y * v2.y;

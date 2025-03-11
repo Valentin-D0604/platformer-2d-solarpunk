@@ -43,6 +43,8 @@ void PhysicsEntity::Update()
 		}
 	}
 
+	m_collider->setPosition(GetPosition());
+
 	OnUpdate();
 }
 
@@ -60,4 +62,9 @@ void PhysicsEntity::setGravityDirection(sf::Vector2f _gravityDirection)
 {
 	Utils::Normalize(_gravityDirection);
 	m_gravityDirection = _gravityDirection;
+}
+
+bool PhysicsEntity::isColliding(PhysicsEntity* _other)
+{
+	return m_collider->isColliding(_other->m_collider);
 }
