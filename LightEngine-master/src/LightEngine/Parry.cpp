@@ -18,12 +18,12 @@ void Parry::OnInitialize() {
 }
 
 void Parry::OnUpdate() {
-	ParryTime += GetDeltaTime();
-	std::cout << ParryTime;
-	if (ParryTime >= 0.5) {
-		Destroy();
-		delete m_collider;
-		m_collider = nullptr;
+	m_parryTime += GetDeltaTime();
+	std::cout << m_parryTime;
+	if (m_parryTime >= 0.5) {
+		//Destroy();
+		//delete m_collider;
+		//m_collider = nullptr;
 		return;
 	}
 }
