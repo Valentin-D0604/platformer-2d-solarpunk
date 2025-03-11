@@ -43,6 +43,8 @@ void PhysicsEntity::Update()
 		}
 	}
 
+	m_collider->setPosition(GetPosition());
+
 	OnUpdate();
 }
 
