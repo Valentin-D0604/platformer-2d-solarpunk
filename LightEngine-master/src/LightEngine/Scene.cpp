@@ -12,6 +12,11 @@ int Scene::GetWindowHeight() const
 	return mpGameManager->mWindowHeight;
 }
 
+void Scene::setCameraCenter(sf::Vector2f _position)
+{
+	m_view->setCenter(_position);
+}
+
 float Scene::GetDeltaTime() const
 {
 	return mpGameManager->mDeltaTime;
