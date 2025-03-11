@@ -148,6 +148,7 @@ void Player::onCollision(Entity* other)
 
 void Player::parry() {
 	//Parry* pro = new Parry(GetPosition(),{50,50});
+	m_parryCooldown = 2.f;
 	Parry* protec = CreateEntity<Parry>(50, sf::Color::Green);
 	protec->SetPosition(GetPosition().x-175, GetPosition().y);
 	protec->setMass(20);
@@ -167,6 +168,7 @@ const char* Player::GetStateName(State state) const
 }
 
 void Player::OnUpdate() {
+	if (!m_isAlive) return;
 	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
@@ -174,9 +176,13 @@ void Player::OnUpdate() {
 	float joystickY = JOYSTICK_Y;
 	bool X = BOUTON_X;
 	bool R2 = BOUTON_R2;
-	
+	m_parryCooldown -= dt;
 	if (pos.y >= m_OldY && m_jumping) {
 		m_jumping = false;
+	}
+	if (m_life <= 0) {
+		m_life = 0;
+		m_isAlive = false;
 	}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
 			m_velocity.x += m_acceleration * dt;
@@ -191,13 +197,14 @@ void Player::OnUpdate() {
 			setGravityForce(-200);
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)|| R2) {
-			parry();
+			if (m_parryCooldown <= 0) parry();
 		}
-
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+			if (m_parryCooldown <= 0) m_life--;
+		}
 		if (m_velocity.x > MAX_VELOCITY) {
 			m_velocity.x = MAX_VELOCITY;
 		}
-
 		float currentFriction;
 		if (m_jumping) {
 			currentFriction = m_airResistance;
@@ -219,6 +226,8 @@ void Player::OnUpdate() {
 
 		mpStateMachine->Update();
 		const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
+		std::string life = std::to_string(m_life);
 		std::cout << stateName << std::endl;
 		Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 0.5f, 0.5f, sf::Color::Red);
+		Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
 }

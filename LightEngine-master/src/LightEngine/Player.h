@@ -6,12 +6,24 @@
 
 class Player : public PhysicsEntity
 {
+	//--------moving---------
 	bool m_jumping;
 	float m_OldY = 0;
-	sf::Vector2f m_velocity; 
+	sf::Vector2f m_velocity;
 	float m_acceleration = 600.0f;
-	float m_friction = 400.0f; 
-	float m_airResistance = 100.0f; 
+	float m_friction = 400.0f;
+	float m_airResistance = 100.0f;
+
+	//---------stats---------
+	bool m_isAlive = true;
+	int m_life = 3;
+	int m_ammo = 1;
+
+	//---------time--------
+	float m_parryCooldown = 2.f;
+	float m_shootCooldown = 2.f;
+
+
 	StateMachine<Player>* mpStateMachine;
 
 	enum State

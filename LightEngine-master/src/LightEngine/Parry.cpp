@@ -14,12 +14,12 @@ void Parry::OnInitialize() {
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
 	m_collider = new RectangleCollider(pos, size);
+	std::cout << "created";
 	SetTag(1);
 }
 
 void Parry::OnUpdate() {
 	m_parryTime += GetDeltaTime();
-	std::cout << m_parryTime;
 	if (m_parryTime >= 0.5) {
 		//Destroy();
 		//delete m_collider;

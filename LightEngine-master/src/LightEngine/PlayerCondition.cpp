@@ -32,5 +32,6 @@ bool PlayerCondition_IsParrying::OnTest(Player* owner)
 
 bool PlayerCondition_IsIdle::OnTest(Player* owner)
 {
-	return false;
+	if(owner->m_jumping||owner->m_velocity.x != 0) return false;
+	return true;
 }
