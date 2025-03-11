@@ -144,6 +144,8 @@ void GameManager::Update()
 	}
 
 	mEntitiesToAdd.clear();
+
+	mpWindow->setView(*(mpScene->m_view));
 }
 
 void GameManager::Draw()

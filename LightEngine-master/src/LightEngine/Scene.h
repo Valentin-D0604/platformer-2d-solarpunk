@@ -37,6 +37,8 @@ public:
 	void setCameraCenter(sf::Vector2f _position);
 	sf::Vector2f getCameraCenter() { return m_view->getCenter(); };
 
+	void setCameraZoom(float _zoom);
+
 	friend GameManager;
 };
 

@@ -4,6 +4,7 @@
 
 #include "Debug.h"
 #include "Managers.h"
+#include <iostream>
 
 void SampleScene::OnInitialize()
 {
@@ -37,8 +38,6 @@ void SampleScene::OnEvent(const sf::Event& event)
 		{
 			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
 		}
-
-		m_view->setCenter(m_view->getCenter() + sf::Vector2f(5, 0));
 	}
 }
 
