@@ -1,6 +1,6 @@
 #include "Debug.h"
 
-#include "GameManager.h"
+#include "Managers/GameManager.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 

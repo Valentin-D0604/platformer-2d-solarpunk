@@ -1,7 +1,7 @@
 #include "GameManager.h"
 
-#include "Entity.h"
-#include "Debug.h"
+#include "../Entity.h"
+#include "../Debug.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

@@ -1,7 +1,8 @@
 #include "Entity.h"
 
-#include "GameManager.h"
-#include "Utils.h"
+#include "Managers/GameManager.h"
+#include "Managers.h"
+#include "Utils/Utils.h"
 #include "Debug.h"
 
 #include <SFML/Graphics/Color.hpp>
@@ -177,10 +178,10 @@ void Entity::Update()
 
 Scene* Entity::GetScene() const
 {
-	return GameManager::Get()->GetScene();
+	return GET_MANAGER(GameManager)->GetScene();
 }
 
 float Entity::GetDeltaTime() const
 {
-	return GameManager::Get()->GetDeltaTime();
+	return GET_MANAGER(GameManager)->GetDeltaTime();
 }
