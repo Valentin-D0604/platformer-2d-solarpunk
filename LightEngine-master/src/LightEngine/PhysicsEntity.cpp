@@ -46,6 +46,8 @@ void PhysicsEntity::Update()
 	m_collider->setPosition(GetPosition());
 
 	OnUpdate();
+
+	m_collider->update();
 }
 
 void PhysicsEntity::setMass(float _mass)

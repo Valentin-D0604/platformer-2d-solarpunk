@@ -47,5 +47,6 @@ public:
 	virtual void setPosition(sf::Vector2f _pos, float _ratioX = 0.5f, float _ratioY = 0.5f) = 0;
 	void setOffset(sf::Vector2f _pos) { m_offset = _pos; };
 	virtual sf::Vector2f getPosition(float _ratioX = 0.5f, float _ratioY = 0.5f) const = 0;
+	virtual void update() = 0;
 };
 

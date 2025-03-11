@@ -105,5 +105,5 @@ void RectangleCollider::update()
     if (!m_gizmo)
         return;
 
-    Debug::DrawRectangle(m_vertices[0].x, m_vertices[0].y, m_vertices[3].x - m_vertices[0].x, m_vertices[3].y - m_vertices[0].y, sf::Color::Red);
+    Debug::DrawRectangle(m_vertices[0].x, m_vertices[0].y, m_vertices[2].x - m_vertices[0].x, m_vertices[2].y - m_vertices[0].y, sf::Color::Red);
 }
