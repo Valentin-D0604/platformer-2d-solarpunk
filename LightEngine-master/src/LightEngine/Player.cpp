@@ -27,11 +27,11 @@ void Player::OnCollision(Entity* other)
 void Player::OnUpdate() {
 	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	if (jumping) {
-		if (pos.x < OldX) {
-			jumping = false;
-		}
-	}
+	    if (jumping) {
+		    if (pos.y >= OldY) {
+				jumping = false;
+		    }
+	    }
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 			GoToPosition(pos.x+10, pos.y, 200);
 		}
@@ -39,6 +39,9 @@ void Player::OnUpdate() {
 			GoToPosition(pos.x - 10, pos.y, 200);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+			if (jumping) return;
+			OldY = pos.y;
+			jumping = true;
 			setGravityForce(-200);
 		}
 		if (sf::Joystick::isConnected(0)) {
@@ -53,7 +56,7 @@ void Player::OnUpdate() {
 			}
 			if (X) {
 				if (jumping) return;
-				OldX = pos.x;
+				OldY = pos.y;
 				jumping = true;
 				setGravityForce(-200);
 			}

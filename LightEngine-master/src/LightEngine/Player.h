@@ -4,7 +4,7 @@
 class Player : public PhysicsEntity
 {
 	bool jumping;
-	float OldX = 0;
+	float OldY = 0;
 public:
 	void OnCollision(Entity* other) override;
 	void OnUpdate() override;
