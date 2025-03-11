@@ -7,6 +7,8 @@ protected:
 	float m_rotation;
 
 public:
+	RectangleCollider(sf::Vector2f _position, sf::Vector2f _size, float _rotation = 0);
+
 	virtual sf::Vector2f* const getVertices() const;
 
 	virtual bool isColliding(Collider* _other);

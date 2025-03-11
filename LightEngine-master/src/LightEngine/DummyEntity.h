@@ -1,9 +1,10 @@
 #pragma once
-#include "Entity.h"
+#include "PhysicsEntity.h"
 
-class DummyEntity : public Entity
+class DummyEntity : public PhysicsEntity
 {
 public:
+	void OnInitialize() override;
 	void OnCollision(Entity* other) override;
 };
 

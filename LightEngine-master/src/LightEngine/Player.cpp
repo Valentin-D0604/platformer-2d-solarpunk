@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "CircleCollider.h"
 
 #include <iostream>
 // boutons des manettes
@@ -19,35 +20,52 @@
 #define BOUTON_PS sf::Joystick::isButtonPressed(0, 12);
 #define BOUTON_PAVE sf::Joystick::isButtonPressed(0, 13);
 // stop
+
+void Player::OnInitialize() {
+	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
+	m_collider = new CircleCollider(pos,GetRadius());
+}
+
 void Player::OnCollision(Entity* other)
 {
-	std::cout << "Player::OnCollision" << std::endl;
+	Collider* coll = dynamic_cast<Collider*>(other);
+	if (m_collider->isColliding(coll)) {
+		std::cout << "player colide";
+	}
 }
 
 void Player::OnUpdate() {
 	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
+	float joystickX = JOYSTICK_X;
+	float joystickY = JOYSTICK_Y;
+	bool X = BOUTON_X;
+	bool R2 = BOUTON_R2;
 	    if (jumping) {
 		    if (pos.y >= OldY) {
 				jumping = false;
 		    }
 	    }
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
 			GoToPosition(pos.x+10, pos.y, 200);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
 			GoToPosition(pos.x - 10, pos.y, 200);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) {
 			if (jumping) return;
 			OldY = pos.y;
 			jumping = true;
 			setGravityForce(-200);
 		}
-		if (sf::Joystick::isConnected(0)) {
-			float joystickX = JOYSTICK_X;
-			float joystickY = JOYSTICK_Y;
-			bool X = BOUTON_X;
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)|| R2) {
+			std::cout << "d, qpj, def";
+		}
+}
+
+
+/*----------------------------------------poubelles-------------------------------------------*/
+	/*if (sf::Joystick::isConnected(0)) {
 			if (joystickX > PositiveJoystickSensibility) {
 				GoToPosition(pos.x + 10, pos.y, 200);
 			}
@@ -60,6 +78,5 @@ void Player::OnUpdate() {
 				jumping = true;
 				setGravityForce(-200);
 			}
-		}
-
-}
+		}*/
+//------------------------------------------------------------------------------------------------

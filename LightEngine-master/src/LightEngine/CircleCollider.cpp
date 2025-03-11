@@ -3,11 +3,13 @@
 
 CircleCollider::CircleCollider(sf::Vector2f _position, float _radius)
 {
+	m_radius = _radius;
+	setPosition(_position);
+	m_shapeTag = ShapeTag::Circle;
 }
-
 void CircleCollider::setPosition(sf::Vector2f _position, float _ratioX, float _ratioY)
 {
-	float size = mRadius * 2;
+	float size = m_radius * 2;
 
 	_position.x -= size * _ratioX;
 	_position.y -= size * _ratioY;
@@ -22,7 +24,7 @@ void CircleCollider::move(sf::Vector2f _direction)
 
 sf::Vector2f CircleCollider::getPosition(float _ratioX, float _ratioY) const
 {
-	float size = mRadius * 2;
+	float size = m_radius * 2;
 	sf::Vector2f position = m_position;
 
 	position.x += size * _ratioX;
@@ -39,7 +41,7 @@ bool CircleCollider::isColliding(Collider* _other)
 		case ShapeTag::Circle:
 		{
 			CircleCollider* otherCast = dynamic_cast<CircleCollider*>(_other);
-			sf::Vector2f otherPos = otherCast->getGlobalPosition();
+			sf::Vector2f otherPos = otherCast->getPosition();
 			float otherRadius = otherCast->getRadius();
 
 			colliding = circleCollision(getPosition(), getRadius(), otherPos, otherRadius);

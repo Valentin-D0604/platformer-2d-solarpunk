@@ -3,7 +3,7 @@
 class CircleCollider : public Collider
 {
 protected:
-	float mRadius;
+	float m_radius;
 	sf::Vector2f m_position;
 
 public:
@@ -15,7 +15,7 @@ public:
 
 	virtual bool isColliding(Collider* _other);
 
-	virtual float getRadius() const { return mRadius; };
-	void setRadius(float _radius) { mRadius = _radius; };
+	virtual float getRadius() const { return m_radius; };
+	void setRadius(float _radius) { m_radius = _radius; };
 };
 
