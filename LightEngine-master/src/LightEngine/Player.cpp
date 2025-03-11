@@ -33,6 +33,9 @@ void Player::OnCollision(Entity* other)
 		std::cout << "player colide";
 	}
 }
+void Player::Parry() {
+
+}
 
 void Player::OnUpdate() {
 	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
@@ -59,7 +62,7 @@ void Player::OnUpdate() {
 			setGravityForce(-200);
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)|| R2) {
-			std::cout << "d, qpj, def";
+			Parry();
 		}
 }
 

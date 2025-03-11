@@ -14,12 +14,12 @@ void TestScene::OnInitialize()
 	pEntity1->setMass(20);
 	pEntity1->setGravityDirection(sf::Vector2f(0, 1));
 	
-	/*pEntity2 = CreateEntity<DummyEntity>(50, sf::Color::Green);
+	pEntity2 = CreateEntity<DummyEntity>(50, sf::Color::Green);
 	pEntity2->SetPosition(500, 500);
 	pEntity2->SetRigidBody(true);
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
-	pEntitySelected = nullptr;*/
+	pEntitySelected = nullptr;
 }
 
 void TestScene::OnEvent(const sf::Event& event)
