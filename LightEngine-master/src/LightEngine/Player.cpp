@@ -31,8 +31,13 @@ void Player::onCollision(Entity* other)
 {
 		std::cout << "player colide";
 }
-void Player::Parry() {
 
+void Player::parry() {
+	//Parry* pro = new Parry(GetPosition(),{50,50});
+	Parry* protec = CreateEntity<Parry>(50, sf::Color::Green);
+	protec->SetPosition(GetPosition().x-175, GetPosition().y);
+	protec->setMass(20);
+	protec->setGravityDirection(sf::Vector2f(0, 1));
 }
 
 void Player::OnUpdate() {
@@ -61,7 +66,7 @@ void Player::OnUpdate() {
 			setGravityForce(-200);
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)|| R2) {
-			Parry();
+			parry();
 		}
 
 		if (velocity.x > MAX_VELOCITY) {
