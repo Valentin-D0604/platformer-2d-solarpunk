@@ -1,6 +1,7 @@
 #include "GameManager.h"
 
 #include "../Entity.h"
+#include "../PhysicsEntity.h"
 #include "../Debug.h"
 
 #include <SFML/Graphics.hpp>
@@ -111,22 +112,19 @@ void GameManager::Update()
     }
 
     //Collision
-    for (auto it1 = mEntities.begin(); it1 != mEntities.end(); ++it1)
+    for (auto it1 = mPhysicsEntities.begin(); it1 != mPhysicsEntities.end(); ++it1)
     {
         auto it2 = it1;
         ++it2;
-        for (; it2 != mEntities.end(); ++it2)
+        for (; it2 != mPhysicsEntities.end(); ++it2)
         {
-            Entity* entity = *it1;
-            Entity* otherEntity = *it2;
+            PhysicsEntity* entity = *it1;
+			PhysicsEntity* otherEntity = *it2;
 
-            if (entity->IsColliding(otherEntity))
+            if (entity->isColliding(otherEntity))
             {
-				if (entity->IsRigidBody() && otherEntity->IsRigidBody())
-					entity->Repulse(otherEntity);
-
-                entity->OnCollision(otherEntity);
-                otherEntity->OnCollision(entity);
+                entity->onCollision(otherEntity);
+                otherEntity->onCollision(entity);
             }
         }
     }
@@ -141,6 +139,11 @@ void GameManager::Update()
 	for (auto it = mEntitiesToAdd.begin(); it != mEntitiesToAdd.end(); ++it)
 	{
 		mEntities.push_back(*it);
+		PhysicsEntity* physEntity = dynamic_cast<PhysicsEntity*>(*it);
+		if (physEntity != nullptr)
+		{
+			mPhysicsEntities.push_back(physEntity);
+		}
 	}
 
 	mEntitiesToAdd.clear();

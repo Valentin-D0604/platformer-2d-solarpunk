@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void DummyEntity::OnCollision(Entity* other)
+void DummyEntity::onCollision(Entity* other)
 {
-	std::cout << "DummyEntity::OnCollision" << std::endl;
+	std::cout << "DummyEntity::onCollision" << std::endl;
 }

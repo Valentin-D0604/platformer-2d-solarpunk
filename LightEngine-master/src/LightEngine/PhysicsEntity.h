@@ -14,6 +14,9 @@ public:
 	void setGravityForce(float _gravityForce);
 	void setGravityDirection(sf::Vector2f _gravityDirection);
 
+	bool isColliding(PhysicsEntity* _other);
+	virtual void onCollision(Entity* collidedWith) {};
+
 protected:
 	float m_gravityForce;
 	sf::Vector2f m_velocity;
