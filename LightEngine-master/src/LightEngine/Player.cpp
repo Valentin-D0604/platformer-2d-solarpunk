@@ -28,10 +28,7 @@ void Player::OnInitialize() {
 
 void Player::onCollision(Entity* other)
 {
-	Collider* coll = dynamic_cast<Collider*>(other);
-	if (m_collider->isColliding(coll)) {
 		std::cout << "player colide";
-	}
 }
 void Player::Parry() {
 

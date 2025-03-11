@@ -11,9 +11,6 @@ void DummyEntity::OnInitialize() {
 
 void DummyEntity::onCollision(Entity* other)
 {
-	Collider* coll = dynamic_cast<Collider*>(other);
-	if (m_collider->isColliding(coll)) {
 		std::cout << "dummy colide";
-	}
 
 }
