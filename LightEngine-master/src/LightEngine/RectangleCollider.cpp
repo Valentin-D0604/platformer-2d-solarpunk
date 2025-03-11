@@ -1,5 +1,6 @@
 #include "RectangleCollider.h"
 #include "CircleCollider.h"
+#include "Debug.h"
 
 sf::Vector2f* const RectangleCollider::getVertices() const
 {
@@ -73,4 +74,12 @@ void RectangleCollider::move(sf::Vector2f _delta)
     {
         m_vertices[i] += _delta;
     }
+}
+
+void RectangleCollider::update()
+{
+    if (!m_gizmo)
+        return;
+
+    Debug::DrawRectangle(m_vertices[0].x, m_vertices[0].y, m_vertices[3].x - m_vertices[0].x, m_vertices[3].y - m_vertices[0].y, sf::Color::Red);
 }
