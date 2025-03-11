@@ -8,7 +8,7 @@
 
 void TestScene::OnInitialize()
 {
-	pEntity1 = CreateEntity<Player>(100, sf::Color::Red);
+	pEntity1 = CreateEntity<Player>(100, sf::Color::Magenta);
 	pEntity1->SetPosition(300, 300);
 	pEntity1->setMass(20);
 	pEntity1->setGravityDirection(sf::Vector2f(0, 1));
