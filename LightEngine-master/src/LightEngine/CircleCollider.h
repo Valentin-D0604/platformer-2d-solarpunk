@@ -17,5 +17,6 @@ public:
 
 	virtual float getRadius() const { return m_radius; };
 	void setRadius(float _radius) { m_radius = _radius; };
+	void update();
 };
 

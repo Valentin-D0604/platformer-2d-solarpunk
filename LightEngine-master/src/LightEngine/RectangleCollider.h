@@ -20,5 +20,6 @@ public:
 
 	virtual void setPosition(sf::Vector2f _pos, float _ratioX = 0.5f, float _ratioY = 0.5f);
 	virtual void move(sf::Vector2f _delta);
+	virtual void update();
 };
 

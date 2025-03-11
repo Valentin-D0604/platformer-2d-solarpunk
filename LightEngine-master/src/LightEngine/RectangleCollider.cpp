@@ -1,5 +1,30 @@
 #include "RectangleCollider.h"
 #include "CircleCollider.h"
+#include "Debug.h"
+
+RectangleCollider::RectangleCollider(sf::Vector2f _position, sf::Vector2f _size, float _rotation) : m_rotation(_rotation)
+{
+    m_vertices = new sf::Vector2f[4];
+    m_shapeTag = ShapeTag::Rectangle;
+
+    // Définition des sommets par rapport au centre
+    sf::Vector2f halfSize = _size / 2.f;
+    sf::Vector2f localVertices[4] = {
+        {-halfSize.x, -halfSize.y},
+        {halfSize.x, -halfSize.y},
+        {halfSize.x, halfSize.y},
+        {-halfSize.x, halfSize.y}
+    };
+
+    // Appliquer la rotation et positionner les sommets
+    float angleRad = _rotation * (3.14159265f / 180.f);
+    for (int i = 0; i < 4; ++i)
+    {
+        float x = localVertices[i].x * cos(angleRad) - localVertices[i].y * sin(angleRad);
+        float y = localVertices[i].x * sin(angleRad) + localVertices[i].y * cos(angleRad);
+        m_vertices[i] = _position + sf::Vector2f(x, y);
+    }
+}
 
   RectangleCollider::RectangleCollider(sf::Vector2f _position, sf::Vector2f _size, float _rotation)
         : m_rotation(_rotation)
@@ -98,4 +123,12 @@ void RectangleCollider::move(sf::Vector2f _delta)
     {
         m_vertices[i] += _delta;
     }
+}
+
+void RectangleCollider::update()
+{
+    if (!m_gizmo)
+        return;
+
+    Debug::DrawRectangle(m_vertices[0].x, m_vertices[0].y, m_vertices[3].x - m_vertices[0].x, m_vertices[3].y - m_vertices[0].y, sf::Color::Red);
 }

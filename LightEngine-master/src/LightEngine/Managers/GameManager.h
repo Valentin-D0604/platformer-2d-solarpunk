@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Text.hpp>
 
 class Entity;
+class PhysicsEntity;
 class Scene;
 class Debug;
 
@@ -18,6 +19,7 @@ namespace sf
 class GameManager
 {
 	std::list<Entity*> mEntities;
+	std::list<PhysicsEntity*> mPhysicsEntities;
 	std::list<Entity*> mEntitiesToDestroy;
 	std::list<Entity*> mEntitiesToAdd;
 

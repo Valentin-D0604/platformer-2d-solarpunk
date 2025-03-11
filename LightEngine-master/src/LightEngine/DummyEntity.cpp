@@ -15,4 +15,5 @@ void DummyEntity::OnCollision(Entity* other)
 	if (m_collider->isColliding(coll)) {
 		std::cout << "dummy colide";
 	}
+
 }

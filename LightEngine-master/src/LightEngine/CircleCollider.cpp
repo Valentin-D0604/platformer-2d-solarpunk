@@ -1,5 +1,6 @@
 #include "CircleCollider.h"
 #include "RectangleCollider.h"
+#include "Debug.h"
 
 CircleCollider::CircleCollider(sf::Vector2f _position, float _radius)
 {
@@ -56,4 +57,14 @@ bool CircleCollider::isColliding(Collider* _other)
 	}
 
 	return colliding;
+}
+
+void CircleCollider::update()
+{
+	if (!m_gizmo)
+		return;
+
+	sf::Vector2f position = getPosition();
+
+	Debug::DrawCircle(position.x, position.y, getRadius(), sf::Color::Red);
 }

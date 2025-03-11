@@ -17,6 +17,7 @@ class Collider: public sf::Transformable
 protected:
 	sf::Vector2f m_offset;
 	ShapeTag m_shapeTag;
+	bool m_gizmo;
 
 	// Circle / Rectangle
 	bool checkVertexInsideCircle(sf::Vector2f* const& _rect, const sf::Vector2f& _circleCenter, float _radius);
@@ -39,6 +40,8 @@ protected:
 
 public:
 	ShapeTag getShapeTag() const { return m_shapeTag; };
+
+	void setGizmo(bool _active) { m_gizmo = _active; };
 
 	virtual bool isColliding(Collider* _other) = 0;
 	virtual void setPosition(sf::Vector2f _pos, float _ratioX = 0.5f, float _ratioY = 0.5f) = 0;
