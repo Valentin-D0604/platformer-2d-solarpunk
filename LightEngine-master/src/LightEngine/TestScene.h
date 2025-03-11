@@ -1,12 +1,13 @@
 #pragma once
 #include "Scene.h"
 
+class PhysicsEntity;
 class DummyEntity;
 class Player;
 class TestScene : public Scene
 {
-	Entity* pEntity1;
-	DummyEntity* pEntity2;
+	Player* pEntity1;
+	PhysicsEntity* pEntity2;
 
 	DummyEntity* pEntitySelected;
 
