@@ -1,12 +1,15 @@
 #pragma once
 #include "PhysicsEntity.h"
+#include "Scene.h"
 
 class Parry : public PhysicsEntity
 {
-	sf::Vector2f pos;
-	sf::Vector2f size;
+	float m_parryTime = 0.f;
+	float m_maxTime = 2.f;
 
 public : 
-	Parry(sf::Vector2f pos, sf::Vector2f size);
+	void OnInitialize() override;
+	void onCollision(Entity* other) override;
+	void OnUpdate() override;
 };
 

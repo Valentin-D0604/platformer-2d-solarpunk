@@ -1,8 +1,12 @@
 #include "Player.h"
 #include "CircleCollider.h"
-#include "TestScene.h"
-#include <iostream>
 
+#include "PlayerAction.h"
+#include "PlayerCondition.h"
+
+#include "Debug.h"
+
+#include <iostream>
 // boutons des manettes
 #define JOYSTICK_X sf::Joystick::getAxisPosition(0, sf::Joystick::X);
 #define JOYSTICK_Y sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
@@ -26,21 +30,145 @@ void Player::OnInitialize() {
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new CircleCollider(pos,GetRadius());
 	m_collider->setGizmo(true);
+	mpStateMachine = new StateMachine<Player>(this, State::Count);
+	//idle
+	{
+		Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
+		{//walking
+			auto transition = pIdle->CreateTransition(State::walking);
+			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
+		}
+		{//jumping
+			auto transition = pIdle->CreateTransition(State::jumping);
+			auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
+		}
+		{//parrying
+			auto transition = pIdle->CreateTransition(State::parrying);
+			auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
+		}
+		{//attacking
+			auto transition = pIdle->CreateTransition(State::attacking);
+			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
+		}
+
+	}
+	//walking
+	 {
+		Action<Player>* pWalking = mpStateMachine->CreateAction<PlayerAction_Walking>(State::walking);
+		{//jumping
+			auto transition = pWalking->CreateTransition(State::jumping);
+			auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
+		}
+		{//parrying
+			auto transition = pWalking->CreateTransition(State::parrying);
+			auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
+		}
+		{//attacking
+			auto transition = pWalking->CreateTransition(State::attacking);
+			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
+		}
+		{//idle
+			auto transition = pWalking->CreateTransition(State::idle);
+			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
+		}
+
+	}
+
+	//jumping
+	{
+		Action<Player>* pJumping = mpStateMachine->CreateAction<PlayerAction_jumping>(State::jumping);
+		{//walking
+			auto transition = pJumping->CreateTransition(State::walking);
+			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
+		}
+		{//parrying
+			auto transition = pJumping->CreateTransition(State::parrying);
+			auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
+		}
+		{//attacking
+			auto transition = pJumping->CreateTransition(State::attacking);
+			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
+		}
+		{//idle
+			auto transition = pJumping->CreateTransition(State::idle);
+			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
+		}
+	}
+
+	//parrying
+	{
+		Action<Player>* pParrying = mpStateMachine->CreateAction<PlayerAction_Shooting>(State::parrying);
+		{//jumping
+			auto transition = pParrying->CreateTransition(State::jumping);
+			auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
+		}
+		{//walking
+			auto transition = pParrying->CreateTransition(State::walking);
+			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
+		}
+		{//attacking
+			auto transition = pParrying->CreateTransition(State::attacking);
+			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
+		}
+		{//idle
+			auto transition = pParrying->CreateTransition(State::idle);
+			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
+		}
+	}
+
+	//attacking
+	{
+		Action<Player>* pAttacking = mpStateMachine->CreateAction<PlayerAction_Parrying>(State::attacking);
+		{
+			{//jumping
+				auto transition = pAttacking->CreateTransition(State::jumping);
+				auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
+			}
+			{//parrying
+				auto transition = pAttacking->CreateTransition(State::parrying);
+				auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
+			}
+			{//walking
+				auto transition = pAttacking->CreateTransition(State::walking);
+				auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
+			}
+			{//idle
+				auto transition = pAttacking->CreateTransition(State::idle);
+				auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
+			}
+		}
+	}
+	mpStateMachine->SetState(State::idle);
 }
 
 void Player::onCollision(Entity* other)
 {
-	if (other->IsTag(TestScene::Tag::OBJECT))
+		std::cout << "player colide";
+}
+
+void Player::parry() {
+	//Parry* pro = new Parry(GetPosition(),{50,50});
+	m_parryCooldown = 2.f;
+	Parry* protec = CreateEntity<Parry>(50, sf::Color::Green);
+	protec->SetPosition(GetPosition().x-175, GetPosition().y);
+	protec->setMass(20);
+	protec->setGravityDirection(sf::Vector2f(0, 1));
+}
+
+const char* Player::GetStateName(State state) const
+{
+	switch (state)
 	{
-		std::cout << "player colide with object";
+	case walking: return "walking";
+	case jumping: return "jumping";
+	case parrying: return "parrying";
+	case attacking: return "attacking";
+	default: return "Unknown";
 	}
 }
 
-void Player::Parry() {
-
-}
-
 void Player::OnUpdate() {
+	if (!m_isAlive) return;
 	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
@@ -48,47 +176,58 @@ void Player::OnUpdate() {
 	float joystickY = JOYSTICK_Y;
 	bool X = BOUTON_X;
 	bool R2 = BOUTON_R2;
-
-	if (pos.y >= OldY && jumping) {
-		jumping = false;
+	m_parryCooldown -= dt;
+	if (pos.y >= m_OldY && m_jumping) {
+		m_jumping = false;
 	}
-
+	if (m_life <= 0) {
+		m_life = 0;
+		m_isAlive = false;
+	}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
-			velocity.x += acceleration * dt;
+			m_velocity.x += m_acceleration * dt;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
-			velocity.x -= acceleration * dt;
+			m_velocity.x -= m_acceleration * dt;
 			// GoToPosition(pos.x - 10, pos.y, 200);
 		}
-		if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !jumping){
-			OldY = pos.y;
-			jumping = true;
+		if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping){
+			m_OldY = pos.y;
+			m_jumping = true;
 			setGravityForce(-200);
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)|| R2) {
-			Parry();
+			if (m_parryCooldown <= 0) parry();
 		}
-
-		if (velocity.x > MAX_VELOCITY) {
-			velocity.x = MAX_VELOCITY;
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+			if (m_parryCooldown <= 0) m_life--;
 		}
-		//---------------------------------------------------
+		if (m_velocity.x > MAX_VELOCITY) {
+			m_velocity.x = MAX_VELOCITY;
+		}
 		float currentFriction;
-		if (jumping) {
-			currentFriction = airResistance; // Moins de friction en l'air
+		if (m_jumping) {
+			currentFriction = m_airResistance;
 		}
 		else {
-			currentFriction = friction; // Plus de friction au sol
+			currentFriction = m_friction;
 		}
-		if (velocity.x > 0) {
-			velocity.x -= currentFriction * dt;
-			if (velocity.x < 0) velocity.x = 0;
+		if (m_velocity.x > 0) {
+			m_velocity.x -= currentFriction * dt;
+			if (m_velocity.x < 0) m_velocity.x = 0;
 		}
-		else if (velocity.x < 0) {
-			velocity.x += currentFriction * dt;
-			if (velocity.x > 0) velocity.x = 0; 
+		else if (m_velocity.x < 0) {
+			m_velocity.x += currentFriction * dt;
+			if (m_velocity.x > 0) m_velocity.x = 0; 
 		}
-		//--------------------------------------------------
-		pos.x += velocity.x * dt;
+
+		pos.x += m_velocity.x * dt;
 		SetPosition(pos.x, pos.y);
+
+		mpStateMachine->Update();
+		const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
+		std::string life = std::to_string(m_life);
+		std::cout << stateName << std::endl;
+		Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 0.5f, 0.5f, sf::Color::Red);
+		Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
 }
