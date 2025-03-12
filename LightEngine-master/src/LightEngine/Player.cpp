@@ -1,7 +1,8 @@
 #include "Player.h"
 #include "CircleCollider.h"
-
+#include "TestScene.h"
 #include <iostream>
+
 // boutons des manettes
 #define JOYSTICK_X sf::Joystick::getAxisPosition(0, sf::Joystick::X);
 #define JOYSTICK_Y sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
@@ -29,8 +30,12 @@ void Player::OnInitialize() {
 
 void Player::onCollision(Entity* other)
 {
-		std::cout << "player colide";
+	if (other->IsTag(TestScene::Tag::OBJECT))
+	{
+		std::cout << "player colide with object";
+	}
 }
+
 void Player::Parry() {
 
 }

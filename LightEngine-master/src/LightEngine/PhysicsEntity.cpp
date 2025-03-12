@@ -1,6 +1,7 @@
 #include "PhysicsEntity.h"
 #include "Debug.h"
 #include "Utils/Utils.h"
+#include <iostream>
 
 #define GRAVITATIONNAL_CONSTANT 9.806f;
 #define MAX_GRAVITATIONNAL_FORCE 100.0f;
@@ -41,9 +42,13 @@ void PhysicsEntity::Update()
 			mDirection = sf::Vector2f(0.f, 0.f);
 			mTarget.isSet = false;
 		}
+
 	}
 
-	m_collider->setPosition(GetPosition());
+	if (m_collider != nullptr) {
+		m_collider->setPosition(GetPosition());
+	}
+	else {std::cout << "Dead niggga !" << std::endl;}
 
 	OnUpdate();
 }

@@ -4,7 +4,10 @@
 
 #include "Debug.h"
 
-#include "player.h"
+#include "Player.h"
+
+#include "Platform.h"
+
 
 void TestScene::OnInitialize()
 {
@@ -18,6 +21,9 @@ void TestScene::OnInitialize()
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
 	pEntitySelected = nullptr;
+
+	pPlatform = CreateEntity<Platform>(70, sf::Color::Red);
+	pPlatform->SetPosition(100, 500);
 }
 
 void TestScene::OnEvent(const sf::Event& event)

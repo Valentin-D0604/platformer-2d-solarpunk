@@ -29,7 +29,6 @@ RectangleCollider::RectangleCollider(sf::Vector2f _position, sf::Vector2f _size,
 sf::Vector2f* const RectangleCollider::getVertices() const
 {
     sf::Vector2f* vertices = m_vertices;
-
     return vertices;
 }
 
@@ -46,6 +45,7 @@ bool RectangleCollider::isColliding(Collider* _other)
 
             colliding = circleRectangleCollision(otherPos, otherRadius, m_vertices);
         }
+        
         case ShapeTag::Rectangle:
         {
             RectangleCollider* otherCast = dynamic_cast<RectangleCollider*>(_other);
