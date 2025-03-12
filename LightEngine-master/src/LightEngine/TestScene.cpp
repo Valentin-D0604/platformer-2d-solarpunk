@@ -6,6 +6,8 @@
 
 #include "player.h"
 
+#include "Mob1.h"
+
 void TestScene::OnInitialize()
 {
 	pEntity1 = CreateEntity<Player>(100, sf::Color::Magenta);
@@ -17,6 +19,9 @@ void TestScene::OnInitialize()
 	pEntity2->SetPosition(500, 500);
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
+
+	monster = CreateEntity<Mob1>(10, sf::Color::Magenta);
+	monster->SetPosition(700, 300);
 	pEntitySelected = nullptr;
 }
 
@@ -54,4 +59,9 @@ void TestScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
+}
+
+Player* TestScene::GetPlayer()
+{
+	return pEntity1;
 }

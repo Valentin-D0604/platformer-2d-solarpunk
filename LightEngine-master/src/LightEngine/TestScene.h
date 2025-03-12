@@ -4,10 +4,12 @@
 class PhysicsEntity;
 class DummyEntity;
 class Player;
+class Mob1;
 class TestScene : public Scene
 {
 	Player* pEntity1;
 	DummyEntity* pEntity2;
+	Mob1* monster;
 
 	DummyEntity* pEntitySelected;
 
@@ -25,6 +27,8 @@ public:
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
+
+	Player* GetPlayer();
 };
 
 
