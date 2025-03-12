@@ -4,7 +4,6 @@
 bool PlayerCondition_IsWalking::OnTest(Player* owner)
 {
 	if (owner->m_velocity.x > 0|| owner->m_velocity.x < 0) {
-		std::cout << "walking"; 
 		return true;
 	}
 	return false;
@@ -13,7 +12,6 @@ bool PlayerCondition_IsWalking::OnTest(Player* owner)
 bool PlayerCondition_IsJumping::OnTest(Player* owner)
 {
 	if (owner->m_jumping) {
-		std::cout << "jumping";
 		return true;
 	}
 	return false;

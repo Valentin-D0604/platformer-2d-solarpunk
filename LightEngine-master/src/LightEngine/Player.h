@@ -1,6 +1,7 @@
 #pragma once
 #include "PhysicsEntity.h"
 #include "Parry.h"
+#include "Bullet.h"
 #include "StateMachine.h"
 #define MAX_VELOCITY 400
 
@@ -13,7 +14,7 @@ class Player : public PhysicsEntity
 	float m_acceleration = 600.0f;
 	float m_friction = 400.0f;
 	float m_airResistance = 100.0f;
-
+	sf::Vector2f m_lastDir;
 	//---------stats---------
 	bool m_isAlive = true;
 	int m_life = 3;
@@ -43,6 +44,7 @@ public:
 
 	const char* GetStateName(State state) const;
 	void parry();
+	void Attack();
 
 protected:
 	friend class PlayerCondition_IsWalking;

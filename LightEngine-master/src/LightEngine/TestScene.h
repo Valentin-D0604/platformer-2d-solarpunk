@@ -15,6 +15,13 @@ private:
 	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);
 
 public:
+	enum Tag
+	{
+		player,
+		mob1,
+		bullet
+	};
+
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;

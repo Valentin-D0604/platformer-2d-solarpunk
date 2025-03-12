@@ -4,6 +4,8 @@
 #include "PlayerAction.h"
 #include "PlayerCondition.h"
 
+#include "TestScene.h"
+
 #include "Debug.h"
 
 #include <iostream>
@@ -27,6 +29,7 @@
 // stop
 
 void Player::OnInitialize() {
+	SetTag(TestScene::Tag::player);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new CircleCollider(pos,GetRadius());
 	m_collider->setGizmo(true);
@@ -143,7 +146,7 @@ void Player::OnInitialize() {
 
 void Player::onCollision(Entity* other)
 {
-		std::cout << "player colide";
+		//std::cout << "player colide";
 }
 
 void Player::parry() {
@@ -153,6 +156,15 @@ void Player::parry() {
 	protec->SetPosition(GetPosition().x-175, GetPosition().y);
 	protec->setMass(20);
 	protec->setGravityDirection(sf::Vector2f(0, 1));
+}
+
+void Player::Attack() {
+	m_shootCooldown = 2.f;
+	std::cout << m_lastDir.x << " " << m_lastDir.y << std::endl;
+	Bullet* bullet = CreateEntity<Bullet>(10, sf::Color::Cyan);
+	bullet->InitBullet(GetPosition(), m_lastDir, false);
+	bullet->setMass(1);
+	bullet->setGravityDirection(sf::Vector2f(0, 1));
 }
 
 const char* Player::GetStateName(State state) const
@@ -169,6 +181,7 @@ const char* Player::GetStateName(State state) const
 
 void Player::OnUpdate() {
 	if (!m_isAlive) return;
+
 	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
@@ -176,7 +189,9 @@ void Player::OnUpdate() {
 	float joystickY = JOYSTICK_Y;
 	bool X = BOUTON_X;
 	bool R2 = BOUTON_R2;
+
 	m_parryCooldown -= dt;
+	m_shootCooldown -= dt;
 	if (pos.y >= m_OldY && m_jumping) {
 		m_jumping = false;
 	}
@@ -186,21 +201,25 @@ void Player::OnUpdate() {
 	}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
 			m_velocity.x += m_acceleration * dt;
+			m_lastDir = { 1,0 };
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
 			m_velocity.x -= m_acceleration * dt;
-			// GoToPosition(pos.x - 10, pos.y, 200);
+			m_lastDir = { -1,0 };
 		}
 		if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping){
 			m_OldY = pos.y;
 			m_jumping = true;
 			setGravityForce(-200);
 		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)|| R2) {
-			if (m_parryCooldown <= 0) parry();
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)|| R2) {
+			if (m_parryCooldown <= 0) Parry();
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 			if (m_parryCooldown <= 0) m_life--;
+		}
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (m_shootCooldown <= 0) Attack();
 		}
 		if (m_velocity.x > MAX_VELOCITY) {
 			m_velocity.x = MAX_VELOCITY;
@@ -223,11 +242,9 @@ void Player::OnUpdate() {
 
 		pos.x += m_velocity.x * dt;
 		SetPosition(pos.x, pos.y);
-
 		mpStateMachine->Update();
 		const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
 		std::string life = std::to_string(m_life);
-		std::cout << stateName << std::endl;
 		Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 0.5f, 0.5f, sf::Color::Red);
 		Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
 }
