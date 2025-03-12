@@ -147,6 +147,11 @@ void Player::OnInitialize() {
 void Player::onCollision(Entity* other)
 {
 		//std::cout << "player colide";
+	if (other->IsTag(TestScene::Tag::bullet)) {
+		Bullet* bullet = dynamic_cast<Bullet*>(other);
+		if (bullet->IsBulletOnGround()) m_ammo +=1;
+		std::cout << m_ammo << std::endl;
+	}
 }
 
 void Player::parry() {
@@ -160,6 +165,8 @@ void Player::parry() {
 
 void Player::Attack() {
 	m_shootCooldown = 2.f;
+	m_ammo -= 1;
+	std::cout << m_ammo << std::endl;
 	std::cout << m_lastDir.x << " " << m_lastDir.y << std::endl;
 	Bullet* bullet = CreateEntity<Bullet>(10, sf::Color::Cyan);
 	bullet->InitBullet(GetPosition(), m_lastDir, false);
@@ -189,6 +196,7 @@ void Player::OnUpdate() {
 	float joystickY = JOYSTICK_Y;
 	bool X = BOUTON_X;
 	bool R2 = BOUTON_R2;
+	bool L2 = BOUTON_L2;
 
 	m_parryCooldown -= dt;
 	m_shootCooldown -= dt;
@@ -212,13 +220,13 @@ void Player::OnUpdate() {
 			m_jumping = true;
 			setGravityForce(-200);
 		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)|| R2) {
-			if (m_parryCooldown <= 0) Parry();
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)|| L2) {
+			if (m_parryCooldown <= 0) parry();
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 			if (m_parryCooldown <= 0) m_life--;
 		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)|| R2) {
 			if (m_shootCooldown <= 0) Attack();
 		}
 		if (m_velocity.x > MAX_VELOCITY) {

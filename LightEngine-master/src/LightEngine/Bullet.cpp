@@ -23,8 +23,15 @@ void Bullet::OnUpdate() {
 	if (!m_onTheGround) {
 		SetDirection(m_dir.x, m_dir.y, 200);
 	}
+	else if (m_onTheGround) {
+		setMass(20);
+	}
 }
 
 void Bullet::onCollision(Entity* other) {
 
+}
+
+bool Bullet::IsBulletOnGround() {
+	return m_onTheGround;
 }

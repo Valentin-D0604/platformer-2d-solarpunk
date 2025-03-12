@@ -11,6 +11,8 @@ public:
 	void OnInitialize() override;
 	void OnUpdate() override;
 	void onCollision(Entity* other) override;
+
+	bool IsBulletOnGround();
 };
 
 
