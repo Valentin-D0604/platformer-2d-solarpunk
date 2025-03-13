@@ -1,11 +1,14 @@
 #include "Bullet.h"
 #include "RectangleCollider.h"
 #include "TestScene.h"
+#include "Player.h"
+#include "Mob1.h"
 
 #include <iostream>
 
-void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction, bool state) {
+void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster, bool state) {
 	std::cout << "m_lastDir: " << direction.x << ", " << direction.y << std::endl;
+	m_caster = caster;
 	m_pos = position;
 	m_dir = direction;
 	m_onTheGround = state;
@@ -29,7 +32,16 @@ void Bullet::OnUpdate() {
 }
 
 void Bullet::onCollision(Entity* other) {
-
+	if (other->IsTag(TestScene::Tag::mob1)) {
+		Mob1* enemy = dynamic_cast<Mob1*>(other);
+		enemy->TakeDamage(1);
+	}
+	if (other->IsTag(TestScene::Tag::player)) {
+		Player* player = dynamic_cast<Player*>(other);
+		if (IsBulletOnGround()) player->AddBullet(1);
+		else if (other != m_caster && !IsBulletOnGround()) player->TakeDamage(1);
+	}
+	if(other != m_caster)Destroy();
 }
 
 bool Bullet::IsBulletOnGround() {

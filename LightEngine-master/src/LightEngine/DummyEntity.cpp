@@ -15,4 +15,5 @@ void DummyEntity::onCollision(Entity* other)
 {
 	//	std::cout << "dummy colide";
 		Debug::DrawText(GetPosition().x, GetPosition().y - 225, "life", 0.5f, 0.5f, sf::Color::Red);
+		Destroy();
 }

@@ -7,7 +7,7 @@ class Mob1 : public PhysicsEntity
 
 	//---------stats---------
 	bool m_isAlive = true;
-	int m_life = 3;
+	int m_life = 1;
 	sf::Vector2f m_velocity;
 	float m_shootCooldown = 2.f;
 	float m_walkingTimer = 3.f;
@@ -30,6 +30,7 @@ public:
 	void OnUpdate() override;
 
 	float GetDistanceToPlayer();
+	void TakeDamage(int damage);
 private :
 	friend class Mob1Action_Walking;
 	friend class Mob1Action_Chasing;

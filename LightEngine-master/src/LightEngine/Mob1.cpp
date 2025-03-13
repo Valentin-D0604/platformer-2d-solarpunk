@@ -93,13 +93,12 @@ void Mob1::OnInitialize()
 
 void Mob1::onCollision(Entity* other)
 {
-	if(other->IsTag(TestScene::Tag::bullet)) m_life -= 1;
-	if (m_life == 0) { std::cout << "mort"; }
+	if (other->IsTag(TestScene::Tag::mob1)) return;
 }
 
 void Mob1::OnUpdate()
 {
-	if (m_life <= 0) return;
+	if (m_life <= 0) { Destroy(); }
 
 	mpStateMachine->Update();
 }
@@ -112,4 +111,8 @@ float Mob1::GetDistanceToPlayer()
 	sf::Vector2f playerPos = player->GetPosition(); // Fonction qui récupère la position du joueur
 	sf::Vector2f mobPos = GetPosition();
 	return sqrt(pow(playerPos.x - mobPos.x, 2) + pow(playerPos.y - mobPos.y, 2));
+}
+
+void Mob1::TakeDamage(int damage) {
+	m_life -= damage;
 }

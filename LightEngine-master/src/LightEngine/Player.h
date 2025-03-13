@@ -1,6 +1,5 @@
 #pragma once
 #include "PhysicsEntity.h"
-#include "Parry.h"
 #include "Bullet.h"
 #include "StateMachine.h"
 #define MAX_VELOCITY 400
@@ -14,7 +13,7 @@ class Player : public PhysicsEntity
 	float m_acceleration = 600.0f;
 	float m_friction = 400.0f;
 	float m_airResistance = 100.0f;
-	sf::Vector2f m_lastDir;
+	sf::Vector2f m_lastDir = { 1,0 };
 	bool m_goingRight = false;
 	bool m_goingLeft = false;
 	//---------stats---------
@@ -50,6 +49,7 @@ public:
 	void parry();
 	void Attack();
 	void TakeDamage(int damage);
+	void AddBullet(int bullet);
 
 protected:
 	friend class PlayerCondition_IsWalking;

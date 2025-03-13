@@ -27,6 +27,7 @@
 #define BOUTON_PS sf::Joystick::isButtonPressed(0, 12);
 #define BOUTON_PAVE sf::Joystick::isButtonPressed(0, 13);
 // stop
+#define DASH 200
 
 void Player::OnInitialize() {
 	SetTag(TestScene::Tag::player);
@@ -146,33 +147,24 @@ void Player::OnInitialize() {
 
 void Player::onCollision(Entity* other)
 {
-	if (m_Parrying) return;
-
-		std::cout << "player colide";
-	if (other->IsTag(TestScene::Tag::bullet)) {
-		Bullet* bullet = dynamic_cast<Bullet*>(other);
-		if (bullet->IsBulletOnGround()) m_ammo +=1;
-		std::cout << m_ammo << std::endl;
-	}
+	std::cout << "carrote";
 }
 
 void Player::parry() {
 	m_parryCooldown = 2.f;
 	m_Parrying = true;
 	std::cout << "going to parry !" << std::endl;
-	mpStateMachine->SetState(State::parrying);
+	//mpStateMachine->SetState(State::parrying);
 }
 
 void Player::Attack() {
 	m_shootCooldown = 2.f;
 	m_ammo -= 1;
-	std::cout << m_ammo << std::endl;
-	std::cout << m_lastDir.x << " " << m_lastDir.y << std::endl;
 	Bullet* bullet = CreateEntity<Bullet>(10, sf::Color::Cyan);
-	bullet->InitBullet(GetPosition(), m_lastDir, false);
+	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
 	bullet->setMass(1);
 	bullet->setGravityDirection(sf::Vector2f(0, 1));
-	mpStateMachine->SetState(State::attacking);
+	//mpStateMachine->SetState(State::attacking);
 }
 
 const char* Player::GetStateName(State state) const
@@ -192,8 +184,14 @@ void Player::TakeDamage(int damage) {
 	std::cout << m_life<<std::endl;
 }
 
+void Player::AddBullet(int bullet)
+{
+	m_ammo += bullet;
+}
+
 void Player::OnUpdate() {
-	if (!m_isAlive) return;
+	if (m_life == 0) m_isAlive = false;
+	if (!m_isAlive) Destroy();
 
 	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
 	sf::Vector2f pos = GetPosition();
@@ -204,6 +202,7 @@ void Player::OnUpdate() {
 	bool X = BOUTON_X;
 	bool R2 = BOUTON_R2;
 	bool L2 = BOUTON_L2;
+	bool R1 = BOUTON_R1;
 
 	m_parryCooldown -= dt;
 	m_shootCooldown -= dt;
@@ -243,6 +242,9 @@ void Player::OnUpdate() {
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
 		if (m_shootCooldown <= 0) Attack();//mpStateMachine->SetState(State::attacking);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
+		GoToPosition(pos.x + DASH * m_lastDir.x, pos.y, 1000);
 	}
 	if (m_velocity.x > MAX_VELOCITY) {
 		m_velocity.x = MAX_VELOCITY;
