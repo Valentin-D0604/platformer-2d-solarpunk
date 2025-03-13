@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "Bullet.h"
 
+#include "Utils/Utils.h"
+
 #include <iostream>
 //-----------------------------------------walking-------------------------
 void Mob2Action_Walking::OnStart(Mob2* owner)
@@ -53,12 +55,13 @@ void Mob2Action_Attacking::OnUpdate(Mob2* owner)
 	//if ((owner->GetPosition().x <= player->GetPosition().x + 50 && owner->GetPosition().x >= player->GetPosition().x - 50 && owner->GetPosition().y <= player->GetPosition().y + 50 && owner->GetPosition().y >= player->GetPosition().y - 50)) {
 	if (owner->m_shootCooldown <= 0) {
 		owner->m_shootCooldown = 2.f;
+		sf::Vector2f dir = player->GetPosition() - owner->GetPosition();
+		Utils::Normalize(dir);
+
 		Bullet* bullet = owner->CreateEntity<Bullet>();
-		std::cout << owner;
-		bullet->InitBullet(owner->GetPosition(), player->GetPosition(), owner, false);
+		bullet->InitBullet(owner->GetPosition(), dir, owner, false);
 		bullet->setMass(1);
 		bullet->setGravityDirection(sf::Vector2f(0, 1));
-		std::cout << "attack";
 	}
 	//	}
 }
