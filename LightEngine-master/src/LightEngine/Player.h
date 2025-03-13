@@ -19,7 +19,7 @@ class Player : public PhysicsEntity
 	bool m_goingRight = false;
 	bool m_goingLeft = false;
 	//---------stats---------
-	bool m_isAlive = true;
+	bool m_isAlive;
 	int m_life = 3;
 	int m_ammo = 10;
 
@@ -58,6 +58,7 @@ public:
 	void HandleInput();
 	void CheckPlayerStates();
 	void PlayerMove();
+	bool IsAlive();
 protected:
 	friend class PlayerCondition_IsWalking;
 	friend class PlayerCondition_IsJumping;

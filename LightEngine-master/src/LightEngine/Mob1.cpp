@@ -110,7 +110,6 @@ float Mob1::GetDistanceToPlayer()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
-	if (player == nullptr) return 1000;
 
 	sf::Vector2f playerPos = player->GetPosition(); // Fonction qui récupère la position du joueur
 	sf::Vector2f mobPos = GetPosition();

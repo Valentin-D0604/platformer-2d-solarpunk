@@ -110,13 +110,12 @@ float Mob2::GetDistanceToPlayer()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
-	if (!player) {
-		std::cout << "Erreur : Impossible de récupérer le joueur !" << std::endl;
-		return -1;
+	if (player != nullptr && player->IsAlive()) {
+		sf::Vector2f playerPos = player->GetPosition();
+		sf::Vector2f mobPos = GetPosition();
+		return sqrt(pow(playerPos.x - mobPos.x, 2) + pow(playerPos.y - mobPos.y, 2));
 	}
-	sf::Vector2f playerPos = player->GetPosition();
-	sf::Vector2f mobPos = GetPosition();
-	return sqrt(pow(playerPos.x - mobPos.x, 2) + pow(playerPos.y - mobPos.y, 2));
+	else return 10000;
 }
 
 void Mob2::TakeDamage(int damage) {

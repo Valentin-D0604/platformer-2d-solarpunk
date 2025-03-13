@@ -36,7 +36,7 @@
 #define COLLIDER_RADIUS 32
 
 void Player::OnInitialize() {
-
+	m_isAlive = true;
 	SetTag(TestScene::Tag::player);
 	SpriteSheet* spriteSheet = new SpriteSheet(this);
 	Animation* animTest1 = new Animation("Test1", sf::Vector2i(102, 96), 2, 0.5f, true);
@@ -225,7 +225,7 @@ void Player::parry() {
 void Player::Attack() {
 	m_shootCooldown = 2.f;
 	m_ammo -= 1;
-	std::cout << m_ammo;
+	//std::cout << m_ammo;
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
 	bullet->setMass(1);
@@ -249,7 +249,7 @@ const char* Player::GetStateName(State state) const
 void Player::TakeDamage(int damage) {
 	if (m_Parrying) return;
 	m_life -= damage;
-	std::cout << m_life<<std::endl;
+	//std::cout << m_life<<std::endl;
 }
 
 void Player::AddBullet(int bullet)
@@ -358,10 +358,18 @@ void Player::PlayerMove()
 	SetPosition(pos.x, pos.y);
 }
 
+bool Player::IsAlive()
+{
+	if (m_isAlive != 1 && m_isAlive != 0) return false;
+	std::cout << "is alive : " << m_isAlive << std::endl;
+	return m_isAlive;
+}
+
 void Player::OnUpdate() {
 	if (m_life <= 0) { m_isAlive = false; Destroy(); }
 	if (!m_isAlive) return;
-	//m_life = m_life - 1;
+	//std::cout << m_isAlive;
+
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 

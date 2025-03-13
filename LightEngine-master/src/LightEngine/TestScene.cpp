@@ -60,5 +60,5 @@ void TestScene::OnUpdate()
 
 Player* TestScene::GetPlayer()
 {
-	return pEntity1;
+	return pEntity1 && pEntity1->IsAlive() ? pEntity1 : nullptr;
 }
