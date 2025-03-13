@@ -2,10 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "Managers.h"
+#include "Managers/Managers.h"
 #include "Managers/GameManager.h"
-#include "SampleScene.h"
-#include "TestScene.h"
+#include "Scene/SampleScene.h"
+#include "Scene/TestScene.h"
 
 #include <cstdlib>
 #include <crtdbg.h>

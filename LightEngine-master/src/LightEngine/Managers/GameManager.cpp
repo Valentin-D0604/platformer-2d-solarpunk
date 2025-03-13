@@ -1,9 +1,9 @@
 #include "GameManager.h"
 
-#include "../Entity.h"
-#include "../PhysicsEntity.h"
-#include "../Debug.h"
-#include "../Sprite.h"
+#include "../Entity/Entity.h"
+#include "../Entity/PhysicsEntity.h"
+#include "../Graphics/Debug.h"
+#include "../Graphics/Sprite.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
