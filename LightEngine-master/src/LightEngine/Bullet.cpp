@@ -3,6 +3,7 @@
 #include "TestScene.h"
 #include "Player.h"
 #include "Mob1.h"
+#include "Mob2.h"
 
 #include "Sprite.h"
 #include "Managers.h"
@@ -11,6 +12,7 @@
 
 void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster, bool state) {
 	m_caster = caster;
+	std::cout << " "<< m_caster;
 	m_pos = position;
 	m_dir = direction;
 	m_onTheGround = state;
@@ -41,12 +43,18 @@ void Bullet::onCollision(Entity* other) {
 		Mob1* enemy = dynamic_cast<Mob1*>(other);
 		enemy->TakeDamage(1);
 	}
+	if (other->IsTag(TestScene::Tag::mob2)) {
+		Mob2* enemy = dynamic_cast<Mob2*>(other);
+		if (enemy != m_caster && !IsBulletOnGround()) enemy->TakeDamage(1);
+	}
 	if (other->IsTag(TestScene::Tag::player)) {
 		Player* player = dynamic_cast<Player*>(other);
 		if (IsBulletOnGround()) player->AddBullet(1);
 		else if (other != m_caster && !IsBulletOnGround()) player->TakeDamage(1);
 	}
-	if(other != m_caster)Destroy();
+	if (other != m_caster) {
+		Destroy();
+	}
 }
 
 bool Bullet::IsBulletOnGround() {

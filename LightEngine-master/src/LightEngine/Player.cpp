@@ -48,7 +48,6 @@ void Player::OnInitialize() {
 	m_sprite = spriteSheet;
 
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
-
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new CircleCollider(pos, COLLIDER_RADIUS);
 	m_collider->setGizmo(true);
@@ -362,7 +361,7 @@ void Player::PlayerMove()
 void Player::OnUpdate() {
 	if (m_life <= 0) { m_isAlive = false; Destroy(); }
 	if (!m_isAlive) return;
-
+	//m_life = m_life - 1;
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 
@@ -374,7 +373,4 @@ void Player::OnUpdate() {
 	mpStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
 	std::string life = std::to_string(m_life);
-	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 0.5f, 0.5f, sf::Color::Red);
-	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
-	std::cout << stateName;
 }

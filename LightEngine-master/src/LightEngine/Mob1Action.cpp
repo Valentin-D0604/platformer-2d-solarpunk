@@ -2,6 +2,9 @@
 #include "TestScene.h"
 #include "Player.h"
 
+#define DETECTING_RANGE 300.f
+#define ATTACK_RANGE  50.f
+
 #include <iostream>
 //-----------------------------------------walking-------------------------
 void Mob1Action_Walking::OnStart(Mob1* owner)

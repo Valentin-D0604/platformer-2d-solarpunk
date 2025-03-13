@@ -7,6 +7,7 @@
 #include "player.h"
 
 #include "Mob1.h"
+#include "Mob2.h"
 
 void TestScene::OnInitialize()
 {
@@ -20,8 +21,12 @@ void TestScene::OnInitialize()
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
 
-	monster = CreateEntity<Mob1>();
-	monster->SetPosition(700, 300);
+	//monster = CreateEntity<Mob1>();
+	//monster->SetPosition(700, 300);
+
+	range = CreateEntity<Mob2>();
+	range->SetPosition(700, 300);
+
 	pEntitySelected = nullptr;
 }
 
