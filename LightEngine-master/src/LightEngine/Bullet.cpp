@@ -4,6 +4,9 @@
 #include "Player.h"
 #include "Mob1.h"
 
+#include "Sprite.h"
+#include "Managers.h"
+
 #include <iostream>
 
 void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster, bool state) {
@@ -16,6 +19,9 @@ void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* ca
 }
 
 void Bullet::OnInitialize() {
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
 	m_collider = new RectangleCollider(pos, size);

@@ -6,13 +6,16 @@
 
 #include "TestScene.h"
 #include "Player.h"
+#include "Sprite.h"
 
 #include "Debug.h"
-
+#include "Managers.h"
 #include <iostream>
 
 void Mob1::OnInitialize()
 {
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
 
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };

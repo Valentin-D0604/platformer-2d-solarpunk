@@ -179,7 +179,7 @@ void Player::parry() {
 void Player::Attack() {
 	m_shootCooldown = 2.f;
 	m_ammo -= 1;
-	Bullet* bullet = CreateEntity<Bullet>(10, sf::Color::Cyan);
+	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
 	bullet->setMass(1);
 	bullet->setGravityDirection(sf::Vector2f(0, 1));
@@ -270,6 +270,9 @@ void Player::CheckPlayerStates()
 	if (m_parryTime <= 0) {
 		m_Parrying = false;
 		m_parryTime = PARRY_DURATION;
+	}
+	if (pos.y >= m_OldY && m_jumping) {
+		m_jumping = false;
 	}
 	if (m_life <= 0) {
 		m_life = 0;

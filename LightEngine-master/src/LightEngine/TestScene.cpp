@@ -20,7 +20,7 @@ void TestScene::OnInitialize()
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
 
-	monster = CreateEntity<Mob1>(10, sf::Color::Magenta);
+	monster = CreateEntity<Mob1>();
 	monster->SetPosition(700, 300);
 	pEntitySelected = nullptr;
 }
