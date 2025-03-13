@@ -21,7 +21,7 @@ class Player : public PhysicsEntity
 	//---------stats---------
 	bool m_isAlive = true;
 	int m_life = 3;
-	int m_ammo = 1;
+	int m_ammo = 10;
 
 	//---------time--------
 	float m_parryCooldown = 2.f;
@@ -40,6 +40,7 @@ class Player : public PhysicsEntity
 		parrying,
 		attacking,
 		idle,
+		dash,
 
 		Count
 	};
@@ -69,6 +70,7 @@ protected:
 	friend class PlayerAction_Shooting;
 	friend class PlayerAction_Parrying;
 	friend class PlayerAction_Idle;
+	friend class PlayerAction_Dash;
 };
 
 

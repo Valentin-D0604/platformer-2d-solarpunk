@@ -42,3 +42,12 @@ public:
 	void OnUpdate(Player* player) override;
 	void OnEnd(Player* player) override;
 };
+
+class PlayerAction_Dash: public Action<Player>
+{
+public:
+	void OnStart(Player* player) override;
+	void OnUpdate(Player* player) override;
+	void OnEnd(Player* player) override;
+};
+

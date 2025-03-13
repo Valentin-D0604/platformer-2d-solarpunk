@@ -33,3 +33,8 @@ bool PlayerCondition_IsIdle::OnTest(Player* owner)
 	if(owner->m_jumping||owner->m_velocity.x != 0) return false;
 	return true;
 }
+
+bool PlayerCondition_IsDash::OnTest(Player* owner)
+{
+	return false;
+}

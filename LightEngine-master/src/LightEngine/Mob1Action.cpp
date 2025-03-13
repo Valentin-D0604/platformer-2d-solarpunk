@@ -15,7 +15,6 @@ void Mob1Action_Walking::OnUpdate(Mob1* owner)
 	if (owner->m_walkingTimer <= 0) {
 		owner->SetDirection(dir.x = -dir.x, dir.y = -dir.y, 200);
 		owner->m_walkingTimer = 3.f;
-		std::cout << "walking";
 	}
 }
 

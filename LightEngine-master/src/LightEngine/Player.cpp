@@ -22,8 +22,8 @@
 #define BOUTON_T sf::Joystick::isButtonPressed(0, 3);
 #define BOUTON_L1 sf::Joystick::isButtonPressed(0, 4);
 #define BOUTON_R1 sf::Joystick::isButtonPressed(0, 5);
-#define BOUTON_L2 sf::Joystick::isButtonPressed(0, 6);
-#define BOUTON_R2 sf::Joystick::isButtonPressed(0, 7);
+#define BOUTON_R2 sf::Joystick::isButtonPressed(0, 6);
+#define BOUTON_L2 sf::Joystick::isButtonPressed(0, 7);
 #define BOUTON_SHARE sf::Joystick::isButtonPressed(0, 8);
 #define BOUTON_START sf::Joystick::isButtonPressed(0, 9);
 #define BOUTON_L3 sf::Joystick::isButtonPressed(0, 10);
@@ -73,6 +73,10 @@ void Player::OnInitialize() {
 			auto transition = pIdle->CreateTransition(State::attacking);
 			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
 		}
+		{//Dash
+			auto transition = pIdle->CreateTransition(State::dash);
+			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
+		}
 
 	}
 	//walking
@@ -93,6 +97,10 @@ void Player::OnInitialize() {
 		{//idle
 			auto transition = pWalking->CreateTransition(State::idle);
 			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
+		}
+		{//Dash
+			auto transition = pWalking->CreateTransition(State::dash);
+			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
 		}
 
 	}
@@ -116,6 +124,10 @@ void Player::OnInitialize() {
 			auto transition = pJumping->CreateTransition(State::idle);
 			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
 		}
+		{//Dash
+			auto transition = pJumping->CreateTransition(State::dash);
+			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
+		}
 	}
 
 	//parrying
@@ -136,6 +148,10 @@ void Player::OnInitialize() {
 		{//idle
 			auto transition = pParrying->CreateTransition(State::idle);
 			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
+		} 
+		{//Dash
+			auto transition = pParrying->CreateTransition(State::dash);
+			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
 		}
 	}
 
@@ -159,31 +175,62 @@ void Player::OnInitialize() {
 				auto transition = pAttacking->CreateTransition(State::idle);
 				auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
 			}
+			{//Dash
+				auto transition = pAttacking->CreateTransition(State::dash);
+				auto condition = transition->AddCondition<PlayerCondition_IsDash>();
+			}
 		}
+	}
+	//Dash
+	{
+		Action<Player>* pDash = mpStateMachine->CreateAction<PlayerAction_Idle>(State::dash);
+		{//walking
+			auto transition = pDash->CreateTransition(State::walking);
+			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
+		}
+		{//jumping
+			auto transition = pDash->CreateTransition(State::jumping);
+			auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
+		}
+		{//parrying
+			auto transition = pDash->CreateTransition(State::parrying);
+			auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
+		}
+		{//attacking
+			auto transition = pDash->CreateTransition(State::attacking);
+			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
+		}
+		{//idle
+			auto transition = pDash->CreateTransition(State::idle);
+			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
+		}
+
 	}
 	mpStateMachine->SetState(State::idle);
 }
 
 void Player::onCollision(Entity* other)
 {
-	std::cout << "carrote";
+	if (!m_isAlive) return;
+	if (!m_Parrying) {
+		std::cout << "carrote";
+	}
 }
 
 void Player::parry() {
 	m_parryCooldown = 2.f;
 	m_Parrying = true;
 	std::cout << "going to parry !" << std::endl;
-	//mpStateMachine->SetState(State::parrying);
 }
 
 void Player::Attack() {
 	m_shootCooldown = 2.f;
 	m_ammo -= 1;
+	std::cout << m_ammo;
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
 	bullet->setMass(1);
 	bullet->setGravityDirection(sf::Vector2f(0, 1));
-	//mpStateMachine->SetState(State::attacking);
 
 }
 
@@ -195,11 +242,13 @@ const char* Player::GetStateName(State state) const
 	case jumping: return "jumping";
 	case parrying: return "parrying";
 	case attacking: return "attacking";
+	case dash: return "Dashing";
 	default: return "Unknown";
 	}
 }
 
 void Player::TakeDamage(int damage) {
+	if (m_Parrying) return;
 	m_life -= damage;
 	std::cout << m_life<<std::endl;
 }
@@ -229,34 +278,29 @@ void Player::HandleInput()
 	bool L2 = BOUTON_L2;
 	bool R1 = BOUTON_R1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
-		m_velocity.x += m_acceleration * dt;
 		m_lastDir = { 1,0 };
-		//mpStateMachine->SetState(State::walking);
+		mpStateMachine->SetState(State::walking);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
-		m_velocity.x -= m_acceleration * dt;
 		m_lastDir = { -1,0 };
-		//mpStateMachine->SetState(State::walking);
+		mpStateMachine->SetState(State::walking);
 	}
 	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
 		m_OldY = pos.y;
-		m_jumping = true;
-		setGravityForce(-200);
-		//mpStateMachine->SetState(State::jumping);
+		mpStateMachine->SetState(State::jumping);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
-		if (m_parryCooldown <= 0)parry();//mpStateMachine->SetState(State::parrying);
+		if (m_parryCooldown <= 0) mpStateMachine->SetState(State::parrying);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 		if (m_parryCooldown <= 0) m_life--;
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
-		if (m_shootCooldown <= 0) Attack();//mpStateMachine->SetState(State::attacking);
+		if (m_shootCooldown <= 0) mpStateMachine->SetState(State::attacking);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
 		if (m_dashCooldown <= 0) {
-			GoToPosition(pos.x + DASH * m_lastDir.x, pos.y, 1500);
-			m_dashCooldown = 2.f;
+		mpStateMachine->SetState(State::dash);
 		}
 	}
 }
@@ -267,6 +311,9 @@ void Player::CheckPlayerStates()
 	float dt = GetDeltaTime();
 
 	if (m_parryTime) m_parryTime -= dt;
+	if (GetPosition().y >= m_OldY && m_jumping) {
+		m_jumping = false;
+	}
 	if (m_parryTime <= 0) {
 		m_Parrying = false;
 		m_parryTime = PARRY_DURATION;
@@ -295,10 +342,16 @@ void Player::PlayerMove()
 		currentFriction = m_friction;
 	}
 	if (m_velocity.x > 0) {
+		if (m_jumping) {
+			m_velocity.x = m_velocity.x - 3;
+		}
 		m_velocity.x -= currentFriction * dt;
 		if (m_velocity.x < 0) m_velocity.x = 0;
 	}
 	else if (m_velocity.x < 0) {
+		if (m_jumping) {
+			m_velocity.x = m_velocity.x +3;
+		}
 		m_velocity.x += currentFriction * dt;
 		if (m_velocity.x > 0) m_velocity.x = 0;
 	}
@@ -307,8 +360,8 @@ void Player::PlayerMove()
 }
 
 void Player::OnUpdate() {
-	if (m_life == 0) m_isAlive = false;
-	if (!m_isAlive) Destroy();
+	if (m_life <= 0) { m_isAlive = false; Destroy(); }
+	if (!m_isAlive) return;
 
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
@@ -323,4 +376,5 @@ void Player::OnUpdate() {
 	std::string life = std::to_string(m_life);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 0.5f, 0.5f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
+	std::cout << stateName;
 }

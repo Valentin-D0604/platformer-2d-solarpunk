@@ -10,7 +10,6 @@
 #include <iostream>
 
 void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster, bool state) {
-	std::cout << "m_lastDir: " << direction.x << ", " << direction.y << std::endl;
 	m_caster = caster;
 	m_pos = position;
 	m_dir = direction;

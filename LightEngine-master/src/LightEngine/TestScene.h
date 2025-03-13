@@ -21,6 +21,8 @@ public:
 	{
 		player,
 		mob1,
+		mob2,
+		mob3,
 		bullet
 	};
 
