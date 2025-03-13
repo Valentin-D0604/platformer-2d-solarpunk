@@ -1,9 +1,10 @@
 #include "PhysicsEntity.h"
 #include "Debug.h"
 #include "Utils/Utils.h"
+#include "Sprite.h"
 
-#define GRAVITATIONNAL_CONSTANT 9.806f;
-#define MAX_GRAVITATIONNAL_FORCE 100.0f;
+#define GRAVITATIONNAL_CONSTANT 9.806f
+#define MAX_GRAVITATIONNAL_FORCE 100.0f
 
 void PhysicsEntity::Update()
 {
@@ -11,7 +12,7 @@ void PhysicsEntity::Update()
 
 	m_gravityForce += m_mass * dt * GRAVITATIONNAL_CONSTANT;
 
-	m_gravityForce = Utils::Clamp(m_gravityForce, -INFINITY, 100.0f); // define doesn't work
+	m_gravityForce = Utils::Clamp(m_gravityForce, -INFINITY, MAX_GRAVITATIONNAL_FORCE); // define doesn't work
 
 	float distance = dt * mSpeed;
 
@@ -19,7 +20,7 @@ void PhysicsEntity::Update()
 	m_velocity += m_gravityDirection * m_gravityForce * GetDeltaTime(); // Gravity
 	
 	sf::Vector2f translation = m_velocity;
-	mShape.move(translation);
+	m_sprite->move(translation);
 
 	if (mTarget.isSet)
 	{
@@ -42,6 +43,8 @@ void PhysicsEntity::Update()
 			mTarget.isSet = false;
 		}
 	}
+
+	m_sprite->update();
 
 	m_collider->setPosition(GetPosition());
 

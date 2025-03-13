@@ -4,33 +4,17 @@
 #include "Managers.h"
 #include "Utils/Utils.h"
 #include "Debug.h"
-
+#include "Sprite.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 
-void Entity::Initialize(float radius, const sf::Color& color)
+void Entity::Initialize()
 {
 	mDirection = sf::Vector2f(0.0f, 0.0f);
-
-	mShape.setOrigin(0.f, 0.f);
-	mShape.setRadius(radius);
-	mShape.setFillColor(color);
 	
 	mTarget.isSet = false;
 
 	OnInitialize();
-}
-
-bool Entity::IsInside(float x, float y) const
-{
-	sf::Vector2f position = GetPosition(0.5f, 0.5f);
-
-	float dx = x - position.x;
-	float dy = y - position.y;
-
-	float radius = mShape.getRadius();
-
-	return (dx * dx + dy * dy) < (radius * radius);
 }
 
 void Entity::Destroy()
@@ -42,12 +26,13 @@ void Entity::Destroy()
 
 void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 {
-	float size = mShape.getRadius() * 2;
+	sf::IntRect rect = m_sprite->getTextureRect();
+	sf::Vector2f size = sf::Vector2f(rect.width , rect.height);
 
-	x -= size * ratioX;
-	y -= size * ratioY;
+	x -= size.x * ratioX;
+	y -= size.y * ratioY;
 
-	mShape.setPosition(x, y);
+	m_sprite->setPosition(x, y);
 
 	//#TODO Optimise
 	if (mTarget.isSet) 
@@ -61,11 +46,11 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 
 sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 {
-	float size = mShape.getRadius() * 2; 
-	sf::Vector2f position = mShape.getPosition();
+	sf::Vector2f size = sf::Vector2f(m_sprite->getTextureRect().width , m_sprite->getTextureRect().height);
+	sf::Vector2f position = m_sprite->getPosition();
 
-	position.x += size * ratioX;
-	position.y += size * ratioY;
+	position.x += size.x * ratioX;
+	position.y += size.y * ratioY;
 
 	return position;
 }
@@ -112,7 +97,7 @@ void Entity::Update()
 	float dt = GetDeltaTime();
 	float distance = dt * mSpeed;
 	sf::Vector2f translation = distance * mDirection;
-	mShape.move(translation);
+	m_sprite->move(translation);
 
 	if (mTarget.isSet) 
 	{
@@ -135,6 +120,8 @@ void Entity::Update()
 			mTarget.isSet = false;
 		}
 	}
+
+	m_sprite->update();
 
 	OnUpdate();
 }

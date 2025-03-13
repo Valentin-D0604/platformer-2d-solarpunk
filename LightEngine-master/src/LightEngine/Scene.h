@@ -25,7 +25,7 @@ protected:
 
 public:
 	template<typename T>
-	T* CreateEntity(float radius, const sf::Color& color);
+	T* CreateEntity();
 
 	float GetDeltaTime() const;
 
@@ -43,3 +43,4 @@ public:
 };
 
 #include "Scene.inl"
+

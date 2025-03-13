@@ -5,6 +5,10 @@
 #include "PlayerCondition.h"
 
 #include "Debug.h"
+#include "Managers.h"
+
+#include "SpriteSheet.h"
+#include "Animation.h"
 
 #include <iostream>
 // boutons des manettes
@@ -26,11 +30,26 @@
 #define BOUTON_PAVE sf::Joystick::isButtonPressed(0, 13);
 // stop
 
+#define COLLIDER_RADIUS 32
+
 void Player::OnInitialize() {
+
+	SpriteSheet* spriteSheet = new SpriteSheet(this);
+	Animation* animTest1 = new Animation("Test1", sf::Vector2i(102, 96), 2, 0.5f, true);
+	spriteSheet->addAnimation(animTest1);
+	Animation* animTest2 = new Animation("Test2", sf::Vector2i(102, 96), 2, 0.5f, false);
+	spriteSheet->addAnimation(animTest2);
+	spriteSheet->setAnimation(1);
+
+	m_sprite = spriteSheet;
+
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new CircleCollider(pos,GetRadius());
+	m_collider = new CircleCollider(pos, COLLIDER_RADIUS);
 	m_collider->setGizmo(true);
 	mpStateMachine = new StateMachine<Player>(this, State::Count);
+
 	//idle
 	{
 		Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
@@ -149,7 +168,7 @@ void Player::onCollision(Entity* other)
 void Player::parry() {
 	//Parry* pro = new Parry(GetPosition(),{50,50});
 	m_parryCooldown = 2.f;
-	Parry* protec = CreateEntity<Parry>(50, sf::Color::Green);
+	Parry* protec = CreateEntity<Parry>();
 	protec->SetPosition(GetPosition().x-175, GetPosition().y);
 	protec->setMass(20);
 	protec->setGravityDirection(sf::Vector2f(0, 1));
