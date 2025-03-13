@@ -9,6 +9,14 @@ enum class ShapeTag
 	Rectangle
 };
 
+struct Side
+{
+	bool up;
+	bool down;
+	bool left;
+	bool right;
+};
+
 class CircleCollider;
 class RectangleCollider;
 
@@ -47,6 +55,7 @@ public:
 	virtual void setPosition(sf::Vector2f _pos, float _ratioX = 0.5f, float _ratioY = 0.5f) = 0;
 	void setOffset(sf::Vector2f _pos) { m_offset = _pos; };
 	virtual sf::Vector2f getPosition(float _ratioX = 0.5f, float _ratioY = 0.5f) const = 0;
+	virtual bool getSide(Collider* _other, Side& _side);
 	virtual void update() = 0;
 };
 

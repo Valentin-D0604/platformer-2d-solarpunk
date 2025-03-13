@@ -182,3 +182,46 @@ bool Collider::rectangleCollision(sf::Vector2f* const& _vertices1, sf::Vector2f*
     return true;
 }
 
+bool Collider::getSide(Collider* _other, Side& _side)
+{
+    if (_other->getShapeTag() != ShapeTag::Rectangle)
+        return false;
+
+    if (_other->getPosition(0, 0).x > getPosition(0, 0).x)
+    {
+        _side.left = true;
+        _side.right = false;
+    }
+
+    else if (_other->getPosition(1, 1).x < getPosition(0, 0).x)
+    {
+        _side.left = false;
+        _side.right = true;
+    }
+
+    else
+    {
+        _side.left = false;
+        _side.right = false;
+    }
+
+    if (_other->getPosition(0, 0).y > getPosition(0, 0).y)
+    {
+        _side.up = true;
+        _side.down = false;
+    }
+
+    else if (_other->getPosition(1, 1).y < getPosition(0, 0).y)
+    {
+        _side.up = false;
+        _side.down = true;
+    }
+
+    else
+    {
+        _side.up = false;
+        _side.down = false;
+    }
+
+    return true;
+}
