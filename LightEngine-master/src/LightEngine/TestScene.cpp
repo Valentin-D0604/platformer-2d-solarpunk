@@ -10,12 +10,12 @@
 
 void TestScene::OnInitialize()
 {
-	pEntity1 = CreateEntity<Player>(100, sf::Color::Magenta);
+	pEntity1 = CreateEntity<Player>();
 	pEntity1->SetPosition(300, 300);
 	pEntity1->setMass(20);
 	pEntity1->setGravityDirection(sf::Vector2f(0, 1));
 	
-	pEntity2 = CreateEntity<DummyEntity>(50, sf::Color::Green);
+	pEntity2 = CreateEntity<DummyEntity>();
 	pEntity2->SetPosition(500, 500);
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
@@ -42,14 +42,6 @@ void TestScene::OnEvent(const sf::Event& event)
 			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
 		}
 	}
-}
-
-void TestScene::TrySetSelectedEntity(DummyEntity* pEntity, int x, int y)
-{
-	if (pEntity->IsInside(x, y) == false)
-		return;
-
-	pEntitySelected = pEntity;
 }
 
 void TestScene::OnUpdate()

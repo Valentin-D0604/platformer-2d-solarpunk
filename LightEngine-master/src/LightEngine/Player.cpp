@@ -7,6 +7,10 @@
 #include "TestScene.h"
 
 #include "Debug.h"
+#include "Managers.h"
+
+#include "SpriteSheet.h"
+#include "Animation.h"
 
 #include <iostream>
 // boutons des manettes
@@ -29,12 +33,27 @@
 // stop
 #define DASH 300
 
+#define COLLIDER_RADIUS 32
+
 void Player::OnInitialize() {
+
 	SetTag(TestScene::Tag::player);
+	SpriteSheet* spriteSheet = new SpriteSheet(this);
+	Animation* animTest1 = new Animation("Test1", sf::Vector2i(102, 96), 2, 0.5f, true);
+	spriteSheet->addAnimation(animTest1);
+	Animation* animTest2 = new Animation("Test2", sf::Vector2i(102, 96), 2, 0.5f, false);
+	spriteSheet->addAnimation(animTest2);
+	spriteSheet->setAnimation(1);
+
+	m_sprite = spriteSheet;
+
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new CircleCollider(pos,GetRadius());
+	m_collider = new CircleCollider(pos, COLLIDER_RADIUS);
 	m_collider->setGizmo(true);
 	mpStateMachine = new StateMachine<Player>(this, State::Count);
+
 	//idle
 	{
 		Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
@@ -165,6 +184,7 @@ void Player::Attack() {
 	bullet->setMass(1);
 	bullet->setGravityDirection(sf::Vector2f(0, 1));
 	//mpStateMachine->SetState(State::attacking);
+
 }
 
 const char* Player::GetStateName(State state) const
@@ -201,7 +221,7 @@ void Player::HandleInput()
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 
-	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
+	float PositiveJoystickSensibility = 20.0f; // la sensibilitï¿½ du joystick
 	float joystickX = JOYSTICK_X;
 	float joystickY = JOYSTICK_Y;
 	bool X = BOUTON_X;

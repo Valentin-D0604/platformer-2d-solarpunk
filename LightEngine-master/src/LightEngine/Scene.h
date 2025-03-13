@@ -4,6 +4,7 @@ class GameManager;
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/View.hpp>
 
 class Scene
 {
@@ -20,16 +21,26 @@ protected:
 	virtual void OnEvent(const sf::Event& event) = 0;
 	virtual void OnUpdate() = 0;
 
+	sf::View* m_view;
+
 public:
 	template<typename T>
-	T* CreateEntity(float radius, const sf::Color& color);
+	T* CreateEntity();
 
 	float GetDeltaTime() const;
 
 	int GetWindowWidth() const;
 	int GetWindowHeight() const;
 
+	void createView() { m_view = new sf::View; };
+
+	void setCameraCenter(sf::Vector2f _position);
+	sf::Vector2f getCameraCenter() { return m_view->getCenter(); };
+
+	void setCameraZoom(float _zoom);
+
 	friend GameManager;
 };
 
 #include "Scene.inl"
+

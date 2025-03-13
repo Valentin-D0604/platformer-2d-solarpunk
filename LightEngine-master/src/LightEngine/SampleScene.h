@@ -12,7 +12,6 @@ class SampleScene : public Scene
 	DummyEntity* pEntitySelected;
 
 private:
-	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);
 
 public:
 	void OnInitialize() override;

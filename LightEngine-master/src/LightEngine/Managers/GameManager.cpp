@@ -3,6 +3,7 @@
 #include "../Entity.h"
 #include "../PhysicsEntity.h"
 #include "../Debug.h"
+#include "../Sprite.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -154,6 +155,8 @@ void GameManager::Update()
 	}
 
 	mEntitiesToAdd.clear();
+
+	mpWindow->setView(*(mpScene->m_view));
 }
 
 void GameManager::Draw()
@@ -162,7 +165,7 @@ void GameManager::Draw()
 	
 	for (Entity* entity : mEntities)
 	{
-		mpWindow->draw(*entity->GetShape());
+		mpWindow->draw(*entity->GetSprite());
 	}
 	
 	Debug::Get()->Draw(mpWindow);

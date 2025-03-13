@@ -12,9 +12,8 @@ T* Entity::GetScene() const
 	return pScene;
 }
 
-
 template<typename T>
-T* Entity::CreateEntity(float radius, const sf::Color& color)
+inline T* Entity::CreateEntity()
 {
-	return GetScene()->CreateEntity<T>(radius, color);
+	return GetScene()->CreateEntity<T>();
 }

@@ -9,6 +9,7 @@ namespace sf
     class Color;
 }
 
+class Sprite;
 class Scene;
 
 class Entity
@@ -21,7 +22,7 @@ class Entity
     };
 
 protected:
-    sf::CircleShape mShape;
+    Sprite* m_sprite;
     sf::Vector2f mDirection;
 	Target mTarget;
     float mSpeed = 0.f;
@@ -35,13 +36,11 @@ public:
 	void SetDirection(float x, float y, float speed = -1.f);
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetTag(int tag) { mTag = tag; }
-	float GetRadius() const { return mShape.getRadius(); }
 
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
-	sf::Shape* GetShape() { return &mShape; }
+    Sprite* GetSprite() { return m_sprite; }
 
 	bool IsTag(int tag) const { return mTag == tag; }
-	bool IsInside(float x, float y) const;
 
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
@@ -53,7 +52,9 @@ public:
 	float GetDeltaTime() const;
 
     template<typename T>
-    T* CreateEntity(float radius, const sf::Color& color);
+    T* CreateEntity();
+
+    virtual void OnAnimationEnd(int _animationIndex) {};
 
 protected:
     Entity() = default;
@@ -61,11 +62,11 @@ protected:
 
     virtual void OnUpdate() {};
 	virtual void OnInitialize() {};
-	virtual void OnDestroy() {};
+    virtual void OnDestroy() {};
 	
 private:
     virtual void Update();
-	void Initialize(float radius, const sf::Color& color);
+	void Initialize();
 	//void Repulse(Entity* other);
 
     friend class GameManager;

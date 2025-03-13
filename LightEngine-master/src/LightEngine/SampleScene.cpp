@@ -4,13 +4,14 @@
 
 #include "Debug.h"
 #include "Managers.h"
+#include <iostream>
 
 void SampleScene::OnInitialize()
 {
-	pEntity1 = CreateEntity<DummyEntity>(100, sf::Color::Red);
+	pEntity1 = CreateEntity<DummyEntity>();
 	pEntity1->SetPosition(100, 100);
 
-	pEntity2 = CreateEntity<DummyEntity>(50, sf::Color::Green);
+	pEntity2 = CreateEntity<DummyEntity>();
 	pEntity2->SetPosition(500, 500);
 
 	pEntitySelected = nullptr;
@@ -25,8 +26,7 @@ void SampleScene::OnEvent(const sf::Event& event)
 
 	if (event.mouseButton.button == sf::Mouse::Button::Right)
 	{
-		TrySetSelectedEntity(pEntity1, event.mouseButton.x, event.mouseButton.y);
-		TrySetSelectedEntity(pEntity2, event.mouseButton.x, event.mouseButton.y);
+
 	}
 
 	if (event.mouseButton.button == sf::Mouse::Button::Left)
@@ -36,14 +36,6 @@ void SampleScene::OnEvent(const sf::Event& event)
 			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
 		}
 	}
-}
-
-void SampleScene::TrySetSelectedEntity(DummyEntity* pEntity, int x, int y)
-{
-	if (pEntity->IsInside(x, y) == false)
-		return;
-
-	pEntitySelected = pEntity;
 }
 
 void SampleScene::OnUpdate()
