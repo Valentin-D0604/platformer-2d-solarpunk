@@ -2,7 +2,9 @@
 #include "PhysicsEntity.h"
 #include "Bullet.h"
 #include "StateMachine.h"
+
 #define MAX_VELOCITY 400
+#define PARRY_DURATION 5.f
 
 class Player : public PhysicsEntity
 {
@@ -24,7 +26,8 @@ class Player : public PhysicsEntity
 	//---------time--------
 	float m_parryCooldown = 2.f;
 	float m_shootCooldown = 2.f;
-	float m_parryTime = 5.f;
+	float m_dashCooldown = 2.f;
+	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------
 	bool m_Parrying = false;
 
@@ -50,7 +53,10 @@ public:
 	void Attack();
 	void TakeDamage(int damage);
 	void AddBullet(int bullet);
-
+	void DecreaseCD(float time);
+	void HandleInput();
+	void CheckPlayerStates();
+	void PlayerMove();
 protected:
 	friend class PlayerCondition_IsWalking;
 	friend class PlayerCondition_IsJumping;

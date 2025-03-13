@@ -27,7 +27,7 @@
 #define BOUTON_PS sf::Joystick::isButtonPressed(0, 12);
 #define BOUTON_PAVE sf::Joystick::isButtonPressed(0, 13);
 // stop
-#define DASH 200
+#define DASH 300
 
 void Player::OnInitialize() {
 	SetTag(TestScene::Tag::player);
@@ -189,35 +189,25 @@ void Player::AddBullet(int bullet)
 	m_ammo += bullet;
 }
 
-void Player::OnUpdate() {
-	if (m_life == 0) m_isAlive = false;
-	if (!m_isAlive) Destroy();
+void Player::DecreaseCD(float dt)
+{
+	m_parryCooldown -= dt;
+	m_shootCooldown -= dt;
+	m_dashCooldown -= dt;
+}
 
-	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
+void Player::HandleInput()
+{
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
-	float currentFriction;
+
+	float PositiveJoystickSensibility = 20.0f; // la sensibilité du joystick
 	float joystickX = JOYSTICK_X;
 	float joystickY = JOYSTICK_Y;
 	bool X = BOUTON_X;
 	bool R2 = BOUTON_R2;
 	bool L2 = BOUTON_L2;
 	bool R1 = BOUTON_R1;
-
-	m_parryCooldown -= dt;
-	m_shootCooldown -= dt;
-	if (m_parryTime) m_parryTime -= dt;
-	if (m_parryTime <= 0) {
-		m_Parrying = false;
-		m_parryTime = 5.f;
-	}
-	if (pos.y >= m_OldY && m_jumping) {
-		m_jumping = false;
-	}
-	if (m_life <= 0) {
-		m_life = 0;
-		m_isAlive = false;
-	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
 		m_velocity.x += m_acceleration * dt;
 		m_lastDir = { 1,0 };
@@ -235,7 +225,7 @@ void Player::OnUpdate() {
 		//mpStateMachine->SetState(State::jumping);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
-		if (m_parryCooldown <= 0) parry();
+		if (m_parryCooldown <= 0)parry();//mpStateMachine->SetState(State::parrying);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 		if (m_parryCooldown <= 0) m_life--;
@@ -244,8 +234,34 @@ void Player::OnUpdate() {
 		if (m_shootCooldown <= 0) Attack();//mpStateMachine->SetState(State::attacking);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
-		GoToPosition(pos.x + DASH * m_lastDir.x, pos.y, 1000);
+		if (m_dashCooldown <= 0) {
+			GoToPosition(pos.x + DASH * m_lastDir.x, pos.y, 1500);
+			m_dashCooldown = 2.f;
+		}
 	}
+}
+
+void Player::CheckPlayerStates()
+{
+	sf::Vector2f pos = GetPosition();
+	float dt = GetDeltaTime();
+
+	if (m_parryTime) m_parryTime -= dt;
+	if (m_parryTime <= 0) {
+		m_Parrying = false;
+		m_parryTime = PARRY_DURATION;
+	}
+	if (m_life <= 0) {
+		m_life = 0;
+		m_isAlive = false;
+	}
+}
+
+void Player::PlayerMove()
+{
+	sf::Vector2f pos = GetPosition();
+	float dt = GetDeltaTime();
+	float currentFriction;
 	if (m_velocity.x > MAX_VELOCITY) {
 		m_velocity.x = MAX_VELOCITY;
 	}
@@ -263,9 +279,22 @@ void Player::OnUpdate() {
 		m_velocity.x += currentFriction * dt;
 		if (m_velocity.x > 0) m_velocity.x = 0;
 	}
-
 	pos.x += m_velocity.x * dt;
 	SetPosition(pos.x, pos.y);
+}
+
+void Player::OnUpdate() {
+	if (m_life == 0) m_isAlive = false;
+	if (!m_isAlive) Destroy();
+
+	sf::Vector2f pos = GetPosition();
+	float dt = GetDeltaTime();
+
+	DecreaseCD(dt);
+	CheckPlayerStates();
+	HandleInput();
+	PlayerMove();
+
 	mpStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
 	std::string life = std::to_string(m_life);

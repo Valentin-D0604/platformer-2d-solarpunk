@@ -24,7 +24,7 @@ void Bullet::OnInitialize() {
 
 void Bullet::OnUpdate() {
 	if (!m_onTheGround) {
-		SetDirection(m_dir.x, m_dir.y, 200);
+		SetDirection(m_dir.x, m_dir.y, speed);
 	}
 	else if (m_onTheGround) {
 		setMass(20);
