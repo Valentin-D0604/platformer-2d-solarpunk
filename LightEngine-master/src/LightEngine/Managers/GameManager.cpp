@@ -108,7 +108,14 @@ void GameManager::Update()
         }
 
         mEntitiesToDestroy.push_back(entity);
-        it = mEntities.erase(it);
+        
+		PhysicsEntity* physEntity = dynamic_cast<PhysicsEntity*>(*it);
+		if (physEntity != nullptr)
+		{
+			mPhysicsEntities.erase(std::find(mPhysicsEntities.begin(), mPhysicsEntities.end(), physEntity));
+		}
+
+		it = mEntities.erase(it);
     }
 
     //Collision
