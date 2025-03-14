@@ -20,8 +20,8 @@ public:
 private:
 	ResourceManager();
 
-	std::map<std::string, sf::Texture> m_textures;
-	std::map<std::string, sf::Font> m_fonts;
+	std::map<std::string, sf::Texture> m_Textures;
+	std::map<std::string, sf::Font> m_Fonts;
 
 	void addTexture(std::string _name, std::string _path);
 	void addFont(std::string _name, std::string _path);

@@ -20,7 +20,7 @@ public:
 	static sf::Font* getFont(std::string _name);
 
 private:
-	static IResourceProvider* m_resources;
+	static IResourceProvider* m_Resources;
 
 	friend class ResourceManager;
 };

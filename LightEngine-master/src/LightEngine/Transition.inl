@@ -2,7 +2,7 @@
 
 #include "Transition.h"
 
-#include "Condition.h"
+#include "Conditions/Condition.h"
 
 template<typename T>
 template<typename U>

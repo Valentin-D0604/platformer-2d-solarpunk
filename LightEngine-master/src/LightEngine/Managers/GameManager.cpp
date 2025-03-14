@@ -1,9 +1,9 @@
 #include "GameManager.h"
 
-#include "../Entity.h"
-#include "../PhysicsEntity.h"
-#include "../Debug.h"
-#include "../Sprite.h"
+#include "../Entity/Entity.h"
+#include "../Entity/PhysicsEntity.h"
+#include "../Graphics/Debug.h"
+#include "../Graphics/Sprite.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -109,7 +109,14 @@ void GameManager::Update()
         }
 
         mEntitiesToDestroy.push_back(entity);
-        it = mEntities.erase(it);
+        
+		PhysicsEntity* physEntity = dynamic_cast<PhysicsEntity*>(*it);
+		if (physEntity != nullptr)
+		{
+			mPhysicsEntities.erase(std::find(mPhysicsEntities.begin(), mPhysicsEntities.end(), physEntity));
+		}
+
+		it = mEntities.erase(it);
     }
 
     //Collision
