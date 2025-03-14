@@ -6,6 +6,8 @@ class DummyEntity;
 class Player;
 class Mob1;
 class Mob2;
+class Platform;
+
 class TestScene : public Scene
 {
 	Player* pEntity1;
@@ -14,6 +16,7 @@ class TestScene : public Scene
 	Mob2* range;
 
 	DummyEntity* pEntitySelected;
+	Platform* pPlatform;
 
 private:
 	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);
@@ -25,7 +28,8 @@ public:
 		mob1,
 		mob2,
 		mob3,
-		bullet
+		bullet,
+		platform,
 	};
 
 	void OnInitialize() override;

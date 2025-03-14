@@ -8,9 +8,9 @@
 
 #include "Platform.h"
 
-
 #include "Mob1.h"
 #include "Mob2.h"
+
 
 void TestScene::OnInitialize()
 {
@@ -32,7 +32,7 @@ void TestScene::OnInitialize()
 
 	pEntitySelected = nullptr;
 
-	pPlatform = CreateEntity<Platform>(70, sf::Color::Red);
+	pPlatform = CreateEntity<Platform>();
 	pPlatform->SetPosition(400, 400);
 	pPlatform->setMass(0);
 	pPlatform->setGravityDirection(sf::Vector2f(0, 0));

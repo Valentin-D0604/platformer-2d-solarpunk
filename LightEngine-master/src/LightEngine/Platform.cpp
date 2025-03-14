@@ -1,12 +1,17 @@
 #include "Platform.h"
 #include "TestScene.h"
+#include "Sprite.h"
+#include "Managers.h"
 #include "RectangleCollider.h"
 #include <iostream>
 
 void Platform::OnInitialize() {
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+
 	m_collider = new RectangleCollider(GetPosition(), sf::Vector2f(100, 10));
 	m_collider->setGizmo(true);
-	SetTag(TestScene::OBJECT);
+	SetTag(TestScene::platform);
 }
 
 void Platform::onCollision(sf::CircleShape& player, const sf::RectangleShape& plat) {
