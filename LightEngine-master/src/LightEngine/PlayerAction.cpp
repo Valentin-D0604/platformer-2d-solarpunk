@@ -78,5 +78,5 @@ void PlayerAction_Dash::OnUpdate(Player* player)
 
 }
 
-void PlayerAction_Dash::OnEnd(Player* player) {}
+void PlayerAction_Dash::OnEnd(Player* player) { player->m_Dash = false; }
 //-----------------------------------------------------------------------------------------------------------

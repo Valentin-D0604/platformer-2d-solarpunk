@@ -57,7 +57,269 @@ void Player::OnInitialize() {
 	Action<Player>* pParrying = mpStateMachine->CreateAction<PlayerAction_Shooting>(State::parrying);
 	Action<Player>* pAttacking = mpStateMachine->CreateAction<PlayerAction_Parrying>(State::attacking);
 	Action<Player>* pDash = mpStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
-	/*
+	
+    mpStateMachine->SetState(State::idle);
+}
+
+void Player::onCollision(Entity* other)
+{
+	if (!m_isAlive) return;
+	if (!m_Parrying) {
+		std::cout << "carrote";
+	}
+}
+
+void Player::parry() {
+	m_parryCooldown = 2.f;
+	m_Parrying = true;
+	std::cout << "going to parry !" << std::endl;
+}
+
+void Player::Attack() {
+	m_shootCooldown = 2.f;
+	m_ammo -= 1;
+	Bullet* bullet = CreateEntity<Bullet>();
+	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
+	bullet->setMass(1);
+	bullet->setGravityDirection(sf::Vector2f(0, 1));
+
+}
+
+void Player::Jump()
+{
+	m_jumping = true;
+	setGravityForce(-200);
+}
+
+void Player::Dash()
+{
+	if (m_dashCooldown <= 0) {
+		m_Dash = true;
+		GoToPosition(GetPosition().x + 1000 * m_lastDir.x, GetPosition().y,10000);
+		m_dashCooldown = 2.f;
+	}
+}
+
+const char* Player::GetStateName(State state) const
+{
+	switch (state)
+	{
+	case walking: return "walking";
+	case jumping: return "jumping";
+	case parrying: return "parrying";
+	case attacking: return "attacking";
+	case dash: return "Dashing";
+	default: return "Unknown";
+	}
+}
+
+void Player::TakeDamage(int damage) {
+	if (m_Parrying) return;
+	m_life -= damage;
+}
+
+void Player::AddBullet(int bullet)
+{
+	m_ammo += bullet;
+}
+
+void Player::DecreaseCD(float dt)
+{
+	m_parryCooldown -= dt;
+	m_shootCooldown -= dt;
+	m_dashCooldown -= dt;
+	if (m_Dash) { m_DashDuration -= dt; }
+}
+
+void Player::HandleInput()
+{
+	float dt = GetDeltaTime();
+
+	float inputX = 0.0f;
+
+	sf::Vector2f pos = GetPosition();
+	float PositiveJoystickSensibility = 20.0f; // la sensibilit� du joystick
+	float joystickX = JOYSTICK_X;
+	float joystickY = JOYSTICK_Y;
+	bool X = BOUTON_X;
+	bool R2 = BOUTON_R2;
+	bool L2 = BOUTON_L2;
+	bool R1 = BOUTON_R1;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
+		inputX = 1.0f;
+		m_lastDir = { 1,0 };
+		mpStateMachine->SetState(State::walking);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
+		inputX = -1.0f;
+		m_lastDir = { -1,0 };
+		mpStateMachine->SetState(State::walking);
+	}
+	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
+		m_OldY = pos.y;
+		mpStateMachine->SetState(State::jumping);
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
+		if (m_parryCooldown <= 0)mpStateMachine->SetState(State::parrying);
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+		if (m_parryCooldown <= 0) m_life--;
+	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
+		if (m_shootCooldown <= 0) mpStateMachine->SetState(State::attacking);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
+		mpStateMachine->SetState(State::dash);
+	}
+		bool reversing = (inputX != 0 && inputX != mDirection.x);
+
+		if (inputX != 0 && (!reversing || mSpeed < 100.0f)) {
+			mDirection.x = inputX;
+			mSpeed += m_acceleration * dt;
+		}
+		else if (inputX == 0) {
+			mSpeed -= m_friction * dt;
+		}
+
+		if (reversing && mSpeed > 0) {
+			mSpeed -= turnResistance * dt;
+			if (mSpeed < 0) mSpeed = 0;
+		}
+
+		if (mSpeed > MAX_SPEED) mSpeed = MAX_SPEED;
+		if (mSpeed < 0) mSpeed = 0;
+}
+void Player::CheckPlayerStates()
+{
+	sf::Vector2f pos = GetPosition();
+	float dt = GetDeltaTime();
+
+	if (m_parryTime) m_parryTime -= dt;
+	if (GetPosition().y >= m_OldY && m_jumping) {
+		m_jumping = false;
+	}
+	if (m_parryTime <= 0) {
+		m_Parrying = false;
+		m_parryTime = PARRY_DURATION;
+	}
+	if (pos.y >= m_OldY && m_jumping) {
+		m_jumping = false;
+	}
+	if (m_life <= 0) {
+		m_life = 0;
+		m_isAlive = false;
+	}
+	if (m_DashDuration <= 0) {
+		//m_Dash = false;
+		m_DashDuration = 1.f;
+	}
+}
+
+
+void Player::PlayerMove()
+{
+	float dt = GetDeltaTime();
+	sf::Vector2f pos = GetPosition();
+
+	pos.x += mDirection.x * mSpeed * dt;
+
+}
+bool Player::IsAlive()
+{
+	if (m_isAlive != 1 && m_isAlive != 0) return false;
+	return m_isAlive;
+}
+
+void Player::OnUpdate() {
+	if (m_life <= 0) { m_isAlive = false; Destroy(); }
+	if (!m_isAlive) return;
+
+	sf::Vector2f pos = GetPosition();
+	float dt = GetDeltaTime();
+
+	DecreaseCD(dt);
+	CheckPlayerStates();
+	HandleInput();
+	PlayerMove();
+	mpStateMachine->Update();
+	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
+	std::string life = std::to_string(m_life);
+}
+
+
+
+
+//--------------------------------------------------------------------------Bin--------------------------------------------------------------
+/*
+ //void Player::HandleInput()
+//{
+//	sf::Vector2f pos = GetPosition();
+//	float dt = GetDeltaTime();
+//	float PositiveJoystickSensibility = 20.0f; // la sensibilit� du joystick
+//	float joystickX = JOYSTICK_X;
+//	float joystickY = JOYSTICK_Y;
+//	bool X = BOUTON_X;
+//	bool R2 = BOUTON_R2;
+//	bool L2 = BOUTON_L2;
+//	bool R1 = BOUTON_R1;
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
+//		m_lastDir = { 1,0 };
+//		mpStateMachine->SetState(State::walking);
+//	}
+//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
+//		m_lastDir = { -1,0 };
+//		mpStateMachine->SetState(State::walking);
+//	}
+//	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
+//		m_OldY = pos.y;
+//		mpStateMachine->SetState(State::jumping);
+//	}
+//	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
+//		if (m_parryCooldown <= 0)mpStateMachine->SetState(State::parrying);
+//	}
+//	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+//		if (m_parryCooldown <= 0) m_life--;
+//	}
+//	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
+//		if (m_shootCooldown <= 0) mpStateMachine->SetState(State::attacking);
+//	}
+//   	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
+//		mpStateMachine->SetState(State::dash);
+//	}
+//}
+* //void Player::PlayerMove()
+//{
+//	sf::Vector2f pos = GetPosition();
+//	float dt = GetDeltaTime();
+//	float currentFriction;
+//	if (m_velocity.x > MAX_SPEED) {
+//		m_velocity.x = MAX_SPEED;
+//	}
+//	if (m_jumping) {
+//		currentFriction = m_airResistance;
+//	}
+//	else {
+//		currentFriction = m_friction;
+//	}
+//	if (m_velocity.x > 0) {
+//		if (m_jumping) {
+//			m_velocity.x = m_velocity.x - 3;
+//		}
+//		m_velocity.x -= currentFriction * dt;
+//		if (m_velocity.x < 0) m_velocity.x = 0;
+//	}
+//	else if (m_velocity.x < 0) {
+//		if (m_jumping) {
+//			m_velocity.x = m_velocity.x +3;
+//		}
+//		m_velocity.x += currentFriction * dt;
+//		if (m_velocity.x > 0) m_velocity.x = 0;
+//	}
+//	pos.x += m_velocity.x * dt;
+//	SetPosition(pos.x, pos.y);
+//}
+
 	//idle
 	{
 		Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
@@ -152,7 +414,7 @@ void Player::OnInitialize() {
 		{//idle
 			auto transition = pParrying->CreateTransition(State::idle);
 			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
-		} 
+		}
 		{//Dash
 			auto transition = pParrying->CreateTransition(State::dash);
 			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
@@ -209,189 +471,3 @@ void Player::OnInitialize() {
 			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
 		}
 	}*/
-    mpStateMachine->SetState(State::idle);
-}
-
-void Player::onCollision(Entity* other)
-{
-	if (!m_isAlive) return;
-	if (!m_Parrying) {
-		std::cout << "carrote";
-	}
-}
-
-void Player::parry() {
-	m_parryCooldown = 2.f;
-	m_Parrying = true;
-	std::cout << "going to parry !" << std::endl;
-}
-
-void Player::Attack() {
-	m_shootCooldown = 2.f;
-	m_ammo -= 1;
-	Bullet* bullet = CreateEntity<Bullet>();
-	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
-	bullet->setMass(1);
-	bullet->setGravityDirection(sf::Vector2f(0, 1));
-
-}
-
-void Player::Jump()
-{
-	m_jumping = true;
-	setGravityForce(-200);
-}
-
-void Player::Dash()
-{
-	if (m_dashCooldown <= 0) {
-		GoToPosition(GetPosition().x + DASH * m_lastDir.x, GetPosition().y, 1500);
-		m_dashCooldown = 2.f;
-		if (m_velocity.x > 0)m_velocity.x += DASH;
-		if (m_velocity.x < 0)m_velocity.x -= DASH;
-	}
-}
-
-const char* Player::GetStateName(State state) const
-{
-	switch (state)
-	{
-	case walking: return "walking";
-	case jumping: return "jumping";
-	case parrying: return "parrying";
-	case attacking: return "attacking";
-	case dash: return "Dashing";
-	default: return "Unknown";
-	}
-}
-
-void Player::TakeDamage(int damage) {
-	if (m_Parrying) return;
-	m_life -= damage;
-}
-
-void Player::AddBullet(int bullet)
-{
-	m_ammo += bullet;
-}
-
-void Player::DecreaseCD(float dt)
-{
-	m_parryCooldown -= dt;
-	m_shootCooldown -= dt;
-	m_dashCooldown -= dt;
-}
-
-void Player::HandleInput()
-{
-	sf::Vector2f pos = GetPosition();
-	float dt = GetDeltaTime();
-	float PositiveJoystickSensibility = 20.0f; // la sensibilit� du joystick
-	float joystickX = JOYSTICK_X;
-	float joystickY = JOYSTICK_Y;
-	bool X = BOUTON_X;
-	bool R2 = BOUTON_R2;
-	bool L2 = BOUTON_L2;
-	bool R1 = BOUTON_R1;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
-		m_lastDir = { 1,0 };
-		mpStateMachine->SetState(State::walking);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
-		m_lastDir = { -1,0 };
-		mpStateMachine->SetState(State::walking);
-	}
-	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
-		m_OldY = pos.y;
-		mpStateMachine->SetState(State::jumping);
-	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
-		if (m_parryCooldown <= 0)mpStateMachine->SetState(State::parrying);
-	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
-		if (m_parryCooldown <= 0) m_life--;
-	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
-		if (m_shootCooldown <= 0) mpStateMachine->SetState(State::attacking);
-	}
-   	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
-		mpStateMachine->SetState(State::dash);
-	}
-}
-
-void Player::CheckPlayerStates()
-{
-	sf::Vector2f pos = GetPosition();
-	float dt = GetDeltaTime();
-
-	if (m_parryTime) m_parryTime -= dt;
-	if (GetPosition().y >= m_OldY && m_jumping) {
-		m_jumping = false;
-	}
-	if (m_parryTime <= 0) {
-		m_Parrying = false;
-		m_parryTime = PARRY_DURATION;
-	}
-	if (pos.y >= m_OldY && m_jumping) {
-		m_jumping = false;
-	}
-	if (m_life <= 0) {
-		m_life = 0;
-		m_isAlive = false;
-	}
-}
-
-void Player::PlayerMove()
-{
-	sf::Vector2f pos = GetPosition();
-	float dt = GetDeltaTime();
-	float currentFriction;
-	if (m_velocity.x > MAX_VELOCITY) {
-		m_velocity.x = MAX_VELOCITY;
-	}
-	if (m_jumping) {
-		currentFriction = m_airResistance;
-	}
-	else {
-		currentFriction = m_friction;
-	}
-	if (m_velocity.x > 0) {
-		if (m_jumping) {
-			m_velocity.x = m_velocity.x - 3;
-		}
-		m_velocity.x -= currentFriction * dt;
-		if (m_velocity.x < 0) m_velocity.x = 0;
-	}
-	else if (m_velocity.x < 0) {
-		if (m_jumping) {
-			m_velocity.x = m_velocity.x +3;
-		}
-		m_velocity.x += currentFriction * dt;
-		if (m_velocity.x > 0) m_velocity.x = 0;
-	}
-	pos.x += m_velocity.x * dt;
-	SetPosition(pos.x, pos.y);
-}
-
-bool Player::IsAlive()
-{
-	if (m_isAlive != 1 && m_isAlive != 0) return false;
-	return m_isAlive;
-}
-
-void Player::OnUpdate() {
-	if (m_life <= 0) { m_isAlive = false; Destroy(); }
-	if (!m_isAlive) return;
-
-	sf::Vector2f pos = GetPosition();
-	float dt = GetDeltaTime();
-
-	DecreaseCD(dt);
-	CheckPlayerStates();
-	HandleInput();
-	PlayerMove();
-
-	mpStateMachine->Update();
-	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
-	std::string life = std::to_string(m_life);
-}

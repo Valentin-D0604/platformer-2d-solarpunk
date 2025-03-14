@@ -2,7 +2,7 @@
 #include "PhysicsEntity.h"
 #include "Bullet.h"
 #include "StateMachine.h"
-#define MAX_VELOCITY 400
+#define MAX_SPEED 400
 #define PARRY_DURATION 10.f
 
 class Player : public PhysicsEntity
@@ -10,10 +10,11 @@ class Player : public PhysicsEntity
 	//--------moving---------
 	bool m_jumping = false;
 	float m_OldY = 0;
-	sf::Vector2f m_velocity;
+	bool m_Dash = true;
+	//sf::Vector2f m_velocity;
 	float m_acceleration = 600.0f;
 	float m_friction = 400.0f;
-	float m_airResistance = 100.0f;
+	float turnResistance = 800.0f; 
 	sf::Vector2f m_lastDir = { 1,0 };
 	bool m_goingRight = false;
 	bool m_goingLeft = false;
@@ -26,6 +27,7 @@ class Player : public PhysicsEntity
 	float m_parryCooldown = 2.f;
 	float m_shootCooldown = 2.f;
 	float m_dashCooldown = 2.f;
+	float m_DashDuration = 1.f;
 	float m_jumpCooldown = 1.f;
 	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------
@@ -54,7 +56,7 @@ class Player : public PhysicsEntity
 		{  1,     0,      1,     1,     1,     1}, // jumping
 		{  1,     1,      0,     0,     1,     1}, // parrying
 		{  1,     1,      0,     0,     1,     1}, // attacking
-		{  1,     1,      0,     0,     0,     1},  // dash
+		{  0,     0,      0,     0,     0,     1},  // dash
 		{  1,     1,      1,     1,     1,     0}  // idle
 	};
 public:

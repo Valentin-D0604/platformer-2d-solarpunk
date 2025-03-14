@@ -35,7 +35,7 @@ void TestScene::OnInitialize()
 
 	pEntitySelected = nullptr;
 	createView();
-	setCameraZoom(3);
+	setCameraZoom(1);
 }
 
 void TestScene::OnEvent(const sf::Event& event)
