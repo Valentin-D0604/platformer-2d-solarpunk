@@ -11,13 +11,6 @@ class TestScene : public Scene
 {
 public:
 
-	enum Tag
-	{
-		PLAYER,
-		ENEMY,
-		OBJECT
-	};
-
 	Player* pEntity1;
 	DummyEntity* pEntity2;
 	Mob1* monster;
@@ -33,7 +26,10 @@ public:
 	{
 		player,
 		mob1,
-		bullet
+		mob2,
+		mob3,
+		bullet,
+		platform
 	};
 
 	void OnInitialize() override;

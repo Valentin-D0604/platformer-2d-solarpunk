@@ -1,8 +1,8 @@
 #include "Collider.h"
-#include "Utils/Utils.h"
+#include "../Utils/Utils.h"
 #include "CircleCollider.h"
 #include "RectangleCollider.h"
-#include "Managers.h"
+#include "../Managers/Managers.h"
 
 bool Collider::checkVertexInsideCircle(sf::Vector2f* const& _rect, const sf::Vector2f& _circleCenter, float _radius) {
     for (int i = 0; i < 4; i++)

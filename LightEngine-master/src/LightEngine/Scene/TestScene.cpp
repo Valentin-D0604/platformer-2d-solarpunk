@@ -8,7 +8,7 @@
 
 #include "../Entity/Mob1.h"
 
-#include "Platform.h"
+#include "../Platform.h"
 
 void TestScene::OnInitialize()
 {
@@ -26,7 +26,7 @@ void TestScene::OnInitialize()
 	monster->SetPosition(700, 300);
 	pEntitySelected = nullptr;
 
-	pPlatform = CreateEntity<Platform>(70, sf::Color::Red);
+	pPlatform = CreateEntity<Platform>();
 	pPlatform->SetPosition(100, 500);
 }
 
