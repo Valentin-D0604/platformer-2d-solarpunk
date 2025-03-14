@@ -23,12 +23,12 @@ void TestScene::OnInitialize()
 	pEntity2->SetPosition(500, 500);
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
-
+	/*
 	monster = CreateEntity<Mob1>();
 	monster->SetPosition(100, 300);
 
 	range = CreateEntity<Mob2>();
-	range->SetPosition(700, 300);
+	range->SetPosition(700, 300);*/
 	
 	Explode = CreateEntity<Mob3>();
 	Explode->SetPosition(500, 100);
@@ -64,7 +64,11 @@ void TestScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
-	setCameraCenter(pEntity1->GetPosition());
+	if (pEntity1->IsAlive()) setCameraCenter(pEntity1->GetPosition());
+	else {
+		setCameraCenter({ 0,0 });
+		setCameraZoom(5);
+	}
 }
 
 Player* TestScene::GetPlayer()

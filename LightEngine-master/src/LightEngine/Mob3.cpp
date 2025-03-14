@@ -12,6 +12,7 @@
 
 #include "Debug.h"
 #include "Managers.h"
+#include "Explode.h"
 #include <iostream>
 
 void Mob3::OnInitialize()
@@ -19,11 +20,12 @@ void Mob3::OnInitialize()
 	m_sprite = new Sprite();
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
 	m_sprite->setScale({ 0.25,0.25 });
-	SetTag(TestScene::Tag::mob2);
+	SetTag(TestScene::Tag::mob3);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos, { 10,10 });
 	mpStateMachine = new StateMachine<Mob3>(this, State::Count);
-
+	m_sprite->setScale({ 0.25,0.25 });
+	mSpeed = 300;
 	//idle
 	{
 		Action<Mob3>* pIdle = mpStateMachine->CreateAction<Mob3Action_Idle>(State::idle);
@@ -103,7 +105,7 @@ void Mob3::onCollision(Entity* other)
 
 void Mob3::OnUpdate()
 {
-	if (m_life <= 0) { Destroy(); }
+	if (m_life <= 0) { Attack(); Destroy(); }
 
 	mpStateMachine->Update();
 }
@@ -113,16 +115,20 @@ void Mob3::Attack()
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
 	m_shootCooldown -= GetDeltaTime();
-	//if ((owner->GetPosition().x <= player->GetPosition().x + 50 && owner->GetPosition().x >= player->GetPosition().x - 50 && owner->GetPosition().y <= player->GetPosition().y + 50 && owner->GetPosition().y >= player->GetPosition().y - 50)) {
+	sf::Vector2f dir = player->GetPosition() - GetPosition();
+	Utils::Normalize(dir);
+
 	if (m_shootCooldown <= 0) {
 		m_shootCooldown = 2.f;
-		sf::Vector2f dir = player->GetPosition() - GetPosition();
-		Utils::Normalize(dir);
-
-		Bullet* bullet =CreateEntity<Bullet>();
-		bullet->InitBullet(GetPosition(), dir, this, false);
-		bullet->setMass(1);
-		bullet->setGravityDirection(sf::Vector2f(0, 1));
+		if (m_canExplode) {
+			Explode* damage = CreateEntity<Explode>();
+			damage->SetPosition(GetPosition().x, GetPosition().y, 0.75, 0.75);
+			m_canExplode = false;
+			mSpeed = 200;
+		}
+		else {
+			player->TakeDamage(1);
+		}
 	}
 }
 
@@ -135,7 +141,8 @@ float Mob3::GetDistanceToPlayer()
 		sf::Vector2f mobPos = GetPosition();
 		return sqrt(pow(playerPos.x - mobPos.x, 2) + pow(playerPos.y - mobPos.y, 2));
 	}
-	else return 10000;
+
+	 return 10000;
 }
 
 void Mob3::TakeDamage(int damage) {

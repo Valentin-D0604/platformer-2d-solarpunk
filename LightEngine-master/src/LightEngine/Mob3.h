@@ -8,6 +8,7 @@ class Mob3 : public PhysicsEntity
 	//---------stats---------
 	bool m_isAlive = true;
 	int m_life = 2;
+	bool m_canExplode = true;
 	sf::Vector2f m_velocity;
 	float m_shootCooldown = 2.f;
 	float m_walkingTimer = 3.f;

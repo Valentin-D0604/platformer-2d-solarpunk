@@ -65,7 +65,6 @@ void Player::onCollision(Entity* other)
 {
 	if (!m_isAlive) return;
 	if (!m_Parrying) {
-		std::cout << "carrote";
 	}
 }
 
@@ -87,15 +86,19 @@ void Player::Attack() {
 
 void Player::Jump()
 {
-	m_jumping = true;
-	setGravityForce(-200);
+	if (m_jumpCooldown <= 0 && m_jumpCount <= m_maxJumps) {
+		std::cout << m_jumpCount;
+		setGravityForce(-200);
+		m_jumpCount += 1;
+		m_jumpCooldown = 0.2f;
+	}
 }
 
 void Player::Dash()
 {
 	if (m_dashCooldown <= 0) {
 		m_Dash = true;
-		GoToPosition(GetPosition().x + 1000 * m_lastDir.x, GetPosition().y,10000);
+		GoToPosition(GetPosition().x + 1000 * m_lastDir.x, GetPosition().y, 10000);
 		m_dashCooldown = 2.f;
 	}
 }
@@ -116,6 +119,7 @@ const char* Player::GetStateName(State state) const
 void Player::TakeDamage(int damage) {
 	if (m_Parrying) return;
 	m_life -= damage;
+	std::cout << m_life;
 }
 
 void Player::AddBullet(int bullet)
@@ -128,6 +132,7 @@ void Player::DecreaseCD(float dt)
 	m_parryCooldown -= dt;
 	m_shootCooldown -= dt;
 	m_dashCooldown -= dt;
+	m_jumpCooldown -= dt;
 	if (m_Dash) { m_DashDuration -= dt; }
 }
 
@@ -157,7 +162,7 @@ void Player::HandleInput()
 		mpStateMachine->SetState(State::walking);
 	}
 	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
-		m_OldY = pos.y;
+		if (m_jumpCount <=1) m_OldY = pos.y;
 		mpStateMachine->SetState(State::jumping);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
@@ -195,6 +200,10 @@ void Player::CheckPlayerStates()
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 
+	if (pos.y >= m_OldY) {
+		m_jumping = false;
+		m_jumpCount = 0; // Reset le nombre de sauts
+	}
 	if (m_parryTime) m_parryTime -= dt;
 	if (GetPosition().y >= m_OldY && m_jumping) {
 		m_jumping = false;
@@ -203,15 +212,11 @@ void Player::CheckPlayerStates()
 		m_Parrying = false;
 		m_parryTime = PARRY_DURATION;
 	}
-	if (pos.y >= m_OldY && m_jumping) {
-		m_jumping = false;
-	}
 	if (m_life <= 0) {
 		m_life = 0;
 		m_isAlive = false;
 	}
 	if (m_DashDuration <= 0) {
-		//m_Dash = false;
 		m_DashDuration = 1.f;
 	}
 }
@@ -227,14 +232,16 @@ void Player::PlayerMove()
 }
 bool Player::IsAlive()
 {
-	if (m_isAlive != 1 && m_isAlive != 0) return false;
-	return m_isAlive;
+	if (m_isAlive != 1 && m_isAlive != 0) {
+		return false;
+	}
+	if (m_isAlive)return true;
+	return false;
 }
 
 void Player::OnUpdate() {
 	if (m_life <= 0) { m_isAlive = false; Destroy(); }
 	if (!m_isAlive) return;
-
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 

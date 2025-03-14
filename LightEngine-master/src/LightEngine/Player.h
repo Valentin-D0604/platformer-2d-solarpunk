@@ -32,6 +32,8 @@ class Player : public PhysicsEntity
 	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------
 	bool m_Parrying = false;
+	int m_jumpCount = 0;
+	const int m_maxJumps = 2;
 
 	StateMachine<Player>* mpStateMachine;
 

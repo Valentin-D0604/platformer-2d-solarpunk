@@ -14,9 +14,9 @@ void Mob3Action_Walking::OnStart(Mob3* owner)
 void Mob3Action_Walking::OnUpdate(Mob3* owner)
 {
 	owner->m_walkingTimer -= owner->GetDeltaTime();
-	owner->SetDirection(dir.x, dir.y, 200);
+	owner->SetDirection(dir.x, dir.y, owner->mSpeed);
 	if (owner->m_walkingTimer <= 0) {
-		owner->SetDirection(dir.x = -dir.x, dir.y = -dir.y, 200);
+		owner->SetDirection(dir.x = -dir.x, dir.y = -dir.y, owner->mSpeed);
 		owner->m_walkingTimer = 3.f;
 	}
 }
@@ -34,7 +34,7 @@ void Mob3Action_Chasing::OnUpdate(Mob3* owner)
 {
 	TestScene* scene = dynamic_cast<TestScene*>(owner->GetScene());
 	Player* player = scene->GetPlayer();
-	owner->GoToDirection(player->GetPosition().x, player->GetPosition().y, 200);
+	owner->GoToDirection(player->GetPosition().x, player->GetPosition().y, owner->mSpeed);
 	//	std::cout << "chasing";
 }
 
