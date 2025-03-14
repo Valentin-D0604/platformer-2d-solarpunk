@@ -8,6 +8,8 @@
 
 #include "../Entity/Mob1.h"
 
+#include "Platform.h"
+
 void TestScene::OnInitialize()
 {
 	pEntity1 = CreateEntity<Player>();
@@ -23,6 +25,9 @@ void TestScene::OnInitialize()
 	monster = CreateEntity<Mob1>();
 	monster->SetPosition(700, 300);
 	pEntitySelected = nullptr;
+
+	pPlatform = CreateEntity<Platform>(70, sf::Color::Red);
+	pPlatform->SetPosition(100, 500);
 }
 
 void TestScene::OnEvent(const sf::Event& event)

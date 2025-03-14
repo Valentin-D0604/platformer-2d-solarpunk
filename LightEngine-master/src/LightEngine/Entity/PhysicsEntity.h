@@ -23,7 +23,5 @@ protected:
 
 private:
 	virtual void Update();
-
 	friend class GameManager;
 };
-

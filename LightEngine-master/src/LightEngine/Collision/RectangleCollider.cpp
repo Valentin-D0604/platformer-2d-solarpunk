@@ -7,7 +7,7 @@ RectangleCollider::RectangleCollider(sf::Vector2f _position, sf::Vector2f _size,
     m_Vertices = new sf::Vector2f[4];
     m_shapeTag = ShapeTag::Rectangle;
 
-    // Définition des sommets par rapport au centre
+    // Dï¿½finition des sommets par rapport au centre
     sf::Vector2f halfSize = _size / 2.f;
     sf::Vector2f localVertices[4] = {
         {-halfSize.x, -halfSize.y},
@@ -46,6 +46,7 @@ bool RectangleCollider::isColliding(Collider* _other)
 
             colliding = circleRectangleCollision(otherPos, otherRadius, m_Vertices);
         }
+        
         case ShapeTag::Rectangle:
         {
             RectangleCollider* otherCast = dynamic_cast<RectangleCollider*>(_other);
