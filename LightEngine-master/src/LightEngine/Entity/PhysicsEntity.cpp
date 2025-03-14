@@ -4,6 +4,8 @@
 #include "../Utils/Utils.h"
 #include "../Graphics/Sprite.h"
 
+#include <iostream>
+
 #define GRAVITATIONNAL_CONSTANT 9.806f
 #define MAX_GRAVITATIONNAL_FORCE 100.0f
 
@@ -62,6 +64,7 @@ void PhysicsEntity::Repulse(StaticEntity* _other)
 {
 	if (m_Collider->getShapeTag() == ShapeTag::Rectangle)
 	{
+		m_Collider->setPosition(GetPosition());
 		sf::FloatRect movingBounds(m_Collider->getPosition(0, 0), m_Collider->getPosition(1, 1) - m_Collider->getPosition(0, 0));
 		sf::FloatRect staticBounds(_other->m_Collider->getPosition(0, 0), _other->m_Collider->getPosition(1, 1) - _other->m_Collider->getPosition(0, 0));
 

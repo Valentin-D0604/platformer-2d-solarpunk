@@ -46,8 +46,8 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 
 void Entity::Move(float _x, float _y)
 {
-	sf::Vector2f position = GetPosition() + sf::Vector2f(_x, _y);
-	SetPosition(position.x, position.y);
+	sf::Vector2f position = GetPosition(0, 0) + sf::Vector2f(_x, _y);
+	SetPosition(position.x, position.y, 0, 0);
 }
 
 sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
