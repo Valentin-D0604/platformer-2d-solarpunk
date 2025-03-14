@@ -32,11 +32,11 @@ void Bullet::OnUpdate() {
 		SetDirection(m_Dir.x, m_Dir.y, m_Speed);
 	}
 	else if (m_OnTheGround) {
-		setMass(20);
+		SetMass(20);
 	}
 }
 
-void Bullet::onCollision(Entity* other) {
+void Bullet::OnCollision(Entity* other) {
 	if (other->IsTag(TestScene::Tag::mob1)) {
 		Mob1* enemy = dynamic_cast<Mob1*>(other);
 		enemy->TakeDamage(1);

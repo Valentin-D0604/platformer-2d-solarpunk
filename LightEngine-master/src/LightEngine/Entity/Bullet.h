@@ -12,7 +12,7 @@ public:
 	void InitBullet(sf::Vector2f _position,sf::Vector2f _direction,Entity* _caster, bool _state);
 	void OnInitialize() override;
 	void OnUpdate() override;
-	void onCollision(Entity* _other) override;
+	void OnCollision(Entity* _other) override;
 
 	bool IsBulletOnGround();
 };

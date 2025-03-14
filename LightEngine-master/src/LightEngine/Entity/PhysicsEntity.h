@@ -3,23 +3,27 @@
 #include "../Collision/Collider.h"
 #include "SFML/Graphics.hpp"
 
+class StaticEntity;
+
 class PhysicsEntity : public Entity
 {
 public:	
 	float m_Mass;
 	sf::Vector2f m_GravityDirection;
-	Collider* m_Collider;
 
-	void setMass(float _mass);
-	void setGravityForce(float _gravityForce);
-	void setGravityDirection(sf::Vector2f _gravityDirection);
+	void SetMass(float _mass);
+	void SetGravityForce(float _gravityForce);
+	void SetGravityDirection(sf::Vector2f _gravityDirection);
 
-	bool isColliding(PhysicsEntity* _other);
-	virtual void onCollision(Entity* _collidedWith) {};
+	bool IsColliding(PhysicsEntity* _other);
+	bool IsColliding(StaticEntity* _other);
+	void Repulse(StaticEntity* _other);
+	virtual void OnCollision(Entity* _collidedWith) {};
 
 protected:
 	float m_GravityForce;
 	sf::Vector2f m_Velocity;
+	Collider* m_Collider;
 
 private:
 	virtual void Update();

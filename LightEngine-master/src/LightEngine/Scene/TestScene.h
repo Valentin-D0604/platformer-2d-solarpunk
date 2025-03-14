@@ -18,10 +18,6 @@ public:
 
 	Entity* pEntitySelected;
 
-private:
-	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);
-
-public:
 	enum Tag
 	{
 		player,

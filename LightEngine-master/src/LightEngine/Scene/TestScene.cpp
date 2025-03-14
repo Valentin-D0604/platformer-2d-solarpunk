@@ -14,13 +14,13 @@ void TestScene::OnInitialize()
 {
 	pEntity1 = CreateEntity<Player>();
 	pEntity1->SetPosition(300, 300);
-	pEntity1->setMass(20);
-	pEntity1->setGravityDirection(sf::Vector2f(0, 1));
+	pEntity1->SetMass(20);
+	pEntity1->SetGravityDirection(sf::Vector2f(0, 1));
 	
 	pEntity2 = CreateEntity<DummyEntity>();
 	pEntity2->SetPosition(500, 500);
-	pEntity2->setMass(0);
-	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
+	pEntity2->SetMass(0);
+	pEntity2->SetGravityDirection(sf::Vector2f(0, -1));
 
 	monster = CreateEntity<Mob1>();
 	monster->SetPosition(700, 300);

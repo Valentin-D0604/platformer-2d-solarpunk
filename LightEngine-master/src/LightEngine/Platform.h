@@ -1,9 +1,7 @@
 #pragma once
-#include "Entity/PhysicsEntity.h"
+#include "Entity/StaticEntity.h"
 
-class Platform : public PhysicsEntity {
+class Platform : public StaticEntity {
 public:
     void OnInitialize() override;
-    void onCollision(Entity* other) override;
-	void OnUpdate() override;
 };

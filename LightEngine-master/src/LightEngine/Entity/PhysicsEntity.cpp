@@ -1,4 +1,5 @@
 #include "PhysicsEntity.h"
+#include "StaticEntity.h"
 #include "../Graphics/Debug.h"
 #include "../Utils/Utils.h"
 #include "../Graphics/Sprite.h"
@@ -12,7 +13,7 @@ void PhysicsEntity::Update()
 
 	m_GravityForce += m_Mass * dt * GRAVITATIONNAL_CONSTANT;
 
-	m_GravityForce = Utils::Clamp(m_GravityForce, -INFINITY, MAX_GRAVITATIONNAL_FORCE); // define doesn't work
+	m_GravityForce = Utils::Clamp(m_GravityForce, -INFINITY, MAX_GRAVITATIONNAL_FORCE);
 
 	float distance = dt * m_Speed;
 
@@ -21,28 +22,6 @@ void PhysicsEntity::Update()
 	
 	sf::Vector2f translation = m_Velocity;
 	m_Sprite->move(translation);
-
-	if (m_Target.m_IsSet)
-	{
-		float x1 = GetPosition(0.5f, 0.5f).x;
-		float y1 = GetPosition(0.5f, 0.5f).y;
-
-		float x2 = x1 + m_Direction.x * m_Target.m_Distance;
-		float y2 = y1 + m_Direction.y * m_Target.m_Distance;
-
-		Debug::DrawLine(x1, y1, x2, y2, sf::Color::Cyan);
-
-		Debug::DrawCircle(m_Target.m_Position.x, m_Target.m_Position.y, 5.f, sf::Color::Magenta);
-
-		m_Target.m_Distance -= distance;
-
-		if (m_Target.m_Distance <= 0.f)
-		{
-			SetPosition(m_Target.m_Position.x, m_Target.m_Position.y, 0.5f, 0.5f);
-			m_Direction = sf::Vector2f(0.f, 0.f);
-			m_Target.m_IsSet = false;
-		}
-	}
 
 	m_Sprite->update();
 
@@ -53,23 +32,59 @@ void PhysicsEntity::Update()
 	m_Collider->update();
 }
 
-void PhysicsEntity::setMass(float _mass)
+void PhysicsEntity::SetMass(float _mass)
 {
 	m_Mass = _mass;
 }
 
-void PhysicsEntity::setGravityForce(float _gravityForce)
+void PhysicsEntity::SetGravityForce(float _gravityForce)
 {
 	m_GravityForce = _gravityForce;
 }
 
-void PhysicsEntity::setGravityDirection(sf::Vector2f _gravityDirection)
+void PhysicsEntity::SetGravityDirection(sf::Vector2f _gravityDirection)
 {
 	Utils::Normalize(_gravityDirection);
 	m_GravityDirection = _gravityDirection;
 }
 
-bool PhysicsEntity::isColliding(PhysicsEntity* _other)
+bool PhysicsEntity::IsColliding(PhysicsEntity* _other)
 {
-	return m_Collider->isColliding(_other->m_Collider);
+	return m_Collider->IsColliding(_other->m_Collider);
 }
+
+bool PhysicsEntity::IsColliding(StaticEntity* _other)
+{
+	return m_Collider->IsColliding(_other->m_Collider);
+}
+
+void PhysicsEntity::Repulse(StaticEntity* _other)
+{
+	if (m_Collider->getShapeTag() == ShapeTag::Rectangle)
+	{
+		sf::FloatRect movingBounds(m_Collider->getPosition(0, 0), m_Collider->getPosition(1, 1) - m_Collider->getPosition(0, 0));
+		sf::FloatRect staticBounds(_other->m_Collider->getPosition(0, 0), _other->m_Collider->getPosition(1, 1) - _other->m_Collider->getPosition(0, 0));
+
+		float overlapLeft = movingBounds.left + movingBounds.width - staticBounds.left;
+		float overlapRight = staticBounds.left + staticBounds.width - movingBounds.left;
+		float overlapTop = movingBounds.top + movingBounds.height - staticBounds.top;
+		float overlapBottom = staticBounds.top + staticBounds.height - movingBounds.top;
+
+		bool fromLeft = overlapLeft < overlapRight;
+		bool fromTop = overlapTop < overlapBottom;
+
+		float minOverlapX = fromLeft ? overlapLeft : overlapRight;
+		float minOverlapY = fromTop ? overlapTop : overlapBottom;
+
+		// Repousser dans la direction la plus courte (horizontale ou verticale)
+		if (minOverlapX < minOverlapY)
+		{
+			Move(fromLeft ? -minOverlapX : minOverlapX, 0);
+		}
+		else
+		{
+			Move(0, fromTop ? -minOverlapY : minOverlapY);
+		}
+	}
+}
+

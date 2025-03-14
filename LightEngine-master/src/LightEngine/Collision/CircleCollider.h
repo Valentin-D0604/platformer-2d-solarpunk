@@ -13,10 +13,13 @@ public:
 	virtual void move(sf::Vector2f _direction);
 	virtual sf::Vector2f getPosition(float _ratioX = 0.5f, float _ratioY = 0.5f) const;
 
-	virtual bool isColliding(Collider* _other);
+	virtual bool IsColliding(Collider* _other);
 
 	virtual float getRadius() const { return m_Radius; };
 	void setRadius(float _radius) { m_Radius = _radius; };
 	virtual void update();
+
+	// Hérité via Collider
+	sf::Vector2f getSize() const override;
 };
 

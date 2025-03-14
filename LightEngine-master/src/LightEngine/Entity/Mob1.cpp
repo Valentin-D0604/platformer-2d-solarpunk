@@ -94,7 +94,7 @@ void Mob1::OnInitialize()
 	m_pStateMachine->SetState(State::idle);
 }
 
-void Mob1::onCollision(Entity* other)
+void Mob1::OnCollision(Entity* other)
 {
 	if (other->IsTag(TestScene::Tag::mob1)) return;
 }

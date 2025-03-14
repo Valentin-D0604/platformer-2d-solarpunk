@@ -45,7 +45,7 @@ class Player : public PhysicsEntity
 	};
 public:
 	void OnInitialize() override;
-	void onCollision(Entity* _other) override;
+	void OnCollision(Entity* _other) override;
 	void OnUpdate() override;
 	
 	const char* GetStateName(State _state) const;

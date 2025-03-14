@@ -34,7 +34,7 @@ sf::Vector2f CircleCollider::getPosition(float _ratioX, float _ratioY) const
 	return position;
 }
 
-bool CircleCollider::isColliding(Collider* _other)
+bool CircleCollider::IsColliding(Collider* _other)
 {
 	bool colliding = false;
 	switch (_other->getShapeTag())
@@ -67,4 +67,9 @@ void CircleCollider::update()
 	sf::Vector2f position = getPosition();
 
 	Debug::DrawCircle(position.x, position.y, getRadius(), sf::Color::Red);
+}
+
+sf::Vector2f CircleCollider::getSize() const
+{
+	return sf::Vector2f(m_Radius, m_Radius);
 }

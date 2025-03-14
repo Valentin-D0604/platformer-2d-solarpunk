@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "../Collision/CircleCollider.h"
+#include "../Collision/RectangleCollider.h"
 
 #include "../Actions/PlayerAction.h"
 #include "../Conditions/PlayerCondition.h"
@@ -50,7 +50,7 @@ void Player::OnInitialize() {
 	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_Collider = new CircleCollider(pos, COLLIDER_RADIUS);
+	m_Collider = new RectangleCollider(pos, sf::Vector2f(64, 64));
 	m_Collider->setGizmo(true);
 	mpStateMachine = new StateMachine<Player>(this, State::Count);
 
@@ -164,7 +164,7 @@ void Player::OnInitialize() {
 	mpStateMachine->SetState(State::idle);
 }
 
-void Player::onCollision(Entity* other)
+void Player::OnCollision(Entity* other)
 {
 	std::cout << "carrote";
 }
@@ -181,8 +181,8 @@ void Player::Attack() {
 	m_Ammo -= 1;
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), m_LastDir,this, false);
-	bullet->setMass(1);
-	bullet->setGravityDirection(sf::Vector2f(0, 1));
+	bullet->SetMass(1);
+	bullet->SetGravityDirection(sf::Vector2f(0, 1));
 	//mpStateMachine->SetState(State::attacking);
 
 }
@@ -241,7 +241,7 @@ void Player::HandleInput()
 	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_Jumping) {
 		m_OldY = pos.y;
 		m_Jumping = true;
-		setGravityForce(-200);
+		SetGravityForce(-200);
 		//mpStateMachine->SetState(State::jumping);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {

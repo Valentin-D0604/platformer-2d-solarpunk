@@ -26,7 +26,7 @@ class Mob1 : public PhysicsEntity
 	};
 public:
 	void OnInitialize() override;
-	void onCollision(Entity* _other) override;
+	void OnCollision(Entity* _other) override;
 	void OnUpdate() override;
 
 	float GetDistanceToPlayer();

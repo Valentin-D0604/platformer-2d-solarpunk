@@ -17,7 +17,7 @@ void PlayerAction_Walking::OnEnd(Player* _player) {}
 void PlayerAction_jumping::OnStart(Player* _player) {
 //	player->m_OldY = player->GetPosition().y;
 	//player->m_jumping = true;
-	//player->setGravityForce(-200);
+	//player->SetGravityForce(-200);
 }
 
 void PlayerAction_jumping::OnUpdate(Player* _player)

@@ -51,10 +51,11 @@ public:
 
 	void setGizmo(bool _active) { m_gizmo = _active; };
 
-	virtual bool isColliding(Collider* _other) = 0;
+	virtual bool IsColliding(Collider* _other) = 0;
 	virtual void setPosition(sf::Vector2f _pos, float _ratioX = 0.5f, float _ratioY = 0.5f) = 0;
 	void setOffset(sf::Vector2f _pos) { m_offset = _pos; };
 	virtual sf::Vector2f getPosition(float _ratioX = 0.5f, float _ratioY = 0.5f) const = 0;
+	virtual sf::Vector2f getSize() const = 0;
 	virtual bool getSide(Collider* _other, Side& _side);
 	virtual void update() = 0;
 };

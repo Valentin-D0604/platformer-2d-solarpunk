@@ -44,6 +44,12 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 	}
 }
 
+void Entity::Move(float _x, float _y)
+{
+	sf::Vector2f position = GetPosition() + sf::Vector2f(_x, _y);
+	SetPosition(position.x, position.y);
+}
+
 sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 {
 	sf::Vector2f size = sf::Vector2f(m_Sprite->getTextureRect().width , m_Sprite->getTextureRect().height);
@@ -98,29 +104,6 @@ void Entity::Update()
 	float distance = dt * m_Speed;
 	sf::Vector2f translation = distance * m_Direction;
 	m_Sprite->move(translation);
-
-	if (m_Target.m_IsSet) 
-	{
-		float x1 = GetPosition(0.5f, 0.5f).x;
-		float y1 = GetPosition(0.5f, 0.5f).y;
-
-		float x2 = x1 + m_Direction.x * m_Target.m_Distance;
-		float y2 = y1 + m_Direction.y * m_Target.m_Distance;
-
-		Debug::DrawLine(x1, y1, x2, y2, sf::Color::Cyan);
-
-		Debug::DrawCircle(m_Target.m_Position.x, m_Target.m_Position.y, 5.f, sf::Color::Magenta);
-
-		m_Target.m_Distance -= distance;
-
-		if (m_Target.m_Distance <= 0.f)
-		{
-			SetPosition(m_Target.m_Position.x, m_Target.m_Position.y, 0.5f, 0.5f);
-			m_Direction = sf::Vector2f(0.f, 0.f);
-			m_Target.m_IsSet = false;
-		}
-	}
-
 	m_Sprite->update();
 
 	OnUpdate();
