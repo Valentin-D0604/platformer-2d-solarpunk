@@ -6,6 +6,7 @@ class DummyEntity;
 class Player;
 class Mob1;
 class Mob2;
+class Boss;
 class Platform;
 
 class TestScene : public Scene
@@ -14,6 +15,7 @@ class TestScene : public Scene
 	DummyEntity* pEntity2;
 	Mob1* monster;
 	Mob2* range;
+	Boss* pBoss;
 
 	DummyEntity* pEntitySelected;
 	Platform* pPlatform;
@@ -28,6 +30,7 @@ public:
 		mob1,
 		mob2,
 		mob3,
+		boss,
 		bullet,
 		platform,
 	};

@@ -11,13 +11,14 @@
 #include "Mob1.h"
 #include "Mob2.h"
 
+#include "Boss.h"
 
 void TestScene::OnInitialize()
 {
 	pEntity1 = CreateEntity<Player>();
-	pEntity1->SetPosition(300, 300);
-	pEntity1->setMass(20);
-	pEntity1->setGravityDirection(sf::Vector2f(0, 1));
+	//pEntity1->SetPosition(300, 300);
+	//pEntity1->setMass(20);
+	//pEntity1->setGravityDirection(sf::Vector2f(0, 1));
 	
 	pEntity2 = CreateEntity<DummyEntity>();
 	pEntity2->SetPosition(500, 500);
@@ -32,11 +33,17 @@ void TestScene::OnInitialize()
 
 	pEntitySelected = nullptr;
 
-	pPlatform = CreateEntity<Platform>();
+	/*pPlatform = CreateEntity<Platform>();
 	pPlatform->SetPosition(400, 400);
 	pPlatform->setMass(0);
 	pPlatform->setGravityDirection(sf::Vector2f(0, 0));
-	pPlatform->onCollision(pEntity1->GetShape(), pPlatform->GetShape());
+	pPlatform->onCollision(pEntity1->GetShape(), pPlatform->GetShape());*/
+
+	pBoss = CreateEntity<Boss>();
+	pBoss->SetPosition(700, 300);
+	pBoss->setMass(10);
+	pBoss->setGravityDirection(sf::Vector2f(0, 1));
+
 }
 
 void TestScene::OnEvent(const sf::Event& event)
