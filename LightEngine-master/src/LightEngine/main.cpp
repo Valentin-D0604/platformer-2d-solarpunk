@@ -12,17 +12,17 @@
 
 int main() 
 {
-	/*Managers* pInstance = new Managers();
+	Managers* pInstance = new Managers();
 
 	GET_MANAGER(GameManager)->CreateWindow(1280, 720, "enetre", 60, sf::Color::Black);
 
 	GET_MANAGER(GameManager)->LaunchScene<TestScene>();
 
-	pInstance->run();*/
+	pInstance->run();
 
-	CollisionSystem* collisionSystem = new CollisionSystem();
+	/*CollisionSystem* collisionSystem = new CollisionSystem();
 
-	collisionSystem->test();
+	collisionSystem->test();*/
 
 	return 0;
 }

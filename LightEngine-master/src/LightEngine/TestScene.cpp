@@ -23,7 +23,10 @@ void TestScene::OnInitialize()
 	pEntitySelected = nullptr;
 
 	pPlatform = CreateEntity<Platform>(70, sf::Color::Red);
-	pPlatform->SetPosition(100, 500);
+	pPlatform->SetPosition(400, 400);
+	pPlatform->setMass(0);
+	pPlatform->setGravityDirection(sf::Vector2f(0, 0));
+	pPlatform->onCollision(pEntity1->GetShape(), pPlatform->GetShape());
 }
 
 void TestScene::OnEvent(const sf::Event& event)

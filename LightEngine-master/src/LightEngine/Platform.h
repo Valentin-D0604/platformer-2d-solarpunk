@@ -4,6 +4,6 @@
 class Platform : public PhysicsEntity {
 public:
     void OnInitialize() override;
-    void onCollision(Entity* other) override;
+    void onCollision(sf::CircleShape& player, const sf::RectangleShape& plat);
 	void OnUpdate() override;
 };
