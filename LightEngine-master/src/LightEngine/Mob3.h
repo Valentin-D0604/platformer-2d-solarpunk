@@ -2,7 +2,7 @@
 #include "PhysicsEntity.h"
 #include "StateMachine.h"
 
-class Mob2 : public PhysicsEntity
+class Mob3 : public PhysicsEntity
 {
 
 	//---------stats---------
@@ -13,7 +13,7 @@ class Mob2 : public PhysicsEntity
 	float m_walkingTimer = 3.f;
 	//------------------------
 
-	StateMachine<Mob2>* mpStateMachine;
+	StateMachine<Mob3>* mpStateMachine;
 
 	enum State
 	{
@@ -33,9 +33,9 @@ public:
 	float GetDistanceToPlayer();
 	void TakeDamage(int damage);
 private:
-	friend class Mob2Action_Walking;
-	friend class Mob2Action_Chasing;
-	friend class Mob2Action_Attacking;
+	friend class Mob3Action_Walking;
+	friend class Mob3Action_Chasing;
+	friend class Mob3Action_Attacking;
 	friend class Mob2Action_Idle;
 
 };

@@ -6,13 +6,14 @@ class DummyEntity;
 class Player;
 class Mob1;
 class Mob2;
+class Mob3;
 class TestScene : public Scene
 {
 	Player* pEntity1;
 	DummyEntity* pEntity2;
 	Mob1* monster;
 	Mob2* range;
-
+	Mob3* Explode;
 	DummyEntity* pEntitySelected;
 
 private:

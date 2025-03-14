@@ -2,7 +2,6 @@
 #include "CircleCollider.h"
 
 #include "PlayerAction.h"
-#include "PlayerCondition.h"
 
 #include "TestScene.h"
 
@@ -52,7 +51,13 @@ void Player::OnInitialize() {
 	m_collider = new CircleCollider(pos, COLLIDER_RADIUS);
 	m_collider->setGizmo(true);
 	mpStateMachine = new StateMachine<Player>(this, State::Count);
-
+	Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
+	Action<Player>* pWalking = mpStateMachine->CreateAction<PlayerAction_Walking>(State::walking);
+	Action<Player>* pJumping = mpStateMachine->CreateAction<PlayerAction_jumping>(State::jumping);
+	Action<Player>* pParrying = mpStateMachine->CreateAction<PlayerAction_Shooting>(State::parrying);
+	Action<Player>* pAttacking = mpStateMachine->CreateAction<PlayerAction_Parrying>(State::attacking);
+	Action<Player>* pDash = mpStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
+	/*
 	//idle
 	{
 		Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
@@ -182,7 +187,7 @@ void Player::OnInitialize() {
 	}
 	//Dash
 	{
-		Action<Player>* pDash = mpStateMachine->CreateAction<PlayerAction_Idle>(State::dash);
+		Action<Player>* pDash = mpStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
 		{//walking
 			auto transition = pDash->CreateTransition(State::walking);
 			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
@@ -203,9 +208,8 @@ void Player::OnInitialize() {
 			auto transition = pDash->CreateTransition(State::idle);
 			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
 		}
-
-	}
-	mpStateMachine->SetState(State::idle);
+	}*/
+    mpStateMachine->SetState(State::idle);
 }
 
 void Player::onCollision(Entity* other)
@@ -225,12 +229,27 @@ void Player::parry() {
 void Player::Attack() {
 	m_shootCooldown = 2.f;
 	m_ammo -= 1;
-	//std::cout << m_ammo;
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
 	bullet->setMass(1);
 	bullet->setGravityDirection(sf::Vector2f(0, 1));
 
+}
+
+void Player::Jump()
+{
+	m_jumping = true;
+	setGravityForce(-200);
+}
+
+void Player::Dash()
+{
+	if (m_dashCooldown <= 0) {
+		GoToPosition(GetPosition().x + DASH * m_lastDir.x, GetPosition().y, 1500);
+		m_dashCooldown = 2.f;
+		if (m_velocity.x > 0)m_velocity.x += DASH;
+		if (m_velocity.x < 0)m_velocity.x -= DASH;
+	}
 }
 
 const char* Player::GetStateName(State state) const
@@ -249,7 +268,6 @@ const char* Player::GetStateName(State state) const
 void Player::TakeDamage(int damage) {
 	if (m_Parrying) return;
 	m_life -= damage;
-	//std::cout << m_life<<std::endl;
 }
 
 void Player::AddBullet(int bullet)
@@ -268,7 +286,6 @@ void Player::HandleInput()
 {
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
-
 	float PositiveJoystickSensibility = 20.0f; // la sensibilit� du joystick
 	float joystickX = JOYSTICK_X;
 	float joystickY = JOYSTICK_Y;
@@ -289,7 +306,7 @@ void Player::HandleInput()
 		mpStateMachine->SetState(State::jumping);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
-		if (m_parryCooldown <= 0) mpStateMachine->SetState(State::parrying);
+		if (m_parryCooldown <= 0)mpStateMachine->SetState(State::parrying);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 		if (m_parryCooldown <= 0) m_life--;
@@ -297,10 +314,8 @@ void Player::HandleInput()
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
 		if (m_shootCooldown <= 0) mpStateMachine->SetState(State::attacking);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
-		if (m_dashCooldown <= 0) {
+   	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
 		mpStateMachine->SetState(State::dash);
-		}
 	}
 }
 
@@ -361,14 +376,12 @@ void Player::PlayerMove()
 bool Player::IsAlive()
 {
 	if (m_isAlive != 1 && m_isAlive != 0) return false;
-	std::cout << "is alive : " << m_isAlive << std::endl;
 	return m_isAlive;
 }
 
 void Player::OnUpdate() {
 	if (m_life <= 0) { m_isAlive = false; Destroy(); }
 	if (!m_isAlive) return;
-	//std::cout << m_isAlive;
 
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();

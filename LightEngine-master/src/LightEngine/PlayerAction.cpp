@@ -17,17 +17,23 @@ void PlayerAction_Walking::OnEnd(Player* player) {}
 
 //--------------------------------------------------------jumping-----------------------------------------
 void PlayerAction_jumping::OnStart(Player* player) {
-	if (player->m_jumping) return;
-	player->m_jumping = true;
-    player->setGravityForce(-200);
+	if (!player->m_jumping) {
+		player->Jump();
+	}
+	return;
 }
 
 void PlayerAction_jumping::OnUpdate(Player* player)
 {
-	
 }
 
-void PlayerAction_jumping::OnEnd(Player* player) {}
+void PlayerAction_jumping::OnEnd(Player* player) {
+	/*JPP += 1;
+	if (JPP == 3) {
+			timejump = 0;
+			JPP = 0;
+	}*/
+}
 
 //--------------------------------------------------------Shooting-----------------------------------------
 void PlayerAction_Shooting::OnStart(Player* player) {
@@ -63,8 +69,7 @@ void PlayerAction_Idle::OnEnd(Player* player) {}
 //------------------------------------------------------------Dash-------------------------------------------
 void PlayerAction_Dash::OnStart(Player* player) {
 	if (player->m_dashCooldown <= 0) {
-		player->GoToPosition(player->GetPosition().x + DASH * player->m_lastDir.x, player->GetPosition().y, 1500);
-		player->m_dashCooldown = 2.f;
+		player->Dash();
 	}
 }
 

@@ -1,7 +1,7 @@
-#include "Mob2.h"
+#include "Mob3.h"
 
-#include "Mob2Action.h"
-#include "Mob2Condition.h"
+#include "Mob3Action.h"
+#include "Mob3Condition.h"
 #include "RectangleCollider.h"
 
 #include "TestScene.h"
@@ -14,7 +14,7 @@
 #include "Managers.h"
 #include <iostream>
 
-void Mob2::OnInitialize()
+void Mob3::OnInitialize()
 {
 	m_sprite = new Sprite();
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
@@ -22,108 +22,111 @@ void Mob2::OnInitialize()
 	SetTag(TestScene::Tag::mob2);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos, { 10,10 });
-	mpStateMachine = new StateMachine<Mob2>(this, State::Count);
+	mpStateMachine = new StateMachine<Mob3>(this, State::Count);
 
 	//idle
 	{
-		Action<Mob2>* pIdle = mpStateMachine->CreateAction<Mob2Action_Idle>(State::idle);
+		Action<Mob3>* pIdle = mpStateMachine->CreateAction<Mob3Action_Idle>(State::idle);
 		{//walking
 			auto transition = pIdle->CreateTransition(State::walking);
-			auto condition = transition->AddCondition<Mob2Condition_IsWalking>();
+			auto condition = transition->AddCondition<Mob3Condition_IsWalking>();
 		}
 		{//chasing
 			auto transition = pIdle->CreateTransition(State::chasing);
-			auto condition = transition->AddCondition<Mob2Condition_IsChasing>();
+			auto condition = transition->AddCondition<Mob3Condition_IsChasing>();
 		}
 		{//attacking
 			auto transition = pIdle->CreateTransition(State::attacking);
-			auto condition = transition->AddCondition<Mob2Condition_IsAttacking>();
+			auto condition = transition->AddCondition<Mob3Condition_IsAttacking>();
 		}
 
 	}
 	//walking
 	{
-		Action<Mob2>* pWalking = mpStateMachine->CreateAction<Mob2Action_Walking>(State::walking);
+		Action<Mob3>* pWalking = mpStateMachine->CreateAction<Mob3Action_Walking>(State::walking);
 		{//walking
 			auto transition = pWalking->CreateTransition(State::idle);
-			auto condition = transition->AddCondition<Mob2Condition_IsIdle>();
+			auto condition = transition->AddCondition<Mob3Condition_IsIdle>();
 		}
 		{//chasing
 			auto transition = pWalking->CreateTransition(State::chasing);
-			auto condition = transition->AddCondition<Mob2Condition_IsChasing>();
+			auto condition = transition->AddCondition<Mob3Condition_IsChasing>();
 		}
 		{//attacking
 			auto transition = pWalking->CreateTransition(State::attacking);
-			auto condition = transition->AddCondition<Mob2Condition_IsAttacking>();
+			auto condition = transition->AddCondition<Mob3Condition_IsAttacking>();
 		}
 
 	}
 
 	//chasing
 	{
-		Action<Mob2>* pChasing = mpStateMachine->CreateAction<Mob2Action_Chasing>(State::chasing);
+		Action<Mob3>* pChasing = mpStateMachine->CreateAction<Mob3Action_Chasing>(State::chasing);
 		{//walking
 			auto transition = pChasing->CreateTransition(State::walking);
-			auto condition = transition->AddCondition<Mob2Condition_IsWalking>();
+			auto condition = transition->AddCondition<Mob3Condition_IsWalking>();
 		}
 		{//chasing
 			auto transition = pChasing->CreateTransition(State::idle);
-			auto condition = transition->AddCondition<Mob2Condition_IsIdle>();
+			auto condition = transition->AddCondition<Mob3Condition_IsIdle>();
 		}
 		{//attacking
 			auto transition = pChasing->CreateTransition(State::attacking);
-			auto condition = transition->AddCondition<Mob2Condition_IsAttacking>();
+			auto condition = transition->AddCondition<Mob3Condition_IsAttacking>();
 		}
 	}
 
 	//attacking
 	{
-		Action<Mob2>* pAttacking = mpStateMachine->CreateAction<Mob2Action_Attacking>(State::attacking);
+		Action<Mob3>* pAttacking = mpStateMachine->CreateAction<Mob3Action_Attacking>(State::attacking);
 		{//walking
 			auto transition = pAttacking->CreateTransition(State::walking);
-			auto condition = transition->AddCondition<Mob2Condition_IsWalking>();
+			auto condition = transition->AddCondition<Mob3Condition_IsWalking>();
 		}
 		{//chasing
 			auto transition = pAttacking->CreateTransition(State::idle);
-			auto condition = transition->AddCondition<Mob2Condition_IsIdle>();
+			auto condition = transition->AddCondition<Mob3Condition_IsIdle>();
 		}
 		{//attacking
 			auto transition = pAttacking->CreateTransition(State::chasing);
-			auto condition = transition->AddCondition<Mob2Condition_IsChasing>();
+			auto condition = transition->AddCondition<Mob3Condition_IsChasing>();
 		}
 	}
 
 	mpStateMachine->SetState(State::idle);
 }
 
-void Mob2::onCollision(Entity* other)
+void Mob3::onCollision(Entity* other)
 {
 	if (other->IsTag(TestScene::Tag::mob2)) return;
 }
 
-void Mob2::OnUpdate()
+void Mob3::OnUpdate()
 {
 	if (m_life <= 0) { Destroy(); }
 
 	mpStateMachine->Update();
 }
 
-void Mob2::Attack()
+void Mob3::Attack()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
+	m_shootCooldown -= GetDeltaTime();
+	//if ((owner->GetPosition().x <= player->GetPosition().x + 50 && owner->GetPosition().x >= player->GetPosition().x - 50 && owner->GetPosition().y <= player->GetPosition().y + 50 && owner->GetPosition().y >= player->GetPosition().y - 50)) {
+	if (m_shootCooldown <= 0) {
+		m_shootCooldown = 2.f;
+		sf::Vector2f dir = player->GetPosition() - GetPosition();
+		Utils::Normalize(dir);
 
-	m_shootCooldown = 2.f;
-	sf::Vector2f dir = player->GetPosition() - GetPosition();
-	Utils::Normalize(dir);
-
-	Bullet* bullet = CreateEntity<Bullet>();
-	bullet->InitBullet(GetPosition(), dir, this, false);
-	bullet->setMass(1);
-	bullet->setGravityDirection(sf::Vector2f(0, 1));
+		Bullet* bullet =CreateEntity<Bullet>();
+		bullet->InitBullet(GetPosition(), dir, this, false);
+		bullet->setMass(1);
+		bullet->setGravityDirection(sf::Vector2f(0, 1));
+	}
 }
 
-float Mob2::GetDistanceToPlayer()
+float Mob3::GetDistanceToPlayer()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
@@ -135,6 +138,6 @@ float Mob2::GetDistanceToPlayer()
 	else return 10000;
 }
 
-void Mob2::TakeDamage(int damage) {
+void Mob3::TakeDamage(int damage) {
 	m_life -= damage;
 }

@@ -8,6 +8,9 @@
 
 #include "Mob1.h"
 #include "Mob2.h"
+#include "Mob3.h"
+#include "Sprite.h"
+#include "Managers.h"
 
 void TestScene::OnInitialize()
 {
@@ -21,13 +24,18 @@ void TestScene::OnInitialize()
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
 
-	//monster = CreateEntity<Mob1>();
-	//monster->SetPosition(700, 300);
+	monster = CreateEntity<Mob1>();
+	monster->SetPosition(100, 300);
 
 	range = CreateEntity<Mob2>();
 	range->SetPosition(700, 300);
+	
+	Explode = CreateEntity<Mob3>();
+	Explode->SetPosition(500, 100);
 
 	pEntitySelected = nullptr;
+	createView();
+	setCameraZoom(3);
 }
 
 void TestScene::OnEvent(const sf::Event& event)
@@ -56,6 +64,7 @@ void TestScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
+	setCameraCenter(pEntity1->GetPosition());
 }
 
 Player* TestScene::GetPlayer()

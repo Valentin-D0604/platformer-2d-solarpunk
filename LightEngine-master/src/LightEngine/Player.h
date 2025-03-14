@@ -2,14 +2,13 @@
 #include "PhysicsEntity.h"
 #include "Bullet.h"
 #include "StateMachine.h"
-
 #define MAX_VELOCITY 400
-#define PARRY_DURATION 5.f
+#define PARRY_DURATION 10.f
 
 class Player : public PhysicsEntity
 {
 	//--------moving---------
-	bool m_jumping;
+	bool m_jumping = false;
 	float m_OldY = 0;
 	sf::Vector2f m_velocity;
 	float m_acceleration = 600.0f;
@@ -27,6 +26,7 @@ class Player : public PhysicsEntity
 	float m_parryCooldown = 2.f;
 	float m_shootCooldown = 2.f;
 	float m_dashCooldown = 2.f;
+	float m_jumpCooldown = 1.f;
 	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------
 	bool m_Parrying = false;
@@ -44,6 +44,19 @@ class Player : public PhysicsEntity
 
 		Count
 	};
+	State mState = State::idle;
+	static constexpr int STATE_COUNT = static_cast<int>(State::Count);
+
+	int mTransitions[STATE_COUNT][STATE_COUNT] =
+	{
+		// w,     j,      p ,    a,     d,     i,
+		{  0,     1,      1,     1,     1,     1}, // walking
+		{  1,     0,      1,     1,     1,     1}, // jumping
+		{  1,     1,      0,     0,     1,     1}, // parrying
+		{  1,     1,      0,     0,     1,     1}, // attacking
+		{  1,     1,      0,     0,     0,     1},  // dash
+		{  1,     1,      1,     1,     1,     0}  // idle
+	};
 public:
 	void OnInitialize() override;
 	void onCollision(Entity* other) override;
@@ -52,6 +65,8 @@ public:
 	const char* GetStateName(State state) const;
 	void parry();
 	void Attack();
+	void Jump();
+	void Dash();
 	void TakeDamage(int damage);
 	void AddBullet(int bullet);
 	void DecreaseCD(float time);
@@ -60,11 +75,6 @@ public:
 	void PlayerMove();
 	bool IsAlive();
 protected:
-	friend class PlayerCondition_IsWalking;
-	friend class PlayerCondition_IsJumping;
-	friend class PlayerCondition_IsShooting;
-	friend class PlayerCondition_IsParrying;
-	friend class PlayerCondition_IsIdle;
 
 	friend class PlayerAction_Walking;
 	friend class PlayerAction_jumping;

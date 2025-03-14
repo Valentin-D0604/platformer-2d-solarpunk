@@ -12,6 +12,8 @@ public:
 
 class PlayerAction_jumping : public Action<Player>
 {
+	int timejump = 0;
+	int JPP = 0;
 public:
 	void OnStart(Player* player) override;
 	void OnUpdate(Player* player) override;
