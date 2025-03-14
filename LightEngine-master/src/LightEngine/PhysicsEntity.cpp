@@ -1,10 +1,10 @@
 #include "PhysicsEntity.h"
 #include "Debug.h"
 #include "Utils/Utils.h"
-#include <iostream>
+#include "Sprite.h"
 
-#define GRAVITATIONNAL_CONSTANT 9.806f;
-#define MAX_GRAVITATIONNAL_FORCE 100.0f;
+#define GRAVITATIONNAL_CONSTANT 9.806f
+#define MAX_GRAVITATIONNAL_FORCE 100.0f
 
 void PhysicsEntity::Update()
 {
@@ -12,7 +12,7 @@ void PhysicsEntity::Update()
 
 	m_gravityForce += m_mass * dt * GRAVITATIONNAL_CONSTANT;
 
-	m_gravityForce = Utils::Clamp(m_gravityForce, -INFINITY, 100.0f); // define doesn't work
+	m_gravityForce = Utils::Clamp(m_gravityForce, -INFINITY, MAX_GRAVITATIONNAL_FORCE); // define doesn't work
 
 	float distance = dt * mSpeed;
 
@@ -20,7 +20,7 @@ void PhysicsEntity::Update()
 	m_velocity += m_gravityDirection * m_gravityForce * GetDeltaTime(); // Gravity
 	
 	sf::Vector2f translation = m_velocity;
-	mShape.move(translation);
+	m_sprite->move(translation);
 
 	if (mTarget.isSet)
 	{
@@ -42,15 +42,15 @@ void PhysicsEntity::Update()
 			mDirection = sf::Vector2f(0.f, 0.f);
 			mTarget.isSet = false;
 		}
-
 	}
 
-	if (m_collider != nullptr) {
-		m_collider->setPosition(GetPosition());
-	}
-	else {std::cout << "Dead niggga !" << std::endl;}
+	m_sprite->update();
+
+	m_collider->setPosition(GetPosition());
 
 	OnUpdate();
+
+	m_collider->update();
 }
 
 void PhysicsEntity::setMass(float _mass)

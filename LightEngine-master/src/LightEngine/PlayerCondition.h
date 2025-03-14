@@ -31,3 +31,9 @@ class PlayerCondition_IsIdle : public Condition<Player>
 public:
 	bool OnTest(Player* owner) override;
 };
+
+class PlayerCondition_IsDash : public Condition<Player>
+{
+public:
+	bool OnTest(Player* owner) override;
+};

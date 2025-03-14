@@ -3,6 +3,7 @@
 #include "../Entity.h"
 #include "../PhysicsEntity.h"
 #include "../Debug.h"
+#include "../Sprite.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -108,7 +109,14 @@ void GameManager::Update()
         }
 
         mEntitiesToDestroy.push_back(entity);
-        it = mEntities.erase(it);
+        
+		PhysicsEntity* physEntity = dynamic_cast<PhysicsEntity*>(*it);
+		if (physEntity != nullptr)
+		{
+			mPhysicsEntities.erase(std::find(mPhysicsEntities.begin(), mPhysicsEntities.end(), physEntity));
+		}
+
+		it = mEntities.erase(it);
     }
 
     //Collision
@@ -147,6 +155,8 @@ void GameManager::Update()
 	}
 
 	mEntitiesToAdd.clear();
+
+	mpWindow->setView(*(mpScene->m_view));
 }
 
 void GameManager::Draw()
@@ -155,7 +165,7 @@ void GameManager::Draw()
 	
 	for (Entity* entity : mEntities)
 	{
-		mpWindow->draw(*entity->GetShape());
+		mpWindow->draw(*entity->GetSprite());
 	}
 	
 	Debug::Get()->Draw(mpWindow);

@@ -4,33 +4,35 @@
 class PhysicsEntity;
 class DummyEntity;
 class Player;
-class Platform;
-
+class Mob1;
+class Mob2;
 class TestScene : public Scene
 {
-public:
-
-	enum Tag
-	{
-		PLAYER,
-		ENEMY,
-		OBJECT
-	};
-
 	Player* pEntity1;
 	DummyEntity* pEntity2;
-	Platform* pPlatform;
+	Mob1* monster;
+	Mob2* range;
 
-	Entity* pEntitySelected;
+	DummyEntity* pEntitySelected;
 
 private:
 	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);
 
 public:
+	enum Tag
+	{
+		player,
+		mob1,
+		mob2,
+		mob3,
+		bullet
+	};
+
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
-	void GetTag() { return; }
+
+	Player* GetPlayer();
 };
 
 
