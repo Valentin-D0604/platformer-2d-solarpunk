@@ -21,8 +21,9 @@ class Player : public PhysicsEntity
 	//---------stats---------
 	bool m_isAlive;
 	int m_life = 3;
-	int m_ammo = 10;
-
+	int m_maxLife = 10;
+	int m_ammo = 3;
+	int m_maxAmmo = 10;
 	//---------time--------
 	float m_parryCooldown = 2.f;
 	float m_shootCooldown = 2.f;
@@ -72,7 +73,7 @@ public:
 	void Jump();
 	void Dash();
 	void TakeDamage(int damage);
-	void AddBullet(int bullet);
+	void AddBuff(int bullet);
 	void DecreaseCD(float time);
 	void HandleInput();
 	void CheckPlayerStates();

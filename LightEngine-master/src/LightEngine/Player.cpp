@@ -122,9 +122,22 @@ void Player::TakeDamage(int damage) {
 	std::cout << m_life;
 }
 
-void Player::AddBullet(int bullet)
+void Player::AddBuff(int bonus)
 {
-	m_ammo += bullet;
+	if (m_life < m_maxLife && m_ammo < m_maxAmmo) {
+		int buff = std::rand() % 2;
+		if (buff == 0) m_ammo += bonus;
+		if (buff == 1) m_life += bonus;
+	}
+	else if(m_life > m_maxLife && m_ammo < m_maxAmmo) {
+		m_ammo += bonus;
+	}
+	else if (m_ammo > m_maxAmmo && m_life < m_maxLife) {
+		m_life += bonus;
+	}
+	else {
+		return;
+	}
 }
 
 void Player::DecreaseCD(float dt)
