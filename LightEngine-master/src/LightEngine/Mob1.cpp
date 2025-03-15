@@ -106,6 +106,16 @@ void Mob1::OnUpdate()
 	mpStateMachine->Update();
 }
 
+void Mob1::OnDestroy()
+{
+	int rando = rand() % 2;
+	if (rando == 0) return;
+	Bullet* bullet = CreateEntity<Bullet>();
+	bullet->InitBullet(GetPosition(), { 0,1 }, this, true);
+	bullet->setMass(10);
+	bullet->setGravityDirection(sf::Vector2f(0, 1));
+}
+
 float Mob1::GetDistanceToPlayer()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());

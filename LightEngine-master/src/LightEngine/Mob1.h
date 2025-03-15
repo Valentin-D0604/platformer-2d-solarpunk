@@ -28,6 +28,7 @@ public:
 	void OnInitialize() override;
 	void onCollision(Entity* other) override;
 	void OnUpdate() override;
+	void OnDestroy() override;
 
 	float GetDistanceToPlayer();
 	void TakeDamage(int damage);

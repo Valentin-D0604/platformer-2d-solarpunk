@@ -108,6 +108,16 @@ void Mob2::OnUpdate()
 	mpStateMachine->Update();
 }
 
+void Mob2::OnDestroy()
+{
+	int rando = rand() % 2;
+	if (rando == 0) return;
+	Bullet* bullet = CreateEntity<Bullet>();
+	bullet->InitBullet(GetPosition(), {0,1}, this, true);
+	bullet->setMass(10);
+	bullet->setGravityDirection(sf::Vector2f(0, 1));
+}
+
 void Mob2::Attack()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());

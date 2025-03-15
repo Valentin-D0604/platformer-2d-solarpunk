@@ -125,7 +125,7 @@ void Player::TakeDamage(int damage) {
 void Player::AddBuff(int bonus)
 {
 	if (m_life < m_maxLife && m_ammo < m_maxAmmo) {
-		int buff = std::rand() % 2;
+		int buff = rand() % 2;
 		if (buff == 0) m_ammo += bonus;
 		if (buff == 1) m_life += bonus;
 	}
