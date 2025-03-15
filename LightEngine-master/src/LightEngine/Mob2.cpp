@@ -23,7 +23,7 @@ void Mob2::OnInitialize()
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos, { 10,10 });
 	mpStateMachine = new StateMachine<Mob2>(this, State::Count);
-
+	m_collider->setGizmo(true);
 	//idle
 	{
 		Action<Mob2>* pIdle = mpStateMachine->CreateAction<Mob2Action_Idle>(State::idle);
@@ -147,4 +147,5 @@ float Mob2::GetDistanceToPlayer()
 
 void Mob2::TakeDamage(int damage) {
 	m_life -= damage;
+	std::cout << m_life;
 }

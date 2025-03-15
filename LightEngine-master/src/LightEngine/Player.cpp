@@ -131,11 +131,14 @@ void Player::AddBuff(int bonus)
 	}
 	else if(m_life > m_maxLife && m_ammo < m_maxAmmo) {
 		m_ammo += bonus;
+		std::cout << "ammo : " << m_ammo;
 	}
 	else if (m_ammo > m_maxAmmo && m_life < m_maxLife) {
 		m_life += bonus;
+		std::cout << "life : "<< m_life;
 	}
 	else {
+		std::cout << "nothing ";
 		return;
 	}
 }

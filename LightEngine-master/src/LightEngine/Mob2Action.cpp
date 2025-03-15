@@ -13,7 +13,6 @@ void Mob2Action_Walking::OnStart(Mob2* owner)
 
 void Mob2Action_Walking::OnUpdate(Mob2* owner)
 {
-	owner->Attack();
 	owner->m_walkingTimer -= owner->GetDeltaTime();
 	owner->SetDirection(dir.x, dir.y, 200);
 	if (owner->m_walkingTimer <= 0) {
@@ -51,7 +50,6 @@ void Mob2Action_Attacking::OnStart(Mob2* owner)
 void Mob2Action_Attacking::OnUpdate(Mob2* owner)
 {
 	owner->m_shootCooldown -= owner->GetDeltaTime();
-	//if ((owner->GetPosition().x <= player->GetPosition().x + 50 && owner->GetPosition().x >= player->GetPosition().x - 50 && owner->GetPosition().y <= player->GetPosition().y + 50 && owner->GetPosition().y >= player->GetPosition().y - 50)) {
 	if (owner->m_shootCooldown <= 0) {
 		owner->Attack();
 	}
