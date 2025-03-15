@@ -122,3 +122,12 @@ void Mob1::TakeDamage(int damage) {
 	m_life -= damage;
 }
 
+void Mob1::Attack()
+{
+	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
+	Player* player = scene->GetPlayer();
+	if (player == nullptr) return;
+	player->TakeDamage(1);
+	m_shootCooldown = 2.f;
+}
+

@@ -31,6 +31,7 @@ public:
 
 	float GetDistanceToPlayer();
 	void TakeDamage(int damage);
+	void Attack();
 private :
 	friend class Mob1Action_Walking;
 	friend class Mob1Action_Chasing;

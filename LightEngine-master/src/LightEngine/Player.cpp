@@ -239,6 +239,14 @@ bool Player::IsAlive()
 	return false;
 }
 
+bool Player::IsParry()
+{
+	if (m_Parrying != 1 && m_Parrying != 0) {
+		return false;
+	}
+	return m_Parrying;
+}
+
 void Player::OnUpdate() {
 	if (m_life <= 0) { m_isAlive = false; Destroy(); }
 	if (!m_isAlive) return;

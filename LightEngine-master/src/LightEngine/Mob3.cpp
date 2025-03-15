@@ -114,22 +114,23 @@ void Mob3::Attack()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
+	if (player == nullptr) return;
 	m_shootCooldown -= GetDeltaTime();
 	sf::Vector2f dir = player->GetPosition() - GetPosition();
 	Utils::Normalize(dir);
 
-	if (m_shootCooldown <= 0) {
-		m_shootCooldown = 2.f;
-		if (m_canExplode) {
-			Explode* damage = CreateEntity<Explode>();
-			damage->SetPosition(GetPosition().x, GetPosition().y, 0.75, 0.75);
-			m_canExplode = false;
-			mSpeed = 200;
+		if (m_shootCooldown <= 0) {
+			m_shootCooldown = 2.f;
+			if (m_canExplode) {
+				Explode* damage = CreateEntity<Explode>();
+				damage->SetPosition(GetPosition().x, GetPosition().y, 0.75, 0.75);
+				m_canExplode = false;
+				mSpeed = 200;
+			}
+			else {
+				if (!player->IsParry()) player->TakeDamage(1);
+			}
 		}
-		else {
-			player->TakeDamage(1);
-		}
-	}
 }
 
 float Mob3::GetDistanceToPlayer()

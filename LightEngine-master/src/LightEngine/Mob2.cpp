@@ -112,7 +112,7 @@ void Mob2::Attack()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
-
+	if (player == nullptr) return;
 	m_shootCooldown = 2.f;
 	sf::Vector2f dir = player->GetPosition() - GetPosition();
 	Utils::Normalize(dir);

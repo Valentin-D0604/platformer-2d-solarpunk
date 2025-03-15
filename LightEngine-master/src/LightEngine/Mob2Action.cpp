@@ -13,6 +13,7 @@ void Mob2Action_Walking::OnStart(Mob2* owner)
 
 void Mob2Action_Walking::OnUpdate(Mob2* owner)
 {
+	owner->Attack();
 	owner->m_walkingTimer -= owner->GetDeltaTime();
 	owner->SetDirection(dir.x, dir.y, 200);
 	if (owner->m_walkingTimer <= 0) {

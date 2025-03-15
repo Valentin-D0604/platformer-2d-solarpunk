@@ -31,8 +31,9 @@ void Bullet::OnInitialize() {
 }
 
 void Bullet::OnUpdate() {
+	m_changeDirection -= GetDeltaTime();
 	if (!m_onTheGround) {
-		SetDirection(m_dir.x, m_dir.y, 50);
+		SetDirection(m_dir.x, m_dir.y, 200);
 	}
 	else if (m_onTheGround) {
 		setMass(20);
@@ -40,6 +41,7 @@ void Bullet::OnUpdate() {
 }
 
 void Bullet::onCollision(Entity* other) {
+	Player* player = dynamic_cast<Player*>(other);
 	if (other->IsTag(TestScene::Tag::mob1)) {
 		Mob1* enemy = dynamic_cast<Mob1*>(other);
 		enemy->TakeDamage(1);
@@ -49,12 +51,15 @@ void Bullet::onCollision(Entity* other) {
 		if (enemy != m_caster && !IsBulletOnGround()) enemy->TakeDamage(1);
 	}
 	if (other->IsTag(TestScene::Tag::player)) {
-		Player* player = dynamic_cast<Player*>(other);
 		if (IsBulletOnGround()) player->AddBullet(1);
-		else if (other != m_caster && !IsBulletOnGround()) player->TakeDamage(1);
+		else if (other != m_caster && !IsBulletOnGround() && !player->IsParry()) player->TakeDamage(1);
+		else if (other != m_caster && !IsBulletOnGround() && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; }
 	}
-	if (other != m_caster) {
+	if (other != m_caster && !other->IsTag(TestScene::Tag::player)) {
 		Destroy();
+	}
+	if (other != m_caster && other->IsTag(TestScene::Tag::player)) {
+		if (other != m_caster && !player->IsParry()) Destroy();
 	}
 }
 

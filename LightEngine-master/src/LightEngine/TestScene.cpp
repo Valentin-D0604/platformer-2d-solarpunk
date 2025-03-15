@@ -23,15 +23,15 @@ void TestScene::OnInitialize()
 	pEntity2->SetPosition(500, 500);
 	pEntity2->setMass(0);
 	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
-	/*
-	monster = CreateEntity<Mob1>();
-	monster->SetPosition(100, 300);
+	
+	/*monster = CreateEntity<Mob1>();
+	monster->SetPosition(100, 300);*/
 
 	range = CreateEntity<Mob2>();
-	range->SetPosition(700, 300);*/
+	range->SetPosition(700, 300);
 	
-	Explode = CreateEntity<Mob3>();
-	Explode->SetPosition(500, 100);
+	//Explode = CreateEntity<Mob3>();
+	//Explode->SetPosition(500, 100);
 
 	pEntitySelected = nullptr;
 	createView();

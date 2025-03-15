@@ -1,7 +1,7 @@
 #include "Mob2Condition.h"
 
 #define DETECTING_RANGE 350.f
-#define ATTACK_RANGE  150.f
+#define ATTACK_RANGE  500.f
 
 bool Mob2Condition_IsWalking::OnTest(Mob2* owner)
 {

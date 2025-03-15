@@ -49,14 +49,9 @@ void Mob1Action_Attacking::OnStart(Mob1* owner)
 
 void Mob1Action_Attacking::OnUpdate(Mob1* owner)
 {
-	TestScene* scene = dynamic_cast<TestScene*>(owner->GetScene());
-	Player* player = scene->GetPlayer();
 	owner->m_shootCooldown -= owner->GetDeltaTime();
-	//if ((owner->GetPosition().x <= player->GetPosition().x + 50 && owner->GetPosition().x >= player->GetPosition().x - 50 && owner->GetPosition().y <= player->GetPosition().y + 50 && owner->GetPosition().y >= player->GetPosition().y - 50)) {
 	if (owner->m_shootCooldown <= 0) {
-		player->TakeDamage(1);
-		owner->m_shootCooldown = 2.f;
-		//std::cout << "attack";
+		owner->Attack();
 	}
 //	}
 }

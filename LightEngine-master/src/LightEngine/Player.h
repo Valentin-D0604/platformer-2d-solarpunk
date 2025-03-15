@@ -78,6 +78,7 @@ public:
 	void CheckPlayerStates();
 	void PlayerMove();
 	bool IsAlive();
+	bool IsParry();
 protected:
 
 	friend class PlayerAction_Walking;
