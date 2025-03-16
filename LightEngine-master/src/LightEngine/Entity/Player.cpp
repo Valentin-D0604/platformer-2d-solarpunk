@@ -38,11 +38,8 @@
 void Player::OnInitialize() {
 
 	SetTag(TestScene::Tag::player);
-	SpriteSheet* spriteSheet = new SpriteSheet(this);
-	Animation* animTest1 = new Animation("Test1", sf::Vector2i(102, 96), 2, 0.5f, true);
-	spriteSheet->addAnimation(animTest1);
-	Animation* animTest2 = new Animation("Test2", sf::Vector2i(102, 96), 2, 0.5f, false);
-	spriteSheet->addAnimation(animTest2);
+	SpriteSheet* spriteSheet = new SpriteSheet(this, "test");
+	
 	spriteSheet->setAnimation(1);
 
 	m_Sprite = spriteSheet;
