@@ -138,6 +138,7 @@ void Mob1::Attack()
 	Player* player = scene->GetPlayer();
 	if (player == nullptr) return;
 	player->TakeDamage(1);
+	GoToPosition(GetPosition().x+mDirection.x, GetPosition().y + mDirection.y,200);
 	m_shootCooldown = 2.f;
 }
 

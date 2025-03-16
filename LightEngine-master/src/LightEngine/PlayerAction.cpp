@@ -1,6 +1,7 @@
 #include "PlayerAction.h"
 #include <iostream>
 #define DASH 300
+#define BASE_FRICTION 400.0f;
 
 //--------------------------------------------------------Walking------------------------------------------
 void PlayerAction_Walking::OnStart(Player* player) {
@@ -69,6 +70,7 @@ void PlayerAction_Idle::OnEnd(Player* player) {}
 //------------------------------------------------------------Dash-------------------------------------------
 void PlayerAction_Dash::OnStart(Player* player) {
 	if (player->m_dashCooldown <= 0) {
+		player->m_friction = 0.0f;
 		player->Dash();
 	}
 }
@@ -78,5 +80,7 @@ void PlayerAction_Dash::OnUpdate(Player* player)
 
 }
 
-void PlayerAction_Dash::OnEnd(Player* player) { player->m_Dash = false; }
+void PlayerAction_Dash::OnEnd(Player* player) {
+player->m_friction = BASE_FRICTION;
+}
 //-----------------------------------------------------------------------------------------------------------

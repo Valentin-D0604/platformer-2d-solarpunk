@@ -94,12 +94,28 @@ void Player::Jump()
 	}
 }
 
+//void Player::Dash()
+//{
+//	if (m_dashCooldown <= 0) {
+//		m_Dash = true;
+//		GoToPosition(GetPosition().x + 1000 * m_lastDir.x, GetPosition().y, 10000);
+//		m_dashCooldown = 2.f;
+//	}
+//}
+
 void Player::Dash()
 {
-	if (m_dashCooldown <= 0) {
+	if (m_dashCooldown <= 0 && !m_Dash) {
 		m_Dash = true;
-		GoToPosition(GetPosition().x + 1000 * m_lastDir.x, GetPosition().y, 10000);
-		m_dashCooldown = 2.f;
+		m_DashDuration = 1.f; // Durée du dash en secondes
+		m_dashCooldown = 1.5f; // Temps avant de pouvoir redasher
+
+		// Définition de la vitesse du dash
+		float dashSpeed = 15000.0f;
+
+		// Applique une impulsion dans la direction actuelle
+		mSpeed = dashSpeed;
+		mDirection.x = (m_lastDir.x != 0) ? m_lastDir.x : 1; // Assure que la direction est correcte
 	}
 }
 
@@ -234,6 +250,13 @@ void Player::CheckPlayerStates()
 	}
 	if (m_DashDuration <= 0) {
 		m_DashDuration = 1.f;
+	}
+	if (m_Dash) {
+		m_DashDuration -= dt;
+		if (m_DashDuration <= 0) {
+			m_Dash = false;
+			mSpeed *= 0.5f; // Réduction progressive après le dash
+		}
 	}
 }
 

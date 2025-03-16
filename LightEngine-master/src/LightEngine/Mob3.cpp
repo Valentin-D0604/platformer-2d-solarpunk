@@ -158,4 +158,7 @@ float Mob3::GetDistanceToPlayer()
 
 void Mob3::TakeDamage(int damage) {
 	m_life -= damage;
+	if (m_canExplode) {
+		Attack();
+	}
 }
