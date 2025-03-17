@@ -9,12 +9,15 @@ class Boss;
 class Hand : public PhysicsEntity {
 private:
     Boss* m_owner;
-	bool m_isVulnerable;
+	bool m_isVulnerable = false;
+    bool m_isSweeping = false;
+	bool m_isGroundSmashing = false;
+	bool m_isThrowing = false;
 
 public:
 	void OnInitialize() override;
 	void OnUpdate() override;
-	void onCollision(Entity* other) override;
+    void OnCollision(Entity* _collidedWith) override;
 
 	void Stun();
     void PerformSweep();
@@ -22,7 +25,12 @@ public:
     void ThrowRock();
     void RemoveArmor();
     void SetVulnerable(bool vulnerable);
+    
+    bool IsSweeping() { return m_isSweeping; }
+	bool IsGroundSmashing() { return m_isGroundSmashing; }
+	bool IsThrowing() { return m_isThrowing; }
+	bool IsStunned() { return m_isVulnerable; }
 
-    friend class Boss;
-
+private:
+	friend class Boss;
 };

@@ -23,7 +23,10 @@ private:
     Hand* m_left;
 	Hand* m_right;
     int m_hp;
-    bool m_isStunned;
+    bool m_isStunned = false;
+	bool m_isGroundSmashing = false;
+	bool m_isThrowing = false;
+	bool m_isSweeping = false;
 	
     StateMachine<Boss>* mpStateMachine;
 
@@ -33,6 +36,12 @@ public:
     void StartAttack(BossActionType action);
     void Stun();
     void RemoveArmor();
+	float GetDistanceToPlayer();
+
+	bool IsStunned();
+	bool IsSweepping();
+	bool IsGroundSmashing();
+	bool IsThrowing();
 
 
 private:

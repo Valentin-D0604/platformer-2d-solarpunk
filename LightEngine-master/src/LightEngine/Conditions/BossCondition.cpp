@@ -25,10 +25,10 @@ bool BossCondition_IsThrowing::OnTest(Boss* owner)
 
 bool BossCondition_IsIdle::OnTest(Boss* owner)
 {
-    return false;
+	return true;
 }
 
-bool BossCondition_IsSturnned::OnTest(Boss* owner)
+bool BossCondition_IsStunned::OnTest(Boss* owner)
 {
-    
+	return owner->IsStunned();
 }

@@ -18,24 +18,24 @@ void BossAction_Sweeping::OnUpdate(Boss* owner) {
 	
 	// If the player is hit by the boss hands, the player takes damage
 
-	if (owner->m_left->isColliding(player) || owner->m_right->isColliding(player)) {
+	if (owner->m_left->IsColliding(player) || owner->m_right->IsColliding(player)) {
 		player->TakeDamage(1);
 	}
 
 	// If the player parry the boss hands, the hand he parried is stunned and the other one go back to idle
 
-	if (player->isParrying() && owner->m_left->isColliding(player)) {
+	if (player->IsParry() && owner->m_left->IsColliding(player)) {
 		owner->m_left->Stun();
 		owner->StartAttack(BossActionType::IDLE);
 	}
-	else if (player->isParrying() && owner->m_right->isColliding(player)) {
+	else if (player->IsParry() && owner->m_right->IsColliding(player)) {
 		owner->m_right->Stun();
 		owner->StartAttack(BossActionType::IDLE);
 	}
 
 	// If the boss hands have finished sweeping, the boss goes back to idle
 
-	if (owner->m_left->isSweeping() == false && owner->m_right->isSweeping() == false) {
+	if (owner->m_left->IsSweeping() == false && owner->m_right->IsSweeping() == false) {
 		owner->StartAttack(BossActionType::IDLE);
 	}
 }
@@ -62,25 +62,25 @@ void BossAction_GroundSmash::OnUpdate(Boss* owner) {
 	
 	// If the player is hit by the boss hands, the player takes damage
 
-	if (owner->m_left->isColliding(player) || owner->m_right->isColliding(player)) {
+	if (owner->m_left->IsColliding(player) || owner->m_right->IsColliding(player)) {
 		player->TakeDamage(1);
 	}
 
 	// If the player parry the boss hands, the hand he parried is stunned and the other one go back to idle
 
-	if (player->isParrying() && owner->m_left->isColliding(player)) {
+	if (player->IsParry() && owner->m_left->IsColliding(player)) {
 		owner->m_left->Stun();
 		owner->StartAttack(BossActionType::IDLE);
 	}
 	
-	else if (player->isParrying() && owner->m_right->isColliding(player)) {
+	else if (player->IsParry() && owner->m_right->IsColliding(player)) {
 		owner->m_right->Stun();
 		owner->StartAttack(BossActionType::IDLE);
 	}
 
 	// If the boss hands have finished slamming the ground, the boss goes back to idle
 
-	if (owner->m_left->isGroundSmashing() == false && owner->m_right->isGroundSmashing() == false) {
+	if (owner->m_left->IsGroundSmashing() == false && owner->m_right->IsGroundSmashing() == false) {
 		owner->StartAttack(BossActionType::IDLE);
 	}
 }
@@ -105,18 +105,18 @@ void BossAction_Throwing::OnUpdate(Boss* owner) {
     Player* player = scene->GetPlayer();
 
 	// If the player is hit by the boss hands, the player takes damage
-	if (owner->m_left->isColliding(player) || owner->m_right->isColliding(player)) {
+	if (owner->m_left->IsColliding(player) || owner->m_right->IsColliding(player)) {
 		player->TakeDamage(1);
 	}
 
 	// If the boss hands throw a projectile, but the player parry it, the projectile go hit the boss and stunns him
-	if (player->isParrying() && owner->m_left->isThrowing() && owner->m_left->isColliding(player)) {
+	if (player->IsParry() && owner->m_left->IsThrowing() && owner->m_left->IsColliding(player)) {
 		owner->Stun();
 	}
 
 	// If the boss hands have finished throwing the projectile, the boss goes back to idle
 
-	if (owner->m_left->isThrowing() == false && owner->m_right->isThrowing() == false) {
+	if (owner->m_left->IsThrowing() == false && owner->m_right->IsThrowing() == false) {
 		owner->StartAttack(BossActionType::IDLE);
 	}
 
@@ -140,23 +140,23 @@ void BossAction_Stunned::OnUpdate(Boss* owner) {
 	Player* player = scene->GetPlayer();
 
 	// If the player is hit by the boss hands, the player takes damage
-	if (owner->m_left->isColliding(player) || owner->m_right->isColliding(player)) {
+	if (owner->m_left->IsColliding(player) || owner->m_right->IsColliding(player)) {
 		player->TakeDamage(1);
 	}
 
 	// If the player parry the boss hands, the hand he parried is stunned and the other one go back to idle
-	if (player->isParrying() && owner->m_left->isColliding(player)) {
+	if (player->IsParry() && owner->m_left->IsColliding(player)) {
 		owner->m_left->Stun();
 		owner->StartAttack(BossActionType::IDLE);
 	}
-	else if (player->isParrying() && owner->m_right->isColliding(player)) {
+	else if (player->IsParry() && owner->m_right->IsColliding(player)) {
 		owner->m_right->Stun();
 		owner->StartAttack(BossActionType::IDLE);
 	}
 
 	// If the boss hands have finished being stunned, the boss goes back to idle
 
-	if (owner->m_left->isStunned() == false && owner->m_right->isStunned() == false) {
+	if (owner->m_left->IsStunned() == false && owner->m_right->IsStunned() == false) {
 		owner->StartAttack(BossActionType::IDLE);
 	}
 }

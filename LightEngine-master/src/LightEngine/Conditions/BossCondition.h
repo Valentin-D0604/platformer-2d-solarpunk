@@ -20,7 +20,7 @@ public:
 	bool OnTest(Boss* owner) override;
 };
 
-class BossCondition_IsSturnned : public Condition<Boss>
+class BossCondition_IsStunned : public Condition<Boss>
 {
 public:
 	bool OnTest(Boss* owner) override;
