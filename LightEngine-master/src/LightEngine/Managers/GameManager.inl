@@ -2,7 +2,7 @@
 
 #include "GameManager.h"
 #include <SFML/Graphics/RenderWindow.hpp>
-#include "../Scene.h"
+#include "../Scene/Scene.h"
 
 template<typename T>
 void GameManager::LaunchScene()
