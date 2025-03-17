@@ -1,10 +1,10 @@
 #pragma once
 #include "PhysicsEntity.h"
 #include "Bullet.h"
-#include "StateMachine.h"
+#include "../Utils/StateMachine.h"
+
 #define MAX_SPEED 400
 #define PARRY_DURATION 10.f
-#include "../Utils/StateMachine.h"
 
 
 class Player : public PhysicsEntity

@@ -2,7 +2,7 @@
 
 #include "Mob3Action.h"
 #include "Mob3Condition.h"
-#include "RectangleCollider.h"
+#include "Collision/RectangleCollider.h"
 
 #include "TestScene.h"
 #include "Player.h"
@@ -98,7 +98,7 @@ void Mob3::OnInitialize()
 	mpStateMachine->SetState(State::idle);
 }
 
-void Mob3::onCollision(Entity* other)
+void Mob3::OnCollision(Entity* other)
 {
 	if (other->IsTag(TestScene::Tag::mob2)) return;
 }

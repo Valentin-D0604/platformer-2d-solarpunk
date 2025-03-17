@@ -26,7 +26,7 @@ void Explode::OnInitialize()
 
 }
 
-void Explode::onCollision(Entity* other)
+void Explode::OnCollision(Entity* other)
 {
 	if (m_DamageCooldown <= 0) {
 		if (other->IsTag(TestScene::Tag::player)) {

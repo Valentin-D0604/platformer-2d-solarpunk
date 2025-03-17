@@ -1,5 +1,5 @@
 #pragma once
-#include "PhysicsEntity.h"
+#include "Entity/PhysicsEntity.h"
 
 class Explode : public PhysicsEntity
 {
@@ -7,7 +7,7 @@ class Explode : public PhysicsEntity
 	float m_DamageCooldown = 0.f;
 public:
 	void OnInitialize() override;
-	void onCollision(Entity* other) override;
+	void OnCollision(Entity* other) override;
 	void OnUpdate() override;
 };
 

@@ -53,9 +53,9 @@ void Bullet::onCollision(Entity* other) {
 		if (enemy != m_caster && !IsBulletOnGround()) enemy->TakeDamage(1);
 	}
 	if (other->IsTag(TestScene::Tag::player)) {
-	if (IsBulletOnGround()) player->AddBuff(1);
-		else if (other != m_caster && !IsBulletOnGround() && !player->IsParry()) player->TakeDamage(1);
-		else if (other != m_caster && !IsBulletOnGround() && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; }
+	if (IsBulletOnGround()) player->AddBuff(1); // drop
+		else if (other != m_caster && !IsBulletOnGround() && !player->IsParry()) player->TakeDamage(1); // playe take damage
+		else if (other != m_caster && !IsBulletOnGround() && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; } // player parry bullet
 	}
 	if (other != m_caster && !other->IsTag(TestScene::Tag::player)) {
 		Destroy();

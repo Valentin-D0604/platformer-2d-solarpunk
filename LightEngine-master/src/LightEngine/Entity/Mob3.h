@@ -1,6 +1,6 @@
 #pragma once
-#include "PhysicsEntity.h"
-#include "StateMachine.h"
+#include "Entity/PhysicsEntity.h"
+#include "Utils/StateMachine.h"
 
 class Mob3 : public PhysicsEntity
 {
@@ -27,7 +27,7 @@ class Mob3 : public PhysicsEntity
 	};
 public:
 	void OnInitialize() override;
-	void onCollision(Entity* other) override;
+	void OnCollision(Entity* other) override;
 	void OnUpdate() override;
 	void OnDestroy() override;
 
