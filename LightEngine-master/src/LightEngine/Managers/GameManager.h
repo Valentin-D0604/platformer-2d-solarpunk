@@ -7,6 +7,7 @@
 
 class Entity;
 class PhysicsEntity;
+class StaticEntity;
 class Scene;
 class Debug;
 
@@ -20,6 +21,7 @@ class GameManager
 {
 	std::list<Entity*> mEntities;
 	std::list<PhysicsEntity*> mPhysicsEntities;
+	std::list<StaticEntity*> mStaticEntities;
 	std::list<Entity*> mEntitiesToDestroy;
 	std::list<Entity*> mEntitiesToAdd;
 

@@ -1,0 +1,19 @@
+
+{
+	"frame_size": {
+		"width": 102,
+		"height": 96
+	},
+	"animations": {
+		"test1": {
+			"frames": 2,
+			"frame_time": 0.5,
+			"loop": true
+		},
+		"test2": {
+			"frames": 2,
+			"frame_time": 0.2,
+			"loop": true
+		}
+	}
+}
