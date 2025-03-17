@@ -1,30 +1,31 @@
-#include "Mob1Condition.h"
-#define DETECTING_RANGE 300.f
-#define ATTACK_RANGE  50.f
+#include "Mob3Condition.h"
 
-bool Mob1Condition_IsWalking::OnTest(Mob1* owner)
+#define DETECTING_RANGE 200.f
+#define ATTACK_RANGE  25.f
+
+bool Mob3Condition_IsWalking::OnTest(Mob3* owner)
 {
     float distance = owner->GetDistanceToPlayer();
     if (distance > DETECTING_RANGE) return true;
     return false;
-    
+
 }
 
-bool Mob1Condition_IsChasing::OnTest(Mob1* owner)
+bool Mob3Condition_IsChasing::OnTest(Mob3* owner)
 {
     float distance = owner->GetDistanceToPlayer();
     if (distance > ATTACK_RANGE && distance <= DETECTING_RANGE)return true;
     return false;
 }
 
-bool Mob1Condition_IsAttacking::OnTest(Mob1* owner)
+bool Mob3Condition_IsAttacking::OnTest(Mob3* owner)
 {
     float distance = owner->GetDistanceToPlayer();
-    if( distance <= ATTACK_RANGE)return true;
+    if (distance <= ATTACK_RANGE)return true;
     return false;
 }
 
-bool Mob1Condition_IsIdle::OnTest(Mob1* owner)
+bool Mob3Condition_IsIdle::OnTest(Mob3* owner)
 {
     return false;
 }

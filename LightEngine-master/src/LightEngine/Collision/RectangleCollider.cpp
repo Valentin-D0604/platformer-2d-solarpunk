@@ -7,7 +7,7 @@ RectangleCollider::RectangleCollider(sf::Vector2f _position, sf::Vector2f _size,
     m_Vertices = new sf::Vector2f[4];
     m_shapeTag = ShapeTag::Rectangle;
 
-    // Définition des sommets par rapport au centre
+    // Dï¿½finition des sommets par rapport au centre
     sf::Vector2f halfSize = _size / 2.f;
     sf::Vector2f localVertices[4] = {
         {-halfSize.x, -halfSize.y},
@@ -33,7 +33,7 @@ sf::Vector2f* const RectangleCollider::getVertices() const
     return vertices;
 }
 
-bool RectangleCollider::isColliding(Collider* _other)
+bool RectangleCollider::IsColliding(Collider* _other)
 {
     bool colliding = false;
     switch (_other->getShapeTag())
@@ -77,6 +77,11 @@ void RectangleCollider::rotate(float _angle)
 sf::Vector2f RectangleCollider::getPosition(float _ratioX, float _ratioY) const
 {
     return m_Vertices[0] + (m_Vertices[1] - m_Vertices[0]) * _ratioX + (m_Vertices[3] - m_Vertices[0]) * _ratioY;
+}
+
+sf::Vector2f RectangleCollider::getSize() const
+{
+    return getVertices()[0], getVertices()[2] - getVertices()[0];
 }
 
 void RectangleCollider::setPosition(sf::Vector2f _pos, float _ratioX, float _ratioY)

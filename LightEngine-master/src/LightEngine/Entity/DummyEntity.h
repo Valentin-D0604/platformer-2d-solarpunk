@@ -5,6 +5,6 @@ class DummyEntity : public PhysicsEntity
 {
 public:
 	void OnInitialize() override;
-	void onCollision(Entity* other) override;
+	void OnCollision(Entity* other) override;
 };
 

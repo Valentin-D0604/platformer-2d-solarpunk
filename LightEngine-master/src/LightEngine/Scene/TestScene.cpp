@@ -1,4 +1,4 @@
-#include "TestScene.h"
+#include "../Scene/TestScene.h"
 
 #include "../Entity/DummyEntity.h"
 
@@ -7,22 +7,41 @@
 #include "../Entity/Player.h"
 
 #include "../Entity/Mob1.h"
+#include "../Entity/Mob2.h"
+#include "../Entity/Mob3.h"
+#include "../Graphics/Sprite.h"
+#include "../Managers/Managers.h"
+
+#include "../Entity/Platform.h"
 
 void TestScene::OnInitialize()
 {
 	pEntity1 = CreateEntity<Player>();
 	pEntity1->SetPosition(300, 300);
-	pEntity1->setMass(20);
-	pEntity1->setGravityDirection(sf::Vector2f(0, 1));
+	pEntity1->SetMass(20);
+	pEntity1->SetGravityDirection(sf::Vector2f(0, 1));
 	
 	pEntity2 = CreateEntity<DummyEntity>();
 	pEntity2->SetPosition(500, 500);
-	pEntity2->setMass(0);
-	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
+	pEntity2->SetMass(0);
+	pEntity2->SetGravityDirection(sf::Vector2f(0, -1));
+	
+	/*monster = CreateEntity<Mob1>();
+	monster->SetPosition(100, 300);*/
 
-	monster = CreateEntity<Mob1>();
-	monster->SetPosition(700, 300);
+	range = CreateEntity<Mob2>();
+	range->SetPosition(700, 300);
+	
+	//Explode = CreateEntity<Mob3>();
+	//Explode->SetPosition(500, 100);
+
 	pEntitySelected = nullptr;
+	createView();
+	setCameraZoom(1);
+
+
+	pPlatform = CreateEntity<Platform>();
+	pPlatform->SetPosition(100, 500);
 }
 
 void TestScene::OnEvent(const sf::Event& event)
@@ -51,9 +70,15 @@ void TestScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
+	if (pEntity1->IsAlive()) setCameraCenter(pEntity1->GetPosition());
+	else {
+		setCameraCenter({ 0,0 });
+		setCameraZoom(5);
+		OnInitialize(); // Need fix with delete
+	}
 }
 
 Player* TestScene::GetPlayer()
 {
-	return pEntity1;
+	return pEntity1 && pEntity1->IsAlive() ? pEntity1 : nullptr;
 }

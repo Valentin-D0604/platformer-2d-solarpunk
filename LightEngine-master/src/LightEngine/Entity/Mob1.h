@@ -26,11 +26,13 @@ class Mob1 : public PhysicsEntity
 	};
 public:
 	void OnInitialize() override;
-	void onCollision(Entity* _other) override;
+	void OnCollision(Entity* _other) override;
 	void OnUpdate() override;
+	void OnDestroy() override;
 
 	float GetDistanceToPlayer();
-	void TakeDamage(int _damage);
+	void TakeDamage(int damage);
+	void Attack();
 private :
 	friend class Mob1Action_Walking;
 	friend class Mob1Action_Chasing;

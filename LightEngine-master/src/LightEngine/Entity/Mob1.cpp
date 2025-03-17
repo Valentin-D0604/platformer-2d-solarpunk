@@ -1,4 +1,4 @@
-#include "Mob1.h"
+#include "../Entity/Mob1.h"
 
 #include "../Actions/Mob1Action.h"
 #include "../Conditions/Mob1Condition.h"
@@ -94,7 +94,7 @@ void Mob1::OnInitialize()
 	m_pStateMachine->SetState(State::idle);
 }
 
-void Mob1::onCollision(Entity* other)
+void Mob1::OnCollision(Entity* other)
 {
 	if (other->IsTag(TestScene::Tag::mob1)) return;
 }
@@ -106,16 +106,39 @@ void Mob1::OnUpdate()
 	m_pStateMachine->Update();
 }
 
+void Mob1::OnDestroy()
+{
+	int rando = rand() % 2;
+	if (rando == 0) return;
+	Bullet* bullet = CreateEntity<Bullet>();
+	bullet->InitBullet(GetPosition(), { 0,1 }, this, true);
+	bullet->SetMass(10);
+	bullet->SetGravityDirection(sf::Vector2f(0, 1));
+}
+
 float Mob1::GetDistanceToPlayer()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
-
-	sf::Vector2f playerPos = player->GetPosition(); // Fonction qui récupère la position du joueur
-	sf::Vector2f mobPos = GetPosition();
-	return sqrt(pow(playerPos.x - mobPos.x, 2) + pow(playerPos.y - mobPos.y, 2));
+	if (player != nullptr && player->IsAlive()) {
+		sf::Vector2f playerPos = player->GetPosition();
+		sf::Vector2f mobPos = GetPosition();
+		return sqrt(pow(playerPos.x - mobPos.x, 2) + pow(playerPos.y - mobPos.y, 2));
+	}
+	else return 10000;
 }
 
 void Mob1::TakeDamage(int damage) {
 	m_Life -= damage;
 }
+
+void Mob1::Attack()
+{
+	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
+	Player* player = scene->GetPlayer();
+	if (player == nullptr) return;
+	player->TakeDamage(1);
+	GoToPosition(GetPosition().x+m_Direction.x, GetPosition().y + m_Direction.y,200);
+	m_ShootCooldown = 2.f;
+}
+

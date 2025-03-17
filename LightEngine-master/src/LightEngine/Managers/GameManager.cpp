@@ -2,6 +2,7 @@
 
 #include "../Entity/Entity.h"
 #include "../Entity/PhysicsEntity.h"
+#include "../Entity/StaticEntity.h"
 #include "../Graphics/Debug.h"
 #include "../Graphics/Sprite.h"
 
@@ -116,6 +117,15 @@ void GameManager::Update()
 			mPhysicsEntities.erase(std::find(mPhysicsEntities.begin(), mPhysicsEntities.end(), physEntity));
 		}
 
+		else
+		{
+			StaticEntity* staticEntity = dynamic_cast<StaticEntity*>(*it);
+			if (staticEntity != nullptr)
+			{
+				mStaticEntities.erase(std::find(mStaticEntities.begin(), mStaticEntities.end(), staticEntity));
+			}
+		}
+
 		it = mEntities.erase(it);
     }
 
@@ -124,17 +134,34 @@ void GameManager::Update()
     {
         auto it2 = it1;
         ++it2;
+
+		PhysicsEntity* entity = *it1;
+		// Physics entities / physics entities
         for (; it2 != mPhysicsEntities.end(); ++it2)
         {
-            PhysicsEntity* entity = *it1;
 			PhysicsEntity* otherEntity = *it2;
 
-            if (entity->isColliding(otherEntity))
+            if (entity->IsColliding(otherEntity))
             {
-                entity->onCollision(otherEntity);
-                otherEntity->onCollision(entity);
+                entity->OnCollision(otherEntity);
+                otherEntity->OnCollision(entity);
             }
         }
+
+		if (!entity->m_physicsCollision)
+			continue;
+
+		// Physics entities / static entities
+		for (auto it3 = mStaticEntities.begin(); it3 != mStaticEntities.end(); ++it3)
+		{
+			StaticEntity* otherEntity = *it3;
+			if (entity->IsColliding(otherEntity))
+			{
+				entity->Repulse(otherEntity);
+				entity->OnCollision(otherEntity);
+				otherEntity->OnCollision(entity);
+			}
+		}
     }
 
 	for (auto it = mEntitiesToDestroy.begin(); it != mEntitiesToDestroy.end(); ++it) 
@@ -151,6 +178,15 @@ void GameManager::Update()
 		if (physEntity != nullptr)
 		{
 			mPhysicsEntities.push_back(physEntity);
+		}
+
+		else
+		{
+			StaticEntity* staticEntity = dynamic_cast<StaticEntity*>(*it);
+			if (staticEntity != nullptr)
+			{
+				mStaticEntities.push_back(staticEntity);
+			}
 		}
 	}
 

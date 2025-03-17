@@ -1,6 +1,14 @@
 #pragma once
 #include "Sprite.h"
 
+#pragma region Extneral Dependencies
+
+#include "../json.hpp"
+#include <fstream>
+#include <string>
+
+#pragma endregion
+
 class Animation;
 class Entity;
 
@@ -14,9 +22,10 @@ class SpriteSheet: public Sprite
 	float m_Timer;
 	
 public:
-	SpriteSheet(Entity* _entity);
+	SpriteSheet(Entity* _entity, std::string _path);
 	void addAnimation(Animation* _animation);
 	void setAnimation(int _index);
 	std::string getCurrentAnimationName();
+	virtual void deserialize(const nlohmann::json& _json);
 	virtual void update() override;
 };

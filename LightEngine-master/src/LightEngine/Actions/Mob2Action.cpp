@@ -1,9 +1,9 @@
-#include "Mob2Action.h"
-#include "TestScene.h"
-#include "Player.h"
-#include "Bullet.h"
+#include "../Actions/Mob2Action.h"
+#include "../Scene/TestScene.h"
+#include "../Entity/Player.h"
+#include "../Entity/Bullet.h"
 
-#include "Utils/Utils.h"
+#include "../Utils/Utils.h"
 
 #include <iostream>
 //-----------------------------------------walking-------------------------
@@ -49,19 +49,9 @@ void Mob2Action_Attacking::OnStart(Mob2* owner)
 
 void Mob2Action_Attacking::OnUpdate(Mob2* owner)
 {
-	TestScene* scene = dynamic_cast<TestScene*>(owner->GetScene());
-	Player* player = scene->GetPlayer();
 	owner->m_shootCooldown -= owner->GetDeltaTime();
-	//if ((owner->GetPosition().x <= player->GetPosition().x + 50 && owner->GetPosition().x >= player->GetPosition().x - 50 && owner->GetPosition().y <= player->GetPosition().y + 50 && owner->GetPosition().y >= player->GetPosition().y - 50)) {
 	if (owner->m_shootCooldown <= 0) {
-		owner->m_shootCooldown = 2.f;
-		sf::Vector2f dir = player->GetPosition() - owner->GetPosition();
-		Utils::Normalize(dir);
-
-		Bullet* bullet = owner->CreateEntity<Bullet>();
-		bullet->InitBullet(owner->GetPosition(), dir, owner, false);
-		bullet->setMass(1);
-		bullet->setGravityDirection(sf::Vector2f(0, 1));
+		owner->Attack();
 	}
 	//	}
 }
