@@ -3,7 +3,6 @@
 
 class Bullet : public PhysicsEntity
 {
-	bool m_onTheGround;
 	sf::Vector2f m_pos;
 	sf::Vector2f m_dir;
 	Entity* m_caster;
@@ -11,12 +10,10 @@ class Bullet : public PhysicsEntity
 	float m_changeDirection = 0.f;
 	float m_lifeTime = 5.f;
 public:
-	void InitBullet(sf::Vector2f position,sf::Vector2f direction,Entity* caster, bool state);
+	void InitBullet(sf::Vector2f position,sf::Vector2f direction,Entity* caster);
 	void OnInitialize() override;
 	void OnUpdate() override;
 	void OnCollision(Entity* other) override;
-
-	bool IsBulletOnGround();
 };
 
 

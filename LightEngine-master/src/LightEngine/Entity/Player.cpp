@@ -8,6 +8,7 @@
 #include "../Graphics/Debug.h"
 #include "../Managers/Managers.h"
 
+#include "../Entity/Platform.h"
 #include "../Graphics/SpriteSheet.h"
 #include "../Graphics/Animation.h"
 
@@ -64,7 +65,9 @@ void Player::OnInitialize() {
 void Player::OnCollision(Entity* other)
 {
 	if (!m_isAlive) return;
-	if (!m_Parrying) {
+	if (other->IsTag(TestScene::Tag::platform)) {
+		Platform* plat = dynamic_cast<Platform*>(other);
+
 	}
 }
 
@@ -78,7 +81,7 @@ void Player::Attack() {
 	m_shootCooldown = 2.f;
 	m_ammo -= 1;
 	Bullet* bullet = CreateEntity<Bullet>();
-	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
+	bullet->InitBullet(GetPosition(), m_lastDir,this);
 	bullet->SetMass(1);
 	bullet->SetGravityDirection(sf::Vector2f(0, 1));
 
@@ -88,7 +91,7 @@ void Player::Jump()
 {
 	if (m_jumpCooldown <= 0 && m_jumpCount <= m_maxJumps) {
 		std::cout << m_jumpCount;
-		SetGravityForce(-200);
+		SetGravityForce(-500);
 		m_jumpCount += 1;
 		m_jumpCooldown = 0.2f;
 	}
@@ -282,10 +285,10 @@ void Player::OnUpdate() {
 	CheckPlayerStates();
 	HandleInput();
 	PlayerMove();
-	std::cout << m_friction;
+	// std::cout << m_friction; Will use this later to fix dash bug
 	mpStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
 	std::string life = std::to_string(m_life);
-	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 0.5f, 0.5f, sf::Color::Red);
+		Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
 }

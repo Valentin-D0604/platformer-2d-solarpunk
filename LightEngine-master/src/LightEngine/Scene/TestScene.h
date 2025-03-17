@@ -30,6 +30,7 @@ public:
 		mob1,
 		mob2,
 		mob3,
+		PowerUp,
 		bullet,
 		platform
 
@@ -38,7 +39,8 @@ public:
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
-	
+	void Destroy();
+	void LoadFromText();
 	Player* GetPlayer();
 
 	void GetTag() { return; }

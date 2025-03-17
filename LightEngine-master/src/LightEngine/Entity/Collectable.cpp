@@ -1,3 +1,4 @@
+#include "../Entity/Collectable.h"
 #include "../Entity/Bullet.h"
 #include "../Collision/RectangleCollider.h"
 #include "../Scene/TestScene.h"
@@ -9,10 +10,9 @@
 #include "../Managers/Managers.h"
 #include"../Utils/Utils.h"
 
-
 #include <iostream>
 
-void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster) {
+void Collectable::InitCollec(sf::Vector2f position, sf::Vector2f direction, Entity* caster) {
 	m_caster = caster;
 	Utils::Normalize(direction);
 	m_pos = position;
@@ -20,41 +20,29 @@ void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* ca
 	SetPosition(position.x, position.y);
 }
 
-void Bullet::OnInitialize() {
+void Collectable::OnInitialize() {
 	m_Sprite = new Sprite();
 	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
 	m_Collider = new RectangleCollider(pos, size);
-	SetTag(TestScene::Tag::bullet);
+	SetTag(TestScene::Tag::PowerUp);
 }
 
-void Bullet::OnUpdate() {
-	m_changeDirection -= GetDeltaTime();
+void Collectable::OnUpdate() {
 	m_lifeTime -= GetDeltaTime();
-	SetDirection(m_dir.x, m_dir.y, 200);
+	SetMass(75);
 }
 
-void Bullet::OnCollision(Entity* other) {
+void Collectable::OnCollision(Entity* other) {
 	Player* player = dynamic_cast<Player*>(other);
-	if (other->IsTag(TestScene::Tag::mob1)) {
-		Mob1* enemy = dynamic_cast<Mob1*>(other);
-		enemy->TakeDamage(1);
-	}
-	if (other->IsTag(TestScene::Tag::mob2)) {
-		Mob2* enemy = dynamic_cast<Mob2*>(other);
-		if (enemy != m_caster) enemy->TakeDamage(1);
-	}
 	if (other->IsTag(TestScene::Tag::player)) {
 		if (other != m_caster && !player->IsParry()) player->TakeDamage(1); // playe take damage
-		else if (other != m_caster && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; } // player parry bullet
-	}
-	if (other != m_caster && !other->IsTag(TestScene::Tag::player)) {
-		Destroy();
 	}
 	if (other != m_caster && other->IsTag(TestScene::Tag::player)) {
-		if (other != m_caster && !player->IsParry()) Destroy();
+		player->AddBuff(1);
+		Destroy();
 	}
 	if (m_lifeTime <= 0) Destroy();
 }
