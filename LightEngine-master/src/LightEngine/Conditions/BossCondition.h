@@ -1,6 +1,6 @@
 #pragma once
 #include "Condition.h"
-#include "Boss.h"
+#include "../Entity/Boss.h"
 
 class BossCondition_IsSweeping : public Condition <Boss>
 {

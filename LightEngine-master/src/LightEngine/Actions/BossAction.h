@@ -1,6 +1,6 @@
 #pragma once
 #include "Action.h"
-#include "Boss.h"
+#include "../Entity/Boss.h"
 
 class BossAction_Sweeping : public Action<Boss>
 {

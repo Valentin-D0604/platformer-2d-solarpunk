@@ -1,15 +1,15 @@
 #include "Boss.h"
 
-#include "BossAction.h"
-#include "BossCondition.h"
-#include "RectangleCollider.h"
+#include "../Actions/BossAction.h"
+#include "../Conditions/BossCondition.h"
+#include "../Collision/RectangleCollider.h"
 
-#include "TestScene.h"
-#include "Player.h"
-#include "Sprite.h"
+#include "../Scene/TestScene.h"
+#include "../Entity/Player.h"
+#include "../Graphics/Sprite.h"
 
-#include "Debug.h"
-#include "Managers.h"
+#include "../Graphics/Debug.h"
+#include "../Managers/Managers.h"
 #include <iostream>
 
 void Boss::OnInitialize()
@@ -123,4 +123,9 @@ void Boss::MoveSideToSide(float speed) {
 		}
 	}
 	SetPosition(GetPosition().x + m_velocity.x * GetDeltaTime(), GetPosition().y);
+}
+
+void Boss::SetAnimation(const std::string& name)
+{
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture(name)));
 }

@@ -1,6 +1,6 @@
 #include "BossAction.h"
-#include "TestScene.h"
-#include "Player.h"
+#include "../Scene/TestScene.h"
+#include "../Entity/Player.h"
 
 // ----------------------------------------- BALAYAGE DU TERRAIN -------------------------
 void BossAction_Sweeping::OnStart(Boss* owner) {
@@ -60,9 +60,9 @@ void BossAction_Stunned::OnStart(Boss* owner) {
 
 void BossAction_Stunned::OnUpdate(Boss* owner) {
     // Stun duration countdown
-    owner->m_stunTimer -= owner->GetDeltaTime();
-    if (owner->m_stunTimer <= 0) {
-        owner->ChangeState(new BossAction_Idle());
+    owner->m_stunnedTimer -= owner->GetDeltaTime();
+    if (owner->m_stunnedTimer <= 0) {
+		owner->SetState(Boss::State::idle);
     }
 }
 

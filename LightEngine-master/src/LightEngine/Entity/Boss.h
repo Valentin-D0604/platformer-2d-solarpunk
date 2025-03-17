@@ -1,7 +1,10 @@
 #pragma once
 
 #include "PhysicsEntity.h"
-#include "StateMachine.h"
+#include "../Utils/StateMachine.h"
+
+class Sprite;
+class RectangleCollider;
 
 class Boss : public PhysicsEntity
 {
@@ -13,6 +16,8 @@ class Boss : public PhysicsEntity
 	float m_walkingTimer = 3.f;
 	bool m_isVulnerable = false;
 	float m_stunnedTimer = 3.f;
+	Sprite* m_sprite;
+	RectangleCollider* m_collider;
 	
 	//------------------------
 
@@ -40,6 +45,11 @@ public:
 	void TakeDamage(int damage);
 	void MoveSideToSide(float speed);
 	void SetVulnerable(bool isVulnerable) { m_isVulnerable = isVulnerable; }
+	void SetState(State state) { mpStateMachine->SetState(state); }
+	void SetAnimation(const std::string& name);
+	void PerformGroundSlam();
+	void ThrowProjectiles();
+	void RemoveArmor();
 
 private:
 	friend class BossAction_Sweeping;
