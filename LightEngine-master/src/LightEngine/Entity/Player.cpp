@@ -306,6 +306,11 @@ void Player::PlayerMove()
 	SetPosition(pos.x, pos.y);
 }
 
+bool Player::isParrying() const
+{
+	return m_Parrying;
+}
+
 void Player::OnUpdate() {
 	if (m_Life == 0) m_IsAlive = false;
 	if (!m_IsAlive) Destroy();

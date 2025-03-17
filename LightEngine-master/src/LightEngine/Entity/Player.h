@@ -57,6 +57,7 @@ public:
 	void HandleInput();
 	void CheckPlayerStates();
 	void PlayerMove();
+
 protected:
 	friend class PlayerCondition_IsWalking;
 	friend class PlayerCondition_IsJumping;

@@ -31,6 +31,7 @@ public:
 		mob2,
 		mob3,
 		boss,
+		hands,
 		bullet,
 		platform,
 	};

@@ -14,118 +14,91 @@
 
 void Boss::OnInitialize()
 {
-	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
-
-	SetTag(TestScene::Tag::boss);
-	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, { 10,10 });
-	mpStateMachine = new StateMachine<Boss>(this, State::Count);
+	m_hands = new Hands(this);
 
 	//IDLE
 	{
-		Action<Boss>* pIdle = mpStateMachine->CreateAction<BossAction_Idle>(State::idle);
-		{//rushing
-			auto transition = pIdle->CreateTransition(State::rushing);
+		Action<Boss>* pIdle = mpStateMachine->CreateAction<BossAction_Idle>(BossActionType::IDLE);
+		{//sweeping
+			auto transition = pIdle->CreateTransition(BossActionType::SWEEP);
 			auto condition = transition->AddCondition<BossCondition_IsSweeping>();
 		}
 		{//smashing
-			auto transition = pIdle->CreateTransition(State::smashing);
+			auto transition = pIdle->CreateTransition(BossActionType::GROUND_SMASH);
 			auto condition = transition->AddCondition<BossCondition_IsGroundSmashing>();
 		}
 		{//throwing
-			auto transition = pIdle->CreateTransition(State::throwing);
+			auto transition = pIdle->CreateTransition(BossActionType::THROW_ROCK);
 			auto condition = transition->AddCondition<BossCondition_IsThrowing>();
 		}
 	}
 	
 	//SWEEPING
 	{
-		Action<Boss>* pWalking = mpStateMachine->CreateAction<BossAction_Sweeping>(State::rushing);
+		Action<Boss>* pWalking = mpStateMachine->CreateAction<BossAction_Sweeping>(BossActionType::SWEEP);
 		{//idle
-			auto transition = pWalking->CreateTransition(State::idle);
+			auto transition = pWalking->CreateTransition(BossActionType::IDLE);
 			auto condition = transition->AddCondition<BossCondition_IsIdle>();
 		}
 	}
 
 	//GROUND SMASH
 	{
-		Action<Boss>* pChasing = mpStateMachine->CreateAction<BossAction_GroundSmash>(State::smashing);
+		Action<Boss>* pChasing = mpStateMachine->CreateAction<BossAction_GroundSmash>(BossActionType::GROUND_SMASH);
 		
 		{//idle
-			auto transition = pChasing->CreateTransition(State::idle);
+			auto transition = pChasing->CreateTransition(BossActionType::IDLE);
 			auto condition = transition->AddCondition<BossCondition_IsIdle>();
 		}
 	}
 
 	//TRHOWING
 	{
-		Action<Boss>* pAttacking = mpStateMachine->CreateAction<BossAction_Throwing>(State::throwing);
+		Action<Boss>* pAttacking = mpStateMachine->CreateAction<BossAction_Throwing>(BossActionType::THROW_ROCK);
 		
 		{//idle
-			auto transition = pAttacking->CreateTransition(State::idle);
+			auto transition = pAttacking->CreateTransition(BossActionType::IDLE);
 			auto condition = transition->AddCondition<BossCondition_IsIdle>();
 		}
 	}
 
-	mpStateMachine->SetState(State::idle);
+	mpStateMachine->SetState(BossActionType::IDLE);
 }
 
-void Boss::onCollision(Entity* other)
-{
-	if (other->IsTag(TestScene::Tag::boss)) return;
+
+void Boss::Update() {
+	m_hands->OnUpdate();
 }
 
-void Boss::OnUpdate()
-{
+void Boss::StartAttack(BossActionType action) {
+	if (m_isStunned) return; // Pas d'attaque si stun
 
-	if (m_life <= 0) { Destroy(); }
+	switch (action) {
+	case BossActionType::SWEEP:
+		m_hands->PerformSweep();
+		break;
 
-	if (m_isVulnerable == true)
-	{
-		m_stunnedTimer -= GetDeltaTime();
-		if (m_stunnedTimer <= 0)
-		{
-			mpStateMachine->SetState(State::idle);
-			m_stunnedTimer = 3.f;
-		}
+	case BossActionType::GROUND_SMASH:
+		m_hands->PerformGroundSmash();
+		break;
+
+	case BossActionType::THROW_ROCK:
+		m_hands->ThrowRock();
+		break;
+
+	case BossActionType::STUNNED:
+		Stun();
+		break;
 	}
-
-	mpStateMachine->Update();
 }
 
-float Boss::GetDistanceToPlayer()
-{
-	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
-	Player* player = scene->GetPlayer();
-
-	sf::Vector2f playerPos = player->GetPosition(); // Fonction qui récupère la position du joueur
-	sf::Vector2f mobPos = GetPosition();
-	return sqrt(pow(playerPos.x - mobPos.x, 2) + pow(playerPos.y - mobPos.y, 2));
+void Boss::Stun() {
+	m_isStunned = true;
+	m_hands->SetVulnerable(true);
+	RemoveArmor();
 }
 
-void Boss::TakeDamage(int damage) {
-	m_life -= damage;
-}
-
-void Boss::MoveSideToSide(float speed) {
-	static bool movingRight = true;
-	if (movingRight) {
-		m_velocity.x = speed;
-		if (GetPosition().x > 800) { // Assuming 800 is the right boundary
-			movingRight = false;
-		}
-	}
-	else {
-		m_velocity.x = -speed;
-		if (GetPosition().x < 0) { // Assuming 0 is the left boundary
-			movingRight = true;
-		}
-	}
-	SetPosition(GetPosition().x + m_velocity.x * GetDeltaTime(), GetPosition().y);
-}
-
-void Boss::SetAnimation(const std::string& name)
-{
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture(name)));
+void Boss::RemoveArmor() {
+	m_hp = 48;
+	m_hands->RemoveArmor();
 }
