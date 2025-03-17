@@ -15,12 +15,12 @@
 
 void Mob1::OnInitialize()
 {
-	m_Sprite = new Sprite();
-	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_Collider = new RectangleCollider(pos, {10,10});
+	m_collider = new RectangleCollider(pos, {10,10});
 	m_pStateMachine = new StateMachine<Mob1>(this, State::Count);
 
 	//idle
@@ -95,9 +95,9 @@ void Mob1::OnInitialize()
 	m_pStateMachine->SetState(State::idle);
 }
 
-void Mob1::OnCollision(Entity* other)
+void Mob1::OnCollision(Entity* _other)
 {
-	if (other->IsTag(TestScene::Tag::mob1)) return;
+	if (_other->IsTag(TestScene::Tag::mob1)) return;
 }
 
 void Mob1::OnUpdate()
@@ -140,6 +140,6 @@ void Mob1::Attack()
 	if (player == nullptr) return;
 	player->TakeDamage(1);
 	GoToPosition(GetPosition().x+m_Direction.x, GetPosition().y + m_Direction.y,200);
-	m_ShootCooldown = 2.f;
+	m_shootCooldown = 2.f;
 }
 

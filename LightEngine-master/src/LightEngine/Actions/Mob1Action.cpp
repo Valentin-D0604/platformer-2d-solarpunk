@@ -7,51 +7,51 @@
 
 #include <iostream>
 //-----------------------------------------walking-------------------------
-void Mob1Action_Walking::OnStart(Mob1* owner)
+void Mob1Action_Walking::OnStart(Mob1* _owner)
 {
 }
 
-void Mob1Action_Walking::OnUpdate(Mob1* owner)
+void Mob1Action_Walking::OnUpdate(Mob1* _owner)
 {
-	owner->m_WalkingTimer -= owner->GetDeltaTime();
-	owner->SetDirection(m_Dir.x, m_Dir.y,200);
-	if (owner->m_WalkingTimer <= 0) {
-		owner->SetDirection(m_Dir.x = -m_Dir.x, m_Dir.y = -m_Dir.y, 200);
-		owner->m_WalkingTimer = 3.f;
+	_owner->m_walkingTimer -= _owner->GetDeltaTime();
+	_owner->SetDirection(m_Dir.x, m_Dir.y,200);
+	if (_owner->m_walkingTimer <= 0) {
+		_owner->SetDirection(m_Dir.x = -m_Dir.x, m_Dir.y = -m_Dir.y, 200);
+		_owner->m_walkingTimer = 3.f;
 	}
 }
 
-void Mob1Action_Walking::OnEnd(Mob1* owner)
+void Mob1Action_Walking::OnEnd(Mob1* _owner)
 {
 }
 
 //----------------------------------------Chasing-------------------------
-void Mob1Action_Chasing::OnStart(Mob1* owner)
+void Mob1Action_Chasing::OnStart(Mob1* _owner)
 {
 }
 
-void Mob1Action_Chasing::OnUpdate(Mob1* owner)
+void Mob1Action_Chasing::OnUpdate(Mob1* _owner)
 {
-	TestScene* scene = dynamic_cast<TestScene*>(owner->GetScene());
+	TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
 	Player* player = scene->GetPlayer();
-	owner->GoToDirection(player->GetPosition().x, player->GetPosition().y, 200);
+	_owner->GoToDirection(player->GetPosition().x, player->GetPosition().y, 200);
 //	std::cout << "chasing";
 }
 
-void Mob1Action_Chasing::OnEnd(Mob1* owner)
+void Mob1Action_Chasing::OnEnd(Mob1* _owner)
 {
 }
 
 //-----------------------------------------Attacking-------------------------
-void Mob1Action_Attacking::OnStart(Mob1* owner)
+void Mob1Action_Attacking::OnStart(Mob1* _owner)
 {
 }
 
-void Mob1Action_Attacking::OnUpdate(Mob1* owner)
+void Mob1Action_Attacking::OnUpdate(Mob1* _owner)
 {
-	owner->m_ShootCooldown -= owner->GetDeltaTime();
-	if (owner->m_ShootCooldown <= 0) {
-		owner->Attack();
+	_owner->m_shootCooldown -= _owner->GetDeltaTime();
+	if (_owner->m_shootCooldown <= 0) {
+		_owner->Attack();
 	}
 //	}
 }

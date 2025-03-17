@@ -15,7 +15,7 @@ inline T* Scene::CreateEntity()
 	Entity* entity = newEntity;
 	entity->Initialize();
 
-	mpGameManager->mEntitiesToAdd.push_back(newEntity);
+	mp_GameManager->m_entitiesToAdd.push_back(newEntity);
 
 	return newEntity;
 }

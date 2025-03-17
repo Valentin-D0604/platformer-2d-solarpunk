@@ -7,25 +7,25 @@
 
 int Scene::GetWindowWidth() const
 {
-	return mpGameManager->mWindowWidth;
+	return mp_GameManager->m_windowWidth;
 }
 
 int Scene::GetWindowHeight() const
 {
-	return mpGameManager->mWindowHeight;
+	return mp_GameManager->m_windowHeight;
 }
 
-void Scene::setCameraCenter(sf::Vector2f _position)
+void Scene::SetCameraCenter(sf::Vector2f _position)
 {
 	m_view->setCenter(_position);
 }
 
-void Scene::setCameraZoom(float _zoom)
+void Scene::SetCameraZoom(float _zoom)
 {
 	m_view->setSize(GetWindowWidth() * _zoom, GetWindowHeight() * _zoom);
 }
 
 float Scene::GetDeltaTime() const
 {
-	return mpGameManager->mDeltaTime;
+	return mp_GameManager->m_deltaTime;
 }

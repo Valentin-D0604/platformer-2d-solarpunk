@@ -2,13 +2,13 @@
 #include "ResourceManager.h"
 
 template<typename T>
-inline T* Managers::get()
+inline T* Managers::Get()
 {
 	if (std::is_same<GameManager, T>::value) {
-		return (T*)m_Instance->m_GameManager;
+		return (T*)m_instance->m_gameManager;
 	}
 	else if (std::is_same<ResourceManager, T>::value) {
-		return(T*)m_Instance->m_ResourceManager;
+		return(T*)m_instance->m_resourceManager;
 	}
 
 	return nullptr;

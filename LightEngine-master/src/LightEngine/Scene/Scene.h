@@ -9,16 +9,16 @@ class GameManager;
 class Scene
 {
 private:
-	GameManager* mpGameManager;
+	GameManager* mp_GameManager;
 
 private:
-	void SetGameManager(GameManager* pGameManager) { mpGameManager = pGameManager; }
+	void SetGameManager(GameManager* _pGameManager) { mp_GameManager = _pGameManager; }
 	
 protected:
 	Scene() = default;
 
 	virtual void OnInitialize() = 0;
-	virtual void OnEvent(const sf::Event& event) = 0;
+	virtual void OnEvent(const sf::Event& _event) = 0;
 	virtual void OnUpdate() = 0;
 
 	sf::View* m_view;
@@ -32,12 +32,12 @@ public:
 	int GetWindowWidth() const;
 	int GetWindowHeight() const;
 
-	void createView() { m_view = new sf::View; };
+	void CreateView() { m_view = new sf::View; };
 
-	void setCameraCenter(sf::Vector2f _position);
-	sf::Vector2f getCameraCenter() { return m_view->getCenter(); };
+	void SetCameraCenter(sf::Vector2f _position);
+	sf::Vector2f GetCameraCenter() { return m_view->getCenter(); };
 
-	void setCameraZoom(float _zoom);
+	void SetCameraZoom(float _zoom);
 
 	friend GameManager;
 };

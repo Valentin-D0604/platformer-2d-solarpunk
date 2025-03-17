@@ -16,24 +16,24 @@ void SampleScene::OnInitialize()
 
 	pEntitySelected = nullptr;
 
-	GET_MANAGER(ResourceManager)->loadTexture("test");
+	GET_MANAGER(ResourceManager)->LoadTexture("test");
 }
 
-void SampleScene::OnEvent(const sf::Event& event)
+void SampleScene::OnEvent(const sf::Event& _event)
 {
-	if (event.type != sf::Event::EventType::MouseButtonPressed)
+	if (_event.type != sf::Event::EventType::MouseButtonPressed)
 		return;
 
-	if (event.mouseButton.button == sf::Mouse::Button::Right)
+	if (_event.mouseButton.button == sf::Mouse::Button::Right)
 	{
 
 	}
 
-	if (event.mouseButton.button == sf::Mouse::Button::Left)
+	if (_event.mouseButton.button == sf::Mouse::Button::Left)
 	{
 		if (pEntitySelected != nullptr) 
 		{
-			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
+			pEntitySelected->GoToPosition(_event.mouseButton.x, _event.mouseButton.y, 100.f);
 		}
 	}
 }

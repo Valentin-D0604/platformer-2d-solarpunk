@@ -18,7 +18,7 @@ public:
 	DummyEntity* pEntity2;
 	Mob1* monster;
 	Mob2* range;
-	Mob3* Explode;
+	Mob3* explode;
 
 	Platform* pPlatform;
 
@@ -37,7 +37,7 @@ public:
 	};
 
 	void OnInitialize() override;
-	void OnEvent(const sf::Event& event) override;
+	void OnEvent(const sf::Event& _event) override;
 	void OnUpdate() override;
 	void Destroy();
 	void LoadFromText();

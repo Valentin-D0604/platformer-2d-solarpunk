@@ -19,7 +19,7 @@ int main()
 
 	GET_MANAGER(GameManager)->LaunchScene<TestScene>();
 
-	pInstance->run();
+	pInstance->Run();
 
 	return 0;
 }

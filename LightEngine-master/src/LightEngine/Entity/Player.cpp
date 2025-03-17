@@ -40,26 +40,26 @@ void Player::OnInitialize() {
 	SetTag(TestScene::Tag::player);
 	SpriteSheet* spriteSheet = new SpriteSheet(this, "test");
 	
-	spriteSheet->setAnimation(1);
+	spriteSheet->SetAnimation(1);
 
-	m_Sprite = spriteSheet;
+	m_sprite = spriteSheet;
 
-	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_Collider = new RectangleCollider(pos,  {102,96});
-	m_Collider->setGizmo(true);
+	m_collider = new RectangleCollider(pos,  {102,96});
+	m_collider->SetGizmo(true);
 	m_physicsCollision = true;
 
-	mpStateMachine = new StateMachine<Player>(this, State::Count);
-	Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
-	Action<Player>* pWalking = mpStateMachine->CreateAction<PlayerAction_Walking>(State::walking);
-	Action<Player>* pJumping = mpStateMachine->CreateAction<PlayerAction_jumping>(State::jumping);
-	Action<Player>* pParrying = mpStateMachine->CreateAction<PlayerAction_Shooting>(State::parrying);
-	Action<Player>* pAttacking = mpStateMachine->CreateAction<PlayerAction_Parrying>(State::attacking);
-	Action<Player>* pDash = mpStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
+	m_pStateMachine = new StateMachine<Player>(this, State::Count);
+	Action<Player>* pIdle = m_pStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
+	Action<Player>* pWalking = m_pStateMachine->CreateAction<PlayerAction_Walking>(State::walking);
+	Action<Player>* pJumping = m_pStateMachine->CreateAction<PlayerAction_jumping>(State::jumping);
+	Action<Player>* pParrying = m_pStateMachine->CreateAction<PlayerAction_Shooting>(State::parrying);
+	Action<Player>* pAttacking = m_pStateMachine->CreateAction<PlayerAction_Parrying>(State::attacking);
+	Action<Player>* pDash = m_pStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
 	
-    mpStateMachine->SetState(State::idle);
+    m_pStateMachine->SetState(State::idle);
 }
 
 void Player::OnCollision(Entity* other)
@@ -99,9 +99,9 @@ void Player::Jump()
 
 void Player::Dash()
 {
-	if (m_dashCooldown <= 0 && !m_Dash) {
-		m_Dash = true;
-		m_DashDuration = 1.f; 
+	if (m_dashCooldown <= 0 && !m_dash) {
+		m_dash = true;
+		m_dashDuration = 1.f; 
 		m_dashCooldown = 1.5f;
 
 		float dashSpeed = 15000.0f;
@@ -153,7 +153,7 @@ void Player::DecreaseCD(float dt)
 	m_shootCooldown -= dt;
 	m_dashCooldown -= dt;
 	m_jumpCooldown -= dt;
-	if (m_Dash) { m_DashDuration -= dt; }
+	if (m_dash) { m_dashDuration -= dt; }
 }
 
 void Player::HandleInput()
@@ -174,28 +174,28 @@ void Player::HandleInput()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
 		inputX = 1.0f;
 		m_lastDir = { 1,0 };
-		mpStateMachine->SetState(State::walking);
+		m_pStateMachine->SetState(State::walking);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
 		inputX = -1.0f;
 		m_lastDir = { -1,0 };
-		mpStateMachine->SetState(State::walking);
+		m_pStateMachine->SetState(State::walking);
 	}
 	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
-		if (m_jumpCount <=1) m_OldY = pos.y;
-		mpStateMachine->SetState(State::jumping);
+		if (m_jumpCount <=1) m_oldY = pos.y;
+		m_pStateMachine->SetState(State::jumping);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
-		if (m_parryCooldown <= 0)mpStateMachine->SetState(State::parrying);
+		if (m_parryCooldown <= 0)m_pStateMachine->SetState(State::parrying);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 		if (m_parryCooldown <= 0) m_life--;
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
-		if (m_shootCooldown <= 0) mpStateMachine->SetState(State::attacking);
+		if (m_shootCooldown <= 0) m_pStateMachine->SetState(State::attacking);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
-		mpStateMachine->SetState(State::dash);
+		m_pStateMachine->SetState(State::dash);
 	}
 	bool reversing = (inputX != 0 && inputX != m_Direction.x);
 
@@ -220,12 +220,12 @@ void Player::CheckPlayerStates()
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 
-	if (pos.y >= m_OldY) {
+	if (pos.y >= m_oldY) {
 		m_jumping = false;
 		m_jumpCount = 0;
 	}
 	if (m_parryTime) m_parryTime -= dt;
-	if (GetPosition().y >= m_OldY && m_jumping) {
+	if (GetPosition().y >= m_oldY && m_jumping) {
 		m_jumping = false;
 	}
 	if (m_parryTime <= 0) {
@@ -236,13 +236,13 @@ void Player::CheckPlayerStates()
 		m_life = 0;
 		m_isAlive = false;
 	}
-	if (m_DashDuration <= 0) {
-		m_DashDuration = 1.f;
+	if (m_dashDuration <= 0) {
+		m_dashDuration = 1.f;
 	}
-	if (m_Dash) {
-		m_DashDuration -= dt;
-		if (m_DashDuration <= 0) {
-			m_Dash = false;
+	if (m_dash) {
+		m_dashDuration -= dt;
+		if (m_dashDuration <= 0) {
+			m_dash = false;
 			m_Speed *= 0.5f; 
 			m_friction = 400.f;
 		}
@@ -286,8 +286,8 @@ void Player::OnUpdate() {
 	HandleInput();
 	PlayerMove();
 	// std::cout << m_friction; Will use this later to fix dash bug
-	mpStateMachine->Update();
-	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
+	m_pStateMachine->Update();
+	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
 	std::string life = std::to_string(m_life);
 		Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);

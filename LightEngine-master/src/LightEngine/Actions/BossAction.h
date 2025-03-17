@@ -4,42 +4,42 @@
 
 class BossAction_Sweeping : public Action<Boss>
 {
-	sf::Vector2f dir = { 1,0 };
+	sf::Vector2f _dir = { 1,0 };
 public:
-	void OnStart(Boss* player) override;
-	void OnUpdate(Boss* player) override;
-	void OnEnd(Boss* player) override;
+	void OnStart(Boss* _player) override;
+	void OnUpdate(Boss* _player) override;
+	void OnEnd(Boss* _player) override;
 };
 
 class BossAction_GroundSmash : public Action<Boss>
 {
 public:
-	void OnStart(Boss* player) override;
-	void OnUpdate(Boss* player) override;
-	void OnEnd(Boss* player) override;
+	void OnStart(Boss* _player) override;
+	void OnUpdate(Boss* _player) override;
+	void OnEnd(Boss* _player) override;
 };
 
 class BossAction_Throwing : public Action<Boss>
 {
 public:
-	void OnStart(Boss* player) override;
-	void OnUpdate(Boss* player) override;
-	void OnEnd(Boss* player) override;
+	void OnStart(Boss* _player) override;
+	void OnUpdate(Boss* _player) override;
+	void OnEnd(Boss* _player) override;
 };
 
 class BossAction_Stunned : public Action<Boss>
 {
 public:
-	void OnStart(Boss* player) override;
-	void OnUpdate(Boss* player) override;
-	void OnEnd(Boss* player) override;
+	void OnStart(Boss* _player) override;
+	void OnUpdate(Boss* _player) override;
+	void OnEnd(Boss* _player) override;
 };
 
 class BossAction_Idle : public Action<Boss>
 {
 public:
-	void OnStart(Boss* player) override;
-	void OnUpdate(Boss* player) override;
-	void OnEnd(Boss* player) override;
+	void OnStart(Boss* _player) override;
+	void OnUpdate(Boss* _player) override;
+	void OnEnd(Boss* _player) override;
 };
 

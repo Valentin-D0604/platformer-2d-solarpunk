@@ -13,7 +13,7 @@ class Mob2 : public PhysicsEntity
 	float m_walkingTimer = 3.f;
 	//------------------------
 
-	StateMachine<Mob2>* mpStateMachine;
+	StateMachine<Mob2>* m_pStateMachine;
 
 	enum State
 	{

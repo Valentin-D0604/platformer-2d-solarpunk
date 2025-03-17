@@ -16,81 +16,81 @@ void Boss::OnInitialize()
 {
 	//IDLE
 	{
-		Action<Boss>* pIdle = mpStateMachine->CreateAction<BossAction_Idle>(BossActionType::IDLE);
+		Action<Boss>* pIdle = m_pStateMachine->CreateAction<BossAction_Idle>(BossActionType::idle);
 		
 		{//sweeping
-			auto transition = pIdle->CreateTransition(BossActionType::SWEEP);
+			auto transition = pIdle->CreateTransition(BossActionType::sweep);
 			auto condition = transition->AddCondition<BossCondition_IsSweeping>();
 		}
 		
 		{//smashing
-			auto transition = pIdle->CreateTransition(BossActionType::GROUND_SMASH);
+			auto transition = pIdle->CreateTransition(BossActionType::groundSmash);
 			auto condition = transition->AddCondition<BossCondition_IsGroundSmashing>();
 		}
 		
 		{//throwing
-			auto transition = pIdle->CreateTransition(BossActionType::THROW_ROCK);
+			auto transition = pIdle->CreateTransition(BossActionType::throwRock);
 			auto condition = transition->AddCondition<BossCondition_IsThrowing>();
 		}
 	}
 	
 	//SWEEPING
 	{
-		Action<Boss>* pWalking = mpStateMachine->CreateAction<BossAction_Sweeping>(BossActionType::SWEEP);
+		Action<Boss>* pWalking = m_pStateMachine->CreateAction<BossAction_Sweeping>(BossActionType::sweep);
 		
 		{//idle
-			auto transition = pWalking->CreateTransition(BossActionType::IDLE);
+			auto transition = pWalking->CreateTransition(BossActionType::idle);
 			auto condition = transition->AddCondition<BossCondition_IsIdle>();
 		}
 	}
 
 	//GROUND SMASH
 	{
-		Action<Boss>* pChasing = mpStateMachine->CreateAction<BossAction_GroundSmash>(BossActionType::GROUND_SMASH);
+		Action<Boss>* pChasing = m_pStateMachine->CreateAction<BossAction_GroundSmash>(BossActionType::groundSmash);
 		
 		{//idle
-			auto transition = pChasing->CreateTransition(BossActionType::IDLE);
+			auto transition = pChasing->CreateTransition(BossActionType::idle);
 			auto condition = transition->AddCondition<BossCondition_IsIdle>();
 		}
 	}
 
 	//TRHOWING
 	{
-		Action<Boss>* pAttacking = mpStateMachine->CreateAction<BossAction_Throwing>(BossActionType::THROW_ROCK);
+		Action<Boss>* pAttacking = m_pStateMachine->CreateAction<BossAction_Throwing>(BossActionType::throwRock);
 		
 		{//idle
-			auto transition = pAttacking->CreateTransition(BossActionType::IDLE);
+			auto transition = pAttacking->CreateTransition(BossActionType::idle);
 			auto condition = transition->AddCondition<BossCondition_IsIdle>();
 		}
 	}
 
-	mpStateMachine->SetState(BossActionType::IDLE);
+	m_pStateMachine->SetState(BossActionType::idle);
 }
 
 
 void Boss::Update() {
-	mpStateMachine->Update();
+	m_pStateMachine->Update();
 }
 
 void Boss::StartAttack(BossActionType action) {
 	if (m_isStunned) return; // Pas d'attaque si stun
 
 	switch (action) {
-	case BossActionType::SWEEP:
+	case BossActionType::sweep:
 		m_left->PerformSweep();
 		m_right->PerformSweep();
 		break;
 
-	case BossActionType::GROUND_SMASH:
+	case BossActionType::groundSmash:
 		m_left->PerformGroundSmash();
 		m_right->PerformGroundSmash();
 		break;
 
-	case BossActionType::THROW_ROCK:
+	case BossActionType::throwRock:
 		m_left->ThrowRock();
 		break;
 
-	case BossActionType::STUNNED:
+	case BossActionType::stunned:
 		Stun();
 		break;
 	}
@@ -115,7 +115,7 @@ float Boss::GetDistanceToPlayer()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
-	float distance = GetPosition().Distance(player->GetPosition());
+	float distance = GetPosition().distance(player->GetPosition());
 	return distance;
 }
 

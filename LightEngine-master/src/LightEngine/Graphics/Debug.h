@@ -23,20 +23,20 @@ struct Line
 
 class Debug
 {
-	std::vector<Line> mLines;
-	std::vector<sf::Text> mTexts;
-	std::vector<sf::CircleShape> mCircles;
+	std::vector<Line> m_lines;
+	std::vector<sf::Text> m_texts;
+	std::vector<sf::CircleShape> m_circles;
 
-	void Draw(sf::RenderWindow* pRenderWindow);
+	void Draw(sf::RenderWindow* _pRenderWindow);
 
 public:
 	static Debug* Get();
 
-	static void DrawLine(float x1, float y1, float x2, float y2, const sf::Color& color);
-	static void DrawRectangle(float x, float y, float width, float height, const sf::Color& color);
-	static void DrawCircle(float x, float y, float radius, const sf::Color& color);
-	static void DrawText(float x, float y, const std::string& text, const sf::Color& color);
-	static void DrawText(float x, float y, const std::string& text, float ratioX, float ratioY, const sf::Color& color);
+	static void DrawLine(float _x1, float _y1, float _x2, float _y2, const sf::Color& _color);
+	static void DrawRectangle(float _x, float _y, float _width, float _height, const sf::Color& _color);
+	static void DrawCircle(float _x, float _y, float _radius, const sf::Color& _color);
+	static void DrawText(float _x, float _y, const std::string& _text, const sf::Color& _color);
+	static void DrawText(float _x, float _y, const std::string& _text, float _ratioX, float _ratioY, const sf::Color& _color);
 
 	friend GameManager;
 };

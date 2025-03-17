@@ -10,10 +10,10 @@ class Bullet : public PhysicsEntity
 	float m_changeDirection = 0.f;
 	float m_lifeTime = 5.f;
 public:
-	void InitBullet(sf::Vector2f position,sf::Vector2f direction,Entity* caster);
+	void InitBullet(sf::Vector2f _position,sf::Vector2f _direction,Entity* _caster);
 	void OnInitialize() override;
 	void OnUpdate() override;
-	void OnCollision(Entity* other) override;
+	void OnCollision(Entity* _other) override;
 };
 
 

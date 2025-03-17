@@ -4,9 +4,9 @@
 
 namespace Utils
 {
-	bool Normalize(sf::Vector2f& vector);
-	float GetDistance(int x1, int y1, int x2, int y2);
+	bool Normalize(sf::Vector2f& _vector);
+	float GetDistance(int _x1, int _y1, int _x2, int _y2);
 	float GetDistance(sf::Vector2f _v1, sf::Vector2f _v2);
-	float GetAngleDegree(const sf::Vector2f& v1, const sf::Vector2f& v2);
+	float GetAngleDegree(const sf::Vector2f& _v1, const sf::Vector2f& _v2);
 	float Clamp(float _value, float _min, float _max);
 }

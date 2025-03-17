@@ -7,21 +7,21 @@
 template<typename T>
 class StateMachine
 {
-	std::vector<Action<T>*> mActions;
-	int mCurrentState;
+	std::vector<Action<T>*> m_actions;
+	int m_currentState;
 
-	T* mOwner;
+	T* m_owner;
 
 public:
-	StateMachine(T* owner, int stateCount);
+	StateMachine(T* _owner, int _stateCount);
 	~StateMachine();
 
 	void Update();
-	void SetState(int state);
-	int GetCurrentState() const { return mCurrentState; }
+	void SetState(int _state);
+	int GetCurrentState() const { return m_currentState; }
 
 	template<typename U>
-	U* CreateAction(int state);
+	U* CreateAction(int _state);
 };
 
 #include "StateMachine.inl"

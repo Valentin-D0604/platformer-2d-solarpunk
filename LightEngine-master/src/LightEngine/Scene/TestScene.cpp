@@ -40,8 +40,8 @@ void TestScene::OnInitialize()
 	//Explode->SetPosition(500, 100);
 
 	pEntitySelected = nullptr;
-	createView();
-	setCameraZoom(1);
+	CreateView();
+	SetCameraZoom(1);
 
 	//for (int i = -10; i < 10; i++) {
 	//	pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192
@@ -76,10 +76,10 @@ void TestScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
-	if (pEntity1->IsAlive()) setCameraCenter(pEntity1->GetPosition());
+	if (pEntity1->IsAlive()) SetCameraCenter(pEntity1->GetPosition());
 	else {
-		setCameraCenter({ 0,0 });
-		setCameraZoom(5);
+		SetCameraCenter({ 0,0 });
+		SetCameraZoom(5);
 		//Destroy();
 		OnInitialize(); // Need fix with delete
 	}

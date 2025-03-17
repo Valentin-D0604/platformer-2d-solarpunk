@@ -24,7 +24,7 @@ public:
     void PerformGroundSmash();
     void ThrowRock();
     void RemoveArmor();
-    void SetVulnerable(bool vulnerable);
+    void SetVulnerable(bool _vulnerable);
     
     bool IsSweeping() { return m_isSweeping; }
 	bool IsGroundSmashing() { return m_isGroundSmashing; }

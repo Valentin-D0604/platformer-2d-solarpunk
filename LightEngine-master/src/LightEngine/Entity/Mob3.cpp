@@ -18,18 +18,18 @@
 
 void Mob3::OnInitialize()
 {
-	m_Sprite = new Sprite();
-	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
-	m_Sprite->setScale({ 0.25,0.25 });
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
+	m_sprite->setScale({ 0.25,0.25 });
 	SetTag(TestScene::Tag::mob3);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_Collider = new RectangleCollider(pos, { 10,10 });
-	mpStateMachine = new StateMachine<Mob3>(this, State::Count);
-	m_Sprite->setScale({ 0.25,0.25 });
+	m_collider = new RectangleCollider(pos, { 10,10 });
+	m_pStateMachine = new StateMachine<Mob3>(this, State::Count);
+	m_sprite->setScale({ 0.25,0.25 });
 	m_Speed = 300;
 	//idle
 	{
-		Action<Mob3>* pIdle = mpStateMachine->CreateAction<Mob3Action_Idle>(State::idle);
+		Action<Mob3>* pIdle = m_pStateMachine->CreateAction<Mob3Action_Idle>(State::idle);
 		{//walking
 			auto transition = pIdle->CreateTransition(State::walking);
 			auto condition = transition->AddCondition<Mob3Condition_IsWalking>();
@@ -46,7 +46,7 @@ void Mob3::OnInitialize()
 	}
 	//walking
 	{
-		Action<Mob3>* pWalking = mpStateMachine->CreateAction<Mob3Action_Walking>(State::walking);
+		Action<Mob3>* pWalking = m_pStateMachine->CreateAction<Mob3Action_Walking>(State::walking);
 		{//walking
 			auto transition = pWalking->CreateTransition(State::idle);
 			auto condition = transition->AddCondition<Mob3Condition_IsIdle>();
@@ -64,7 +64,7 @@ void Mob3::OnInitialize()
 
 	//chasing
 	{
-		Action<Mob3>* pChasing = mpStateMachine->CreateAction<Mob3Action_Chasing>(State::chasing);
+		Action<Mob3>* pChasing = m_pStateMachine->CreateAction<Mob3Action_Chasing>(State::chasing);
 		{//walking
 			auto transition = pChasing->CreateTransition(State::walking);
 			auto condition = transition->AddCondition<Mob3Condition_IsWalking>();
@@ -81,7 +81,7 @@ void Mob3::OnInitialize()
 
 	//attacking
 	{
-		Action<Mob3>* pAttacking = mpStateMachine->CreateAction<Mob3Action_Attacking>(State::attacking);
+		Action<Mob3>* pAttacking = m_pStateMachine->CreateAction<Mob3Action_Attacking>(State::attacking);
 		{//walking
 			auto transition = pAttacking->CreateTransition(State::walking);
 			auto condition = transition->AddCondition<Mob3Condition_IsWalking>();
@@ -96,19 +96,19 @@ void Mob3::OnInitialize()
 		}
 	}
 
-	mpStateMachine->SetState(State::idle);
+	m_pStateMachine->SetState(State::idle);
 }
 
-void Mob3::OnCollision(Entity* other)
+void Mob3::OnCollision(Entity* _other)
 {
-	if (other->IsTag(TestScene::Tag::mob2)) return;
+	if (_other->IsTag(TestScene::Tag::mob2)) return;
 }
 
 void Mob3::OnUpdate()
 {
 	if (m_life <= 0) { Attack(); Destroy(); }
 
-	mpStateMachine->Update();
+	m_pStateMachine->Update();
 }
 
 void Mob3::OnDestroy()
@@ -157,8 +157,8 @@ float Mob3::GetDistanceToPlayer()
 	 return 10000;
 }
 
-void Mob3::TakeDamage(int damage) {
-	m_life -= damage;
+void Mob3::TakeDamage(int _damage) {
+	m_life -= _damage;
 	if (m_canExplode) {
 		Attack();
 	}

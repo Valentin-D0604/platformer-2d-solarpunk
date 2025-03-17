@@ -9,13 +9,13 @@ class RectangleCollider;
 class Hand;
 
 enum BossActionType {
-	IDLE,
-    SWEEP, 
-    GROUND_SMASH, 
-    THROW_ROCK,
-    STUNNED,
+	idle,
+    sweep, 
+    groundSmash, 
+    throwRock,
+    stunned,
 
-	COUNT
+	count
 };
 
 class Boss : public Entity {
@@ -28,7 +28,7 @@ private:
 	bool m_isThrowing = false;
 	bool m_isSweeping = false;
 	
-    StateMachine<Boss>* mpStateMachine;
+    StateMachine<Boss>* m_pStateMachine;
 
 public:
     void OnInitialize() override;

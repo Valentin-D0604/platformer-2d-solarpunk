@@ -9,8 +9,8 @@ class Mob1 : public PhysicsEntity
 	bool m_IsAlive = true;
 	int m_Life = 1;
 	sf::Vector2f m_Velocity;
-	float m_ShootCooldown = 2.f;
-	float m_WalkingTimer = 3.f;
+	float m_shootCooldown = 2.f;
+	float m_walkingTimer = 3.f;
 	//------------------------
 
 	StateMachine<Mob1>* m_pStateMachine;

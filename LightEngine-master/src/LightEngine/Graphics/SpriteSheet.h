@@ -14,18 +14,18 @@ class Entity;
 
 class SpriteSheet: public Sprite
 {
-	Entity* m_Entity;
-	sf::Texture* m_Texture;
-	std::vector<Animation*> m_Animations;
-	int m_AnimationIndex;
-	int m_AnimationFrame;
-	float m_Timer;
+	Entity* m_entity;
+	sf::Texture* m_texture;
+	std::vector<Animation*> m_animations;
+	int m_animationIndex;
+	int m_animationFrame;
+	float m_timer;
 	
 public:
 	SpriteSheet(Entity* _entity, std::string _path);
-	void addAnimation(Animation* _animation);
-	void setAnimation(int _index);
-	std::string getCurrentAnimationName();
-	virtual void deserialize(const nlohmann::json& _json);
-	virtual void update() override;
+	void AddAnimation(Animation* _animation);
+	void SetAnimation(int _index);
+	std::string GetCurrentAnimationName();
+	virtual void Deserialize(const nlohmann::json& _json);
+	virtual void Update() override;
 };

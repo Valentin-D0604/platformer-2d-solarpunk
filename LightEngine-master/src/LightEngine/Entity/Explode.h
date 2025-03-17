@@ -7,7 +7,7 @@ class Explode : public PhysicsEntity
 	float m_DamageCooldown = 0.f;
 public:
 	void OnInitialize() override;
-	void OnCollision(Entity* other) override;
+	void OnCollision(Entity* _other) override;
 	void OnUpdate() override;
 };
 

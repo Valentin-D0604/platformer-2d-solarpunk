@@ -11,8 +11,8 @@ class Player : public PhysicsEntity
 {
 	//--------moving---------
 	bool m_jumping = false;
-	float m_OldY = 0;
-	bool m_Dash = true;
+	float m_oldY = 0;
+	bool m_dash = true;
 	//sf::Vector2f m_velocity;
 	float m_acceleration = 600.0f;
 	float m_friction = 400.0f;
@@ -30,7 +30,7 @@ class Player : public PhysicsEntity
 	float m_parryCooldown = 2.f;
 	float m_shootCooldown = 2.f;
 	float m_dashCooldown = 2.f;
-	float m_DashDuration = 1.f;
+	float m_dashDuration = 1.f;
 	float m_jumpCooldown = 1.f;
 	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------
@@ -38,7 +38,7 @@ class Player : public PhysicsEntity
 	int m_jumpCount = 0;
 	const int m_maxJumps = 2;
 
-	StateMachine<Player>* mpStateMachine;
+	StateMachine<Player>* m_pStateMachine;
 
 	enum State
 	{
@@ -51,7 +51,7 @@ class Player : public PhysicsEntity
 
 		Count
 	};
-	State mState = State::idle;
+	State m_state = State::idle;
 	static constexpr int STATE_COUNT = static_cast<int>(State::Count);
 
 	int mTransitions[STATE_COUNT][STATE_COUNT] =

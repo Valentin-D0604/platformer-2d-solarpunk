@@ -13,60 +13,60 @@ void PhysicsEntity::Update()
 {
 	float dt = GetDeltaTime();
 
-	m_GravityForce += m_Mass * dt * GRAVITATIONNAL_CONSTANT;
+	m_gravityForce += m_mass * dt * GRAVITATIONNAL_CONSTANT;
 
-	m_GravityForce = Utils::Clamp(m_GravityForce, -INFINITY, MAX_GRAVITATIONNAL_FORCE);
+	m_gravityForce = Utils::Clamp(m_gravityForce, -INFINITY, MAX_GRAVITATIONNAL_FORCE);
 
 	float distance = dt * m_Speed;
 
-	m_Velocity = distance * m_Direction; // Character Input movement
-	m_Velocity += m_GravityDirection * m_GravityForce * GetDeltaTime(); // Gravity
+	m_velocity = distance * m_Direction; // Character Input movement
+	m_velocity += m_gravityDirection * m_gravityForce * GetDeltaTime(); // Gravity
 	
-	sf::Vector2f translation = m_Velocity;
-	m_Sprite->move(translation);
+	sf::Vector2f translation = m_velocity;
+	m_sprite->move(translation);
 
-	m_Sprite->update();
+	m_sprite->Update();
 
-	m_Collider->setPosition(GetPosition());
+	m_collider->SetPosition(GetPosition());
 
 	OnUpdate();
 
-	m_Collider->update();
+	m_collider->Update();
 }
 
 void PhysicsEntity::SetMass(float _mass)
 {
-	m_Mass = _mass;
+	m_mass = _mass;
 }
 
 void PhysicsEntity::SetGravityForce(float _gravityForce)
 {
-	m_GravityForce = _gravityForce;
+	m_gravityForce = _gravityForce;
 }
 
 void PhysicsEntity::SetGravityDirection(sf::Vector2f _gravityDirection)
 {
 	Utils::Normalize(_gravityDirection);
-	m_GravityDirection = _gravityDirection;
+	m_gravityDirection = _gravityDirection;
 }
 
 bool PhysicsEntity::IsColliding(PhysicsEntity* _other)
 {
-	return m_Collider->IsColliding(_other->m_Collider);
+	return m_collider->IsColliding(_other->m_collider);
 }
 
 bool PhysicsEntity::IsColliding(StaticEntity* _other)
 {
-	return m_Collider->IsColliding(_other->m_Collider);
+	return m_collider->IsColliding(_other->m_collider);
 }
 
 void PhysicsEntity::Repulse(StaticEntity* _other)
 {
-	if (m_Collider->getShapeTag() == ShapeTag::Rectangle)
+	if (m_collider->GetShapeTag() == ShapeTag::rectangle)
 	{
-		m_Collider->setPosition(GetPosition());
-		sf::FloatRect movingBounds(m_Collider->getPosition(0, 0), m_Collider->getPosition(1, 1) - m_Collider->getPosition(0, 0));
-		sf::FloatRect staticBounds(_other->m_Collider->getPosition(0, 0), _other->m_Collider->getPosition(1, 1) - _other->m_Collider->getPosition(0, 0));
+		m_collider->SetPosition(GetPosition());
+		sf::FloatRect movingBounds(m_collider->GetPosition(0, 0), m_collider->GetPosition(1, 1) - m_collider->GetPosition(0, 0));
+		sf::FloatRect staticBounds(_other->m_collider->GetPosition(0, 0), _other->m_collider->GetPosition(1, 1) - _other->m_collider->GetPosition(0, 0));
 
 		float overlapLeft = movingBounds.left + movingBounds.width - staticBounds.left;
 		float overlapRight = staticBounds.left + staticBounds.width - movingBounds.left;

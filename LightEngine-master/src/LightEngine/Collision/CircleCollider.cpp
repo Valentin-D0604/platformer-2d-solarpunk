@@ -4,29 +4,29 @@
 
 CircleCollider::CircleCollider(sf::Vector2f _position, float _radius)
 {
-	m_Radius = _radius;
-	setPosition(_position);
-	m_shapeTag = ShapeTag::Circle;
+	m_radius = _radius;
+	SetPosition(_position);
+	m_shapeTag = ShapeTag::circle;
 }
-void CircleCollider::setPosition(sf::Vector2f _position, float _ratioX, float _ratioY)
+void CircleCollider::SetPosition(sf::Vector2f _position, float _ratioX, float _ratioY)
 {
-	float size = m_Radius * 2;
+	float size = m_radius * 2;
 
 	_position.x -= size * _ratioX;
 	_position.y -= size * _ratioY;
 
-	m_Position = _position + m_offset;
+	m_position = _position + m_offset;
 }
 
-void CircleCollider::move(sf::Vector2f _direction)
+void CircleCollider::Move(sf::Vector2f _direction)
 {
-	m_Position += _direction;
+	m_position += _direction;
 }
 
-sf::Vector2f CircleCollider::getPosition(float _ratioX, float _ratioY) const
+sf::Vector2f CircleCollider::GetPosition(float _ratioX, float _ratioY) const
 {
-	float size = m_Radius * 2;
-	sf::Vector2f position = m_Position;
+	float size = m_radius * 2;
+	sf::Vector2f position = m_position;
 
 	position.x += size * _ratioX;
 	position.y += size * _ratioY;
@@ -37,39 +37,39 @@ sf::Vector2f CircleCollider::getPosition(float _ratioX, float _ratioY) const
 bool CircleCollider::IsColliding(Collider* _other)
 {
 	bool colliding = false;
-	switch (_other->getShapeTag())
+	switch (_other->GetShapeTag())
 	{
-		case ShapeTag::Circle:
+		case ShapeTag::circle:
 		{
 			CircleCollider* otherCast = dynamic_cast<CircleCollider*>(_other);
-			sf::Vector2f otherPos = otherCast->getPosition();
-			float otherRadius = otherCast->getRadius();
+			sf::Vector2f otherPos = otherCast->GetPosition();
+			float otherRadius = otherCast->GetRadius();
 
-			colliding = circleCollision(getPosition(), getRadius(), otherPos, otherRadius);
+			colliding = CircleCollision(GetPosition(), GetRadius(), otherPos, otherRadius);
 		}
-		case ShapeTag::Rectangle:
+		case ShapeTag::rectangle:
 		{
 			RectangleCollider* otherCast = dynamic_cast<RectangleCollider*>(_other);
-			sf::Vector2f* const& otherVertices = otherCast->getVertices();
+			sf::Vector2f* const& otherVertices = otherCast->GetVertices();
 
-			colliding = circleRectangleCollision(getPosition(), getRadius(), otherVertices);
+			colliding = CircleRectangleCollision(GetPosition(), GetRadius(), otherVertices);
 		}
 	}
 
 	return colliding;
 }
 
-void CircleCollider::update()
+void CircleCollider::Update()
 {
 	if (!m_gizmo)
 		return;
 
-	sf::Vector2f position = getPosition();
+	sf::Vector2f position = GetPosition();
 
-	Debug::DrawCircle(position.x, position.y, getRadius(), sf::Color::Red);
+	Debug::DrawCircle(position.x, position.y, GetRadius(), sf::Color::Red);
 }
 
-sf::Vector2f CircleCollider::getSize() const
+sf::Vector2f CircleCollider::GetSize() const
 {
-	return sf::Vector2f(m_Radius, m_Radius);
+	return sf::Vector2f(m_radius, m_radius);
 }

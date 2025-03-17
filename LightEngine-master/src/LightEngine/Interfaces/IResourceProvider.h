@@ -13,11 +13,11 @@ namespace sf {
 
 class IResourceProvider {
 public:
-	virtual void loadTexture(std::string _name) = 0;
-	virtual void unloadTexture(std::string _name) = 0;
-	virtual sf::Texture* getTexture(std::string _name) = 0;
+	virtual void LoadTexture(std::string _name) = 0;
+	virtual void UnloadTexture(std::string _name) = 0;
+	virtual sf::Texture* GetTexture(std::string _name) = 0;
 
-	virtual void loadFont(std::string _name) = 0;
-	virtual void unloadFont(std::string _name) = 0;
-	virtual sf::Font* getFont(std::string _name) = 0;
+	virtual void LoadFont(std::string _name) = 0;
+	virtual void UnloadFont(std::string _name) = 0;
+	virtual sf::Font* GetFont(std::string _name) = 0;
 };

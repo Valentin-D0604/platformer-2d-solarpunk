@@ -9,9 +9,9 @@ class Collectable : public PhysicsEntity
 		float m_speed = 500.f;
 		float m_lifeTime = 5.f;
 	public:
-		void InitCollec(sf::Vector2f position, sf::Vector2f direction, Entity* caster);
+		void InitCollec(sf::Vector2f _position, sf::Vector2f _direction, Entity* _caster);
 		void OnInitialize() override;
 		void OnUpdate() override;
-		void OnCollision(Entity* other) override;
+		void OnCollision(Entity* _other) override;
 };
 

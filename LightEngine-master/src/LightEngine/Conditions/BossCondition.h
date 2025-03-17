@@ -5,29 +5,29 @@
 class BossCondition_IsSweeping : public Condition <Boss>
 {
 public:
-	bool OnTest(Boss* owner) override;
+	bool OnTest(Boss* _owner) override;
 };
 
 class BossCondition_IsGroundSmashing : public Condition<Boss>
 {
 public:
-	bool OnTest(Boss* owner) override;
+	bool OnTest(Boss* _owner) override;
 };
 
 class BossCondition_IsThrowing : public Condition<Boss>
 {
 public:
-	bool OnTest(Boss* owner) override;
+	bool OnTest(Boss* _owner) override;
 };
 
 class BossCondition_IsStunned : public Condition<Boss>
 {
 public:
-	bool OnTest(Boss* owner) override;
+	bool OnTest(Boss* _owner) override;
 };
 
 class BossCondition_IsIdle : public Condition<Boss>
 {
 public:
-	bool OnTest(Boss* owner) override;
+	bool OnTest(Boss* _owner) override;
 };

@@ -4,6 +4,6 @@
 class Sprite : public sf::Sprite
 {
 public:
-	virtual void update() {};
+	virtual void Update() {};
 };
 

@@ -12,21 +12,21 @@
 
 #include <iostream>
 
-void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster) {
-	m_caster = caster;
-	Utils::Normalize(direction);
-	m_pos = position;
-	m_dir = direction;
-	SetPosition(position.x, position.y);
+void Bullet::InitBullet(sf::Vector2f _position, sf::Vector2f _direction,Entity* _caster) {
+	m_caster = _caster;
+	Utils::Normalize(_direction);
+	m_pos = _position;
+	m_dir = _direction;
+	SetPosition(_position.x, _position.y);
 }
 
 void Bullet::OnInitialize() {
-	m_Sprite = new Sprite();
-	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
-	m_Collider = new RectangleCollider(pos, size);
+	m_collider = new RectangleCollider(pos, size);
 	SetTag(TestScene::Tag::bullet);
 }
 

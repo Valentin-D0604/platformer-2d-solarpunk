@@ -26,13 +26,13 @@ void Entity::Destroy()
 
 void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 {
-	sf::IntRect rect = m_Sprite->getTextureRect();
+	sf::IntRect rect = m_sprite->getTextureRect();
 	sf::Vector2f size = sf::Vector2f(rect.width , rect.height);
 
 	x -= size.x * ratioX;
 	y -= size.y * ratioY;
 
-	m_Sprite->setPosition(x, y);
+	m_sprite->setPosition(x, y);
 
 	//#TODO Optimise
 	if (m_Target.m_IsSet) 
@@ -52,8 +52,8 @@ void Entity::Move(float _x, float _y)
 
 sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 {
-	sf::Vector2f size = sf::Vector2f(m_Sprite->getTextureRect().width , m_Sprite->getTextureRect().height);
-	sf::Vector2f position = m_Sprite->getPosition();
+	sf::Vector2f size = sf::Vector2f(m_sprite->getTextureRect().width , m_sprite->getTextureRect().height);
+	sf::Vector2f position = m_sprite->getPosition();
 
 	position.x += size.x * ratioX;
 	position.y += size.y * ratioY;
@@ -61,16 +61,16 @@ sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 	return position;
 }
 
-bool Entity::GoToDirection(int x, int y, float speed)
+bool Entity::GoToDirection(int _x, int _y, float _speed)
 {
 	sf::Vector2f position = GetPosition(0.5f, 0.5f);
-	sf::Vector2f direction = sf::Vector2f(x - position.x, y - position.y);
+	sf::Vector2f direction = sf::Vector2f(_x - position.x, _y - position.y);
 	
 	bool success = Utils::Normalize(direction);
 	if (success == false)
 		return false;
 
-	SetDirection(direction.x, direction.y, speed);
+	SetDirection(direction.x, direction.y, _speed);
 
 	return true;
 }
@@ -89,12 +89,12 @@ bool Entity::GoToPosition(int x, int y, float speed)
 	return true;
 }
 
-void Entity::SetDirection(float x, float y, float speed)
+void Entity::SetDirection(float _x, float _y, float _speed)
 {
-	if (speed > 0)
-		m_Speed = speed;
+	if (_speed > 0)
+		m_Speed = _speed;
 
-	m_Direction = sf::Vector2f(x, y);
+	m_Direction = sf::Vector2f(_x, _y);
 	m_Target.m_IsSet = false;
 }
 
@@ -103,8 +103,8 @@ void Entity::Update()
 	float dt = GetDeltaTime();
 	float distance = dt * m_Speed;
 	sf::Vector2f translation = distance * m_Direction;
-	m_Sprite->move(translation);
-	m_Sprite->update();
+	m_sprite->move(translation);
+	m_sprite->Update();
 
 	OnUpdate();
 }

@@ -69,6 +69,6 @@ void Hand::RemoveArmor() {
 	m_isVulnerable = false;
 }
 
-void Hand::SetVulnerable(bool vulnerable) {
-	m_isVulnerable = vulnerable;
+void Hand::SetVulnerable(bool _vulnerable) {
+	m_isVulnerable = _vulnerable;
 }

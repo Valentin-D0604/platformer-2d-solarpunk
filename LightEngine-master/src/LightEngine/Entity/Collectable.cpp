@@ -21,12 +21,12 @@ void Collectable::InitCollec(sf::Vector2f position, sf::Vector2f direction, Enti
 }
 
 void Collectable::OnInitialize() {
-	m_Sprite = new Sprite();
-	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
-	m_Collider = new RectangleCollider(pos, size);
+	m_collider = new RectangleCollider(pos, size);
 	SetTag(TestScene::Tag::PowerUp);
 }
 

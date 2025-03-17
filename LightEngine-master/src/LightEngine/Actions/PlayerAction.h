@@ -12,44 +12,44 @@ public:
 
 class PlayerAction_jumping : public Action<Player>
 {
-	int timejump = 0;
-	int JPP = 0;
+	int m_timejump = 0;
+	int m_jpp = 0;
 public:
-	void OnStart(Player* player) override;
-	void OnUpdate(Player* player) override;
-	void OnEnd(Player* player) override;
+	void OnStart(Player* _player) override;
+	void OnUpdate(Player* _player) override;
+	void OnEnd(Player* _player) override;
 };
 
 
 class PlayerAction_Shooting : public Action<Player>
 {
 public:
-	void OnStart(Player* player) override;
-	void OnUpdate(Player* player) override;
-	void OnEnd(Player* player) override;
+	void OnStart(Player* _player) override;
+	void OnUpdate(Player* _player) override;
+	void OnEnd(Player* _player) override;
 };
 
 class PlayerAction_Parrying : public Action<Player>
 {
 public:
-	void OnStart(Player* player) override;
-	void OnUpdate(Player* player) override;
-	void OnEnd(Player* player) override;
+	void OnStart(Player* _player) override;
+	void OnUpdate(Player* _player) override;
+	void OnEnd(Player* _player) override;
 };
 
 class PlayerAction_Idle : public Action<Player>
 {
 public:
-	void OnStart(Player* player) override;
-	void OnUpdate(Player* player) override;
-	void OnEnd(Player* player) override;
+	void OnStart(Player* _player) override;
+	void OnUpdate(Player* _player) override;
+	void OnEnd(Player* _player) override;
 };
 
 class PlayerAction_Dash: public Action<Player>
 {
 public:
-	void OnStart(Player* player) override;
-	void OnUpdate(Player* player) override;
-	void OnEnd(Player* player) override;
+	void OnStart(Player* _player) override;
+	void OnUpdate(Player* _player) override;
+	void OnEnd(Player* _player) override;
 };
 
