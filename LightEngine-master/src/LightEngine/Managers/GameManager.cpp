@@ -134,10 +134,11 @@ void GameManager::Update()
     {
         auto it2 = it1;
         ++it2;
+
+		PhysicsEntity* entity = *it1;
 		// Physics entities / physics entities
         for (; it2 != mPhysicsEntities.end(); ++it2)
         {
-            PhysicsEntity* entity = *it1;
 			PhysicsEntity* otherEntity = *it2;
 
             if (entity->IsColliding(otherEntity))
@@ -147,10 +148,12 @@ void GameManager::Update()
             }
         }
 
+		if (!entity->m_physicsCollision)
+			continue;
+
 		// Physics entities / static entities
 		for (auto it3 = mStaticEntities.begin(); it3 != mStaticEntities.end(); ++it3)
 		{
-			PhysicsEntity* entity = *it1;
 			StaticEntity* otherEntity = *it3;
 			if (entity->IsColliding(otherEntity))
 			{

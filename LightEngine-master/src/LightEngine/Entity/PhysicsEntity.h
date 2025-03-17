@@ -24,6 +24,7 @@ protected:
 	float m_GravityForce;
 	sf::Vector2f m_Velocity;
 	Collider* m_Collider;
+	bool m_physicsCollision;
 
 private:
 	virtual void Update();

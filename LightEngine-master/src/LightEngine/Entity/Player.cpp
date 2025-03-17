@@ -49,6 +49,8 @@ void Player::OnInitialize() {
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_Collider = new RectangleCollider(pos, sf::Vector2f(64, 64));
 	m_Collider->setGizmo(true);
+	m_physicsCollision = true;
+
 	mpStateMachine = new StateMachine<Player>(this, State::Count);
 
 	//idle
