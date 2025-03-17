@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "CircleCollider.h"
+#include "RectangleCollider.h"
 
 #include "PlayerAction.h"
 
@@ -48,7 +48,7 @@ void Player::OnInitialize() {
 
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new CircleCollider(pos, COLLIDER_RADIUS);
+	m_collider = new RectangleCollider(pos, {102,96});
 	m_collider->setGizmo(true);
 	mpStateMachine = new StateMachine<Player>(this, State::Count);
 	Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
@@ -94,28 +94,18 @@ void Player::Jump()
 	}
 }
 
-//void Player::Dash()
-//{
-//	if (m_dashCooldown <= 0) {
-//		m_Dash = true;
-//		GoToPosition(GetPosition().x + 1000 * m_lastDir.x, GetPosition().y, 10000);
-//		m_dashCooldown = 2.f;
-//	}
-//}
-
 void Player::Dash()
 {
 	if (m_dashCooldown <= 0 && !m_Dash) {
 		m_Dash = true;
-		m_DashDuration = 1.f; // Durée du dash en secondes
-		m_dashCooldown = 1.5f; // Temps avant de pouvoir redasher
+		m_DashDuration = 1.f; 
+		m_dashCooldown = 1.5f;
 
-		// Définition de la vitesse du dash
 		float dashSpeed = 15000.0f;
+		m_friction = 0.f;
 
-		// Applique une impulsion dans la direction actuelle
 		mSpeed = dashSpeed;
-		mDirection.x = (m_lastDir.x != 0) ? m_lastDir.x : 1; // Assure que la direction est correcte
+		mDirection.x = (m_lastDir.x != 0) ? m_lastDir.x : 1;
 	}
 }
 
@@ -147,14 +137,11 @@ void Player::AddBuff(int bonus)
 	}
 	else if(m_life > m_maxLife && m_ammo < m_maxAmmo) {
 		m_ammo += bonus;
-		std::cout << "ammo : " << m_ammo;
 	}
 	else if (m_ammo > m_maxAmmo && m_life < m_maxLife) {
 		m_life += bonus;
-		std::cout << "life : "<< m_life;
 	}
 	else {
-		std::cout << "nothing ";
 		return;
 	}
 }
@@ -234,7 +221,7 @@ void Player::CheckPlayerStates()
 
 	if (pos.y >= m_OldY) {
 		m_jumping = false;
-		m_jumpCount = 0; // Reset le nombre de sauts
+		m_jumpCount = 0;
 	}
 	if (m_parryTime) m_parryTime -= dt;
 	if (GetPosition().y >= m_OldY && m_jumping) {
@@ -255,7 +242,8 @@ void Player::CheckPlayerStates()
 		m_DashDuration -= dt;
 		if (m_DashDuration <= 0) {
 			m_Dash = false;
-			mSpeed *= 0.5f; // Réduction progressive après le dash
+			mSpeed *= 0.5f; 
+			m_friction = 400.f;
 		}
 	}
 }
@@ -296,232 +284,9 @@ void Player::OnUpdate() {
 	CheckPlayerStates();
 	HandleInput();
 	PlayerMove();
+	std::cout << m_friction;
 	mpStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
 	std::string life = std::to_string(m_life);
 }
 
-
-
-
-//--------------------------------------------------------------------------Bin--------------------------------------------------------------
-/*
- //void Player::HandleInput()
-//{
-//	sf::Vector2f pos = GetPosition();
-//	float dt = GetDeltaTime();
-//	float PositiveJoystickSensibility = 20.0f; // la sensibilit� du joystick
-//	float joystickX = JOYSTICK_X;
-//	float joystickY = JOYSTICK_Y;
-//	bool X = BOUTON_X;
-//	bool R2 = BOUTON_R2;
-//	bool L2 = BOUTON_L2;
-//	bool R1 = BOUTON_R1;
-//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
-//		m_lastDir = { 1,0 };
-//		mpStateMachine->SetState(State::walking);
-//	}
-//	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
-//		m_lastDir = { -1,0 };
-//		mpStateMachine->SetState(State::walking);
-//	}
-//	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
-//		m_OldY = pos.y;
-//		mpStateMachine->SetState(State::jumping);
-//	}
-//	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
-//		if (m_parryCooldown <= 0)mpStateMachine->SetState(State::parrying);
-//	}
-//	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
-//		if (m_parryCooldown <= 0) m_life--;
-//	}
-//	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
-//		if (m_shootCooldown <= 0) mpStateMachine->SetState(State::attacking);
-//	}
-//   	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
-//		mpStateMachine->SetState(State::dash);
-//	}
-//}
-* //void Player::PlayerMove()
-//{
-//	sf::Vector2f pos = GetPosition();
-//	float dt = GetDeltaTime();
-//	float currentFriction;
-//	if (m_velocity.x > MAX_SPEED) {
-//		m_velocity.x = MAX_SPEED;
-//	}
-//	if (m_jumping) {
-//		currentFriction = m_airResistance;
-//	}
-//	else {
-//		currentFriction = m_friction;
-//	}
-//	if (m_velocity.x > 0) {
-//		if (m_jumping) {
-//			m_velocity.x = m_velocity.x - 3;
-//		}
-//		m_velocity.x -= currentFriction * dt;
-//		if (m_velocity.x < 0) m_velocity.x = 0;
-//	}
-//	else if (m_velocity.x < 0) {
-//		if (m_jumping) {
-//			m_velocity.x = m_velocity.x +3;
-//		}
-//		m_velocity.x += currentFriction * dt;
-//		if (m_velocity.x > 0) m_velocity.x = 0;
-//	}
-//	pos.x += m_velocity.x * dt;
-//	SetPosition(pos.x, pos.y);
-//}
-
-	//idle
-	{
-		Action<Player>* pIdle = mpStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
-		{//walking
-			auto transition = pIdle->CreateTransition(State::walking);
-			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
-		}
-		{//jumping
-			auto transition = pIdle->CreateTransition(State::jumping);
-			auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
-		}
-		{//parrying
-			auto transition = pIdle->CreateTransition(State::parrying);
-			auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
-		}
-		{//attacking
-			auto transition = pIdle->CreateTransition(State::attacking);
-			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
-		}
-		{//Dash
-			auto transition = pIdle->CreateTransition(State::dash);
-			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
-		}
-
-	}
-	//walking
-	 {
-		Action<Player>* pWalking = mpStateMachine->CreateAction<PlayerAction_Walking>(State::walking);
-		{//jumping
-			auto transition = pWalking->CreateTransition(State::jumping);
-			auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
-		}
-		{//parrying
-			auto transition = pWalking->CreateTransition(State::parrying);
-			auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
-		}
-		{//attacking
-			auto transition = pWalking->CreateTransition(State::attacking);
-			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
-		}
-		{//idle
-			auto transition = pWalking->CreateTransition(State::idle);
-			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
-		}
-		{//Dash
-			auto transition = pWalking->CreateTransition(State::dash);
-			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
-		}
-
-	}
-
-	//jumping
-	{
-		Action<Player>* pJumping = mpStateMachine->CreateAction<PlayerAction_jumping>(State::jumping);
-		{//walking
-			auto transition = pJumping->CreateTransition(State::walking);
-			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
-		}
-		{//parrying
-			auto transition = pJumping->CreateTransition(State::parrying);
-			auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
-		}
-		{//attacking
-			auto transition = pJumping->CreateTransition(State::attacking);
-			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
-		}
-		{//idle
-			auto transition = pJumping->CreateTransition(State::idle);
-			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
-		}
-		{//Dash
-			auto transition = pJumping->CreateTransition(State::dash);
-			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
-		}
-	}
-
-	//parrying
-	{
-		Action<Player>* pParrying = mpStateMachine->CreateAction<PlayerAction_Shooting>(State::parrying);
-		{//jumping
-			auto transition = pParrying->CreateTransition(State::jumping);
-			auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
-		}
-		{//walking
-			auto transition = pParrying->CreateTransition(State::walking);
-			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
-		}
-		{//attacking
-			auto transition = pParrying->CreateTransition(State::attacking);
-			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
-		}
-		{//idle
-			auto transition = pParrying->CreateTransition(State::idle);
-			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
-		}
-		{//Dash
-			auto transition = pParrying->CreateTransition(State::dash);
-			auto condition = transition->AddCondition<PlayerCondition_IsDash>();
-		}
-	}
-
-	//attacking
-	{
-		Action<Player>* pAttacking = mpStateMachine->CreateAction<PlayerAction_Parrying>(State::attacking);
-		{
-			{//jumping
-				auto transition = pAttacking->CreateTransition(State::jumping);
-				auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
-			}
-			{//parrying
-				auto transition = pAttacking->CreateTransition(State::parrying);
-				auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
-			}
-			{//walking
-				auto transition = pAttacking->CreateTransition(State::walking);
-				auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
-			}
-			{//idle
-				auto transition = pAttacking->CreateTransition(State::idle);
-				auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
-			}
-			{//Dash
-				auto transition = pAttacking->CreateTransition(State::dash);
-				auto condition = transition->AddCondition<PlayerCondition_IsDash>();
-			}
-		}
-	}
-	//Dash
-	{
-		Action<Player>* pDash = mpStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
-		{//walking
-			auto transition = pDash->CreateTransition(State::walking);
-			auto condition = transition->AddCondition<PlayerCondition_IsWalking>();
-		}
-		{//jumping
-			auto transition = pDash->CreateTransition(State::jumping);
-			auto condition = transition->AddCondition<PlayerCondition_IsJumping>();
-		}
-		{//parrying
-			auto transition = pDash->CreateTransition(State::parrying);
-			auto condition = transition->AddCondition<PlayerCondition_IsParrying>();
-		}
-		{//attacking
-			auto transition = pDash->CreateTransition(State::attacking);
-			auto condition = transition->AddCondition<PlayerCondition_IsShooting>();
-		}
-		{//idle
-			auto transition = pDash->CreateTransition(State::idle);
-			auto condition = transition->AddCondition<PlayerCondition_IsIdle>();
-		}
-	}*/
