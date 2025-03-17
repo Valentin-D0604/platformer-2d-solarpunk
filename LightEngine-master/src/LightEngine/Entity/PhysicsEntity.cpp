@@ -7,7 +7,7 @@
 #include <iostream>
 
 #define GRAVITATIONNAL_CONSTANT 9.806f
-#define MAX_GRAVITATIONNAL_FORCE 100.0f
+#define MAX_GRAVITATIONNAL_FORCE 500.0f
 
 void PhysicsEntity::Update()
 {

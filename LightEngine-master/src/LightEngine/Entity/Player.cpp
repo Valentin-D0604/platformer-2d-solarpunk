@@ -88,7 +88,7 @@ void Player::Jump()
 {
 	if (m_jumpCooldown <= 0 && m_jumpCount <= m_maxJumps) {
 		std::cout << m_jumpCount;
-		SetGravityForce(-200);
+		SetGravityForce(-500);
 		m_jumpCount += 1;
 		m_jumpCooldown = 0.2f;
 	}
@@ -282,10 +282,10 @@ void Player::OnUpdate() {
 	CheckPlayerStates();
 	HandleInput();
 	PlayerMove();
-	std::cout << m_friction;
+	// std::cout << m_friction; Will use this later to fix dash bug
 	mpStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
 	std::string life = std::to_string(m_life);
-	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 0.5f, 0.5f, sf::Color::Red);
+		Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
 }
