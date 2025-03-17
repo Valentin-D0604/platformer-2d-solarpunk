@@ -1,4 +1,4 @@
-#include "TestScene.h"
+#include "../Scene/TestScene.h"
 
 #include "../Entity/DummyEntity.h"
 
@@ -6,14 +6,13 @@
 
 #include "../Entity/Player.h"
 
-#include "Mob1.h"
-#include "Mob2.h"
-#include "Mob3.h"
-#include "Sprite.h"
-#include "Managers.h"
 #include "../Entity/Mob1.h"
+#include "../Entity/Mob2.h"
+#include "../Entity/Mob3.h"
+#include "../Graphics/Sprite.h"
+#include "../Managers/Managers.h"
 
-#include "../Platform.h"
+#include "../Entity/Platform.h"
 
 void TestScene::OnInitialize()
 {
@@ -24,8 +23,8 @@ void TestScene::OnInitialize()
 	
 	pEntity2 = CreateEntity<DummyEntity>();
 	pEntity2->SetPosition(500, 500);
-	pEntity2->setMass(0);
-	pEntity2->setGravityDirection(sf::Vector2f(0, -1));
+	pEntity2->SetMass(0);
+	pEntity2->SetGravityDirection(sf::Vector2f(0, -1));
 	
 	/*monster = CreateEntity<Mob1>();
 	monster->SetPosition(100, 300);*/
@@ -75,6 +74,7 @@ void TestScene::OnUpdate()
 	else {
 		setCameraCenter({ 0,0 });
 		setCameraZoom(5);
+		OnInitialize(); // Need fix with delete
 	}
 }
 

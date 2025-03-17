@@ -1,6 +1,6 @@
 #pragma once
-#include "Entity/PhysicsEntity.h"
-#include "Utils/StateMachine.h"
+#include "../Entity/PhysicsEntity.h"
+#include "../Utils/StateMachine.h"
 
 class Mob3 : public PhysicsEntity
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "Scene.h"
+#include "../Scene/Scene.h"
 
 class PhysicsEntity;
 class DummyEntity;
@@ -19,7 +19,6 @@ public:
 	Mob1* monster;
 	Mob2* range;
 	Mob3* Explode;
-	DummyEntity* pEntitySelected;
 
 	Platform* pPlatform;
 

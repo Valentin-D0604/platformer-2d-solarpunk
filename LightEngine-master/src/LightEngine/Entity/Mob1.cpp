@@ -1,4 +1,4 @@
-#include "Mob1.h"
+#include "../Entity/Mob1.h"
 
 #include "../Actions/Mob1Action.h"
 #include "../Conditions/Mob1Condition.h"
@@ -112,8 +112,8 @@ void Mob1::OnDestroy()
 	if (rando == 0) return;
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), { 0,1 }, this, true);
-	bullet->setMass(10);
-	bullet->setGravityDirection(sf::Vector2f(0, 1));
+	bullet->SetMass(10);
+	bullet->SetGravityDirection(sf::Vector2f(0, 1));
 }
 
 float Mob1::GetDistanceToPlayer()
@@ -129,7 +129,7 @@ float Mob1::GetDistanceToPlayer()
 }
 
 void Mob1::TakeDamage(int damage) {
-	m_life -= damage;
+	m_Life -= damage;
 }
 
 void Mob1::Attack()
@@ -138,7 +138,7 @@ void Mob1::Attack()
 	Player* player = scene->GetPlayer();
 	if (player == nullptr) return;
 	player->TakeDamage(1);
-	GoToPosition(GetPosition().x+mDirection.x, GetPosition().y + mDirection.y,200);
-	m_shootCooldown = 2.f;
+	GoToPosition(GetPosition().x+m_Direction.x, GetPosition().y + m_Direction.y,200);
+	m_ShootCooldown = 2.f;
 }
 

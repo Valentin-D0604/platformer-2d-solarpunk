@@ -1,16 +1,14 @@
-#include "Bullet.h"
+#include "../Entity/Bullet.h"
 #include "../Collision/RectangleCollider.h"
 #include "../Scene/TestScene.h"
-#include "Player.h"
-#include "Mob1.h"
-#include "Mob2.h"
-
-#include "Sprite.h"
-#include "Managers.h"
-#include"Utils/Utils.h"
+#include "../Entity/Player.h"
+#include "../Entity/Mob1.h"
+#include "../Entity/Mob2.h"
 
 #include "../Graphics/Sprite.h"
 #include "../Managers/Managers.h"
+#include"../Utils/Utils.h"
+
 
 #include <iostream>
 
@@ -35,14 +33,15 @@ void Bullet::OnInitialize() {
 
 void Bullet::OnUpdate() {
 	m_changeDirection -= GetDeltaTime();
+	m_lifeTime -= GetDeltaTime();
 	if (!m_onTheGround) {
 		SetDirection(m_dir.x, m_dir.y, 200);
 	}
-	else if (m_OnTheGround) {
+	else if (m_onTheGround) {
 		SetMass(20);
 	}
 }
-void Bullet::onCollision(Entity* other) {
+void Bullet::OnCollision(Entity* other) {
 	Player* player = dynamic_cast<Player*>(other);
 	if (other->IsTag(TestScene::Tag::mob1)) {
 		Mob1* enemy = dynamic_cast<Mob1*>(other);
@@ -63,8 +62,9 @@ void Bullet::onCollision(Entity* other) {
 	if (other != m_caster && other->IsTag(TestScene::Tag::player)) {
 		if (other != m_caster && !player->IsParry()) Destroy();
 	}
+	if (m_lifeTime <= 0) Destroy();
 }
 
 bool Bullet::IsBulletOnGround() {
-	return m_OnTheGround;
+	return m_onTheGround;
 }

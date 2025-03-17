@@ -1,6 +1,6 @@
-#include "Mob1Action.h"
-#include "TestScene.h"
-#include "Player.h"
+#include "../Actions/Mob1Action.h"
+#include "../Scene/TestScene.h"
+#include "../Entity/Player.h"
 
 #define DETECTING_RANGE 300.f
 #define ATTACK_RANGE  50.f
@@ -13,11 +13,11 @@ void Mob1Action_Walking::OnStart(Mob1* owner)
 
 void Mob1Action_Walking::OnUpdate(Mob1* owner)
 {
-	owner->m_walkingTimer -= owner->GetDeltaTime();
-	owner->SetDirection(dir.x, dir.y, 200);
-	if (owner->m_walkingTimer <= 0) {
-		owner->SetDirection(dir.x = -dir.x, dir.y = -dir.y, 200);
-		owner->m_walkingTimer = 3.f;
+	owner->m_WalkingTimer -= owner->GetDeltaTime();
+	owner->SetDirection(m_Dir.x, m_Dir.y,200);
+	if (owner->m_WalkingTimer <= 0) {
+		owner->SetDirection(m_Dir.x = -m_Dir.x, m_Dir.y = -m_Dir.y, 200);
+		owner->m_WalkingTimer = 3.f;
 	}
 }
 
@@ -49,8 +49,8 @@ void Mob1Action_Attacking::OnStart(Mob1* owner)
 
 void Mob1Action_Attacking::OnUpdate(Mob1* owner)
 {
-	owner->m_shootCooldown -= owner->GetDeltaTime();
-	if (owner->m_shootCooldown <= 0) {
+	owner->m_ShootCooldown -= owner->GetDeltaTime();
+	if (owner->m_ShootCooldown <= 0) {
 		owner->Attack();
 	}
 //	}

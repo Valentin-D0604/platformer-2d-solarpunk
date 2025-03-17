@@ -6,7 +6,6 @@
 
 #include "Scene/SampleScene.h"
 #include "Scene/TestScene.h"
-#include "CollisionSystem.h"
 
 #include <cstdlib>
 #include <crtdbg.h>
@@ -21,10 +20,6 @@ int main()
 	GET_MANAGER(GameManager)->LaunchScene<TestScene>();
 
 	pInstance->run();
-
-	/*CollisionSystem* collisionSystem = new CollisionSystem();
-
-	collisionSystem->test();*/
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity/StaticEntity.h"
+#include "../Entity/StaticEntity.h"
 
 class Platform : public StaticEntity {
 public:

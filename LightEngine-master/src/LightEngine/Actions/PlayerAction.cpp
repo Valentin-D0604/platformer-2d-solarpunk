@@ -5,8 +5,8 @@
 
 //--------------------------------------------------------Walking------------------------------------------
 void PlayerAction_Walking::OnStart(Player* player) {
-	if (player->m_lastDir.x > 0) { player->m_velocity.x += player->m_acceleration * player->GetDeltaTime(); }
-	if (player->m_lastDir.x < 0) { player->m_velocity.x -= player->m_acceleration * player->GetDeltaTime(); }
+	//if (player->m_lastDir.x > 0) { player->m_Velocity.x += player->m_acceleration * player->GetDeltaTime(); } TOFIXHERE NO VELOCITY TROU DU CUL
+	//if (player->m_lastDir.x < 0) { player->m_Velocity.x -= player->m_acceleration * player->GetDeltaTime(); }
 }
 
 void PlayerAction_Walking::OnUpdate(Player* _player)

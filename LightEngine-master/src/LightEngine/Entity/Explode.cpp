@@ -1,28 +1,27 @@
-#include "Explode.h"
-#include "RectangleCollider.h"
+#include "../Entity/Explode.h"
+#include "../Collision/RectangleCollider.h"
 
-#include "TestScene.h"
-#include "Player.h"
-#include "Sprite.h"
+#include "../Scene/TestScene.h"
+#include "../Entity/Player.h"
+#include "../Entity/Mob1.h"
+#include "../Entity/Mob2.h"
+#include "../Entity/Mob3.h"
+#include "../Entity/Bullet.h"
+#include "../Graphics/Sprite.h"
 
-#include "Debug.h"
-#include "Managers.h"
+#include "../Graphics/Debug.h"
+#include "../Managers/Managers.h"
 #include <iostream>
 
-#include "Player.h"
-#include "Mob1.h"
-#include "Mob2.h"
-#include "Mob3.h"
-#include "Bullet.h"
 
 void Explode::OnInitialize()
 {
-	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+	m_Sprite = new Sprite();
+	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
 
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos,{50,50});
+	m_Collider = new RectangleCollider(pos,{50,50});
 
 }
 

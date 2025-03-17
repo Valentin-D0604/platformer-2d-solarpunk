@@ -1,9 +1,9 @@
-#include "Mob2Action.h"
-#include "TestScene.h"
-#include "Player.h"
-#include "Bullet.h"
+#include "../Actions/Mob2Action.h"
+#include "../Scene/TestScene.h"
+#include "../Entity/Player.h"
+#include "../Entity/Bullet.h"
 
-#include "Utils/Utils.h"
+#include "../Utils/Utils.h"
 
 #include <iostream>
 //-----------------------------------------walking-------------------------

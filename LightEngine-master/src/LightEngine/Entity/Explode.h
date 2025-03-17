@@ -1,5 +1,5 @@
 #pragma once
-#include "Entity/PhysicsEntity.h"
+#include "../Entity/PhysicsEntity.h"
 
 class Explode : public PhysicsEntity
 {

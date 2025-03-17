@@ -1,31 +1,31 @@
-#include "Mob3.h"
+#include "../Entity/Mob3.h"
 
-#include "Mob3Action.h"
-#include "Mob3Condition.h"
-#include "Collision/RectangleCollider.h"
+#include "../Actions/Mob3Action.h"
+#include "../Conditions/Mob3Condition.h"
+#include "../Collision/RectangleCollider.h"
 
-#include "TestScene.h"
-#include "Player.h"
-#include "Sprite.h"
+#include "../Scene/TestScene.h"
+#include "../Entity/Player.h"
+#include "../Graphics/Sprite.h"
 
-#include "Utils/Utils.h"
+#include "../Utils/Utils.h"
 
-#include "Debug.h"
-#include "Managers.h"
-#include "Explode.h"
+#include "../Graphics/Debug.h"
+#include "../Managers/Managers.h"
+#include "../Entity/Explode.h"
 #include <iostream>
 
 void Mob3::OnInitialize()
 {
-	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
-	m_sprite->setScale({ 0.25,0.25 });
+	m_Sprite = new Sprite();
+	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+	m_Sprite->setScale({ 0.25,0.25 });
 	SetTag(TestScene::Tag::mob3);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, { 10,10 });
+	m_Collider = new RectangleCollider(pos, { 10,10 });
 	mpStateMachine = new StateMachine<Mob3>(this, State::Count);
-	m_sprite->setScale({ 0.25,0.25 });
-	mSpeed = 300;
+	m_Sprite->setScale({ 0.25,0.25 });
+	m_Speed = 300;
 	//idle
 	{
 		Action<Mob3>* pIdle = mpStateMachine->CreateAction<Mob3Action_Idle>(State::idle);
@@ -116,8 +116,8 @@ void Mob3::OnDestroy()
 	if (rando == 0) return;
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), { 0,1 }, this, true);
-	bullet->setMass(10);
-	bullet->setGravityDirection(sf::Vector2f(0, 1));
+	bullet->SetMass(10);
+	bullet->SetGravityDirection(sf::Vector2f(0, 1));
 }
 
 void Mob3::Attack()
@@ -135,7 +135,7 @@ void Mob3::Attack()
 				Explode* damage = CreateEntity<Explode>();
 				damage->SetPosition(GetPosition().x, GetPosition().y, 0.75, 0.75);
 				m_canExplode = false;
-				mSpeed = 200;
+				m_Speed = 200;
 			}
 			else {
 				if (!player->IsParry()) player->TakeDamage(1);

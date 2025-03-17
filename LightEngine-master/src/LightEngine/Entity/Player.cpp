@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "../Entity/Player.h"
 #include "../Collision/RectangleCollider.h"
 
 #include "../Actions/PlayerAction.h"
@@ -69,18 +69,18 @@ void Player::OnCollision(Entity* other)
 }
 
 void Player::parry() {
-	m_ParryCooldown = 2.f;
+	m_parryCooldown = 2.f;
 	m_Parrying = true;
 	std::cout << "going to parry !" << std::endl;
 }
 
 void Player::Attack() {
-	m_ShootCooldown = 2.f;
-	m_Ammo -= 1;
+	m_shootCooldown = 2.f;
+	m_ammo -= 1;
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
-	bullet->setMass(1);
-	bullet->setGravityDirection(sf::Vector2f(0, 1));
+	bullet->SetMass(1);
+	bullet->SetGravityDirection(sf::Vector2f(0, 1));
 
 }
 
@@ -88,7 +88,7 @@ void Player::Jump()
 {
 	if (m_jumpCooldown <= 0 && m_jumpCount <= m_maxJumps) {
 		std::cout << m_jumpCount;
-		setGravityForce(-200);
+		SetGravityForce(-200);
 		m_jumpCount += 1;
 		m_jumpCooldown = 0.2f;
 	}
@@ -104,8 +104,8 @@ void Player::Dash()
 		float dashSpeed = 15000.0f;
 		m_friction = 0.f;
 
-		mSpeed = dashSpeed;
-		mDirection.x = (m_lastDir.x != 0) ? m_lastDir.x : 1;
+		m_Speed = dashSpeed;
+		m_Direction.x = (m_lastDir.x != 0) ? m_lastDir.x : 1;
 	}
 }
 
@@ -123,7 +123,7 @@ const char* Player::GetStateName(State state) const
 }
 
 void Player::TakeDamage(int damage) {
-	m_Life -= damage;
+	m_life -= damage;
 }
 
 void Player::AddBuff(int bonus)
@@ -186,7 +186,7 @@ void Player::HandleInput()
 		if (m_parryCooldown <= 0)mpStateMachine->SetState(State::parrying);
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
-		if (m_ParryCooldown <= 0) m_Life--;
+		if (m_parryCooldown <= 0) m_life--;
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
 		if (m_shootCooldown <= 0) mpStateMachine->SetState(State::attacking);
@@ -194,24 +194,24 @@ void Player::HandleInput()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
 		mpStateMachine->SetState(State::dash);
 	}
-		bool reversing = (inputX != 0 && inputX != mDirection.x);
+	bool reversing = (inputX != 0 && inputX != m_Direction.x);
 
-		if (inputX != 0 && (!reversing || mSpeed < 100.0f)) {
-			mDirection.x = inputX;
-			mSpeed += m_acceleration * dt;
+		if (inputX != 0 && (!reversing || m_Speed < 100.0f)) {
+			m_Direction.x = inputX;
+			m_Speed += m_acceleration * dt;
 		}
 		else if (inputX == 0) {
-			mSpeed -= m_friction * dt;
+			m_Speed -= m_friction * dt;
+		}
+		if (reversing && m_Speed > 0) {
+			m_Speed -= turnResistance * dt;
+			if (m_Speed < 0) m_Speed = 0;
 		}
 
-		if (reversing && mSpeed > 0) {
-			mSpeed -= turnResistance * dt;
-			if (mSpeed < 0) mSpeed = 0;
-		}
-
-		if (mSpeed > MAX_SPEED) mSpeed = MAX_SPEED;
-		if (mSpeed < 0) mSpeed = 0;
+		if (m_Speed > MAX_SPEED) m_Speed = MAX_SPEED;
+		if (m_Speed < 0) m_Speed = 0;
 }
+
 void Player::CheckPlayerStates()
 {
 	sf::Vector2f pos = GetPosition();
@@ -227,7 +227,7 @@ void Player::CheckPlayerStates()
 	}
 	if (m_parryTime <= 0) {
 		m_Parrying = false;
-		m_ParryTime = PARRY_DURATION;
+		m_parryTime = PARRY_DURATION;
 	}
 	if (m_life <= 0) {
 		m_life = 0;
@@ -240,7 +240,7 @@ void Player::CheckPlayerStates()
 		m_DashDuration -= dt;
 		if (m_DashDuration <= 0) {
 			m_Dash = false;
-			mSpeed *= 0.5f; 
+			m_Speed *= 0.5f; 
 			m_friction = 400.f;
 		}
 	}
@@ -252,7 +252,7 @@ void Player::PlayerMove()
 	float dt = GetDeltaTime();
 	sf::Vector2f pos = GetPosition();
 
-	pos.x += mDirection.x * mSpeed * dt;
+	pos.x += m_Direction.x * m_Speed * dt;
 
 }
 bool Player::IsAlive()
@@ -285,7 +285,7 @@ void Player::OnUpdate() {
 	std::cout << m_friction;
 	mpStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)mpStateMachine->GetCurrentState());
-	std::string life = std::to_string(m_Life);
+	std::string life = std::to_string(m_life);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 0.5f, 0.5f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
 }

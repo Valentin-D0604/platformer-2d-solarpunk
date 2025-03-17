@@ -1,10 +1,10 @@
-#include "Platform.h"
-#include "Scene/TestScene.h"
-#include "Collision/RectangleCollider.h"
-#include "Graphics/Sprite.h"
+#include "../Entity/Platform.h"
+#include "../Scene/TestScene.h"
+#include "../Collision/RectangleCollider.h"
+#include "../Graphics/Sprite.h"
 
-#include "Graphics/Debug.h"
-#include "Managers/Managers.h"
+#include "../Graphics/Debug.h"
+#include "../Managers/Managers.h"
 #include <iostream>
 
 void Platform::OnInitialize() {

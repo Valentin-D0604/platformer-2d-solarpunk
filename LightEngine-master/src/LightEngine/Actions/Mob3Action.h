@@ -1,6 +1,6 @@
 #pragma once
-#include "Action.h"
-#include "Mob3.h"
+#include "../Actions/Action.h"
+#include "../Entity/Mob3.h"
 
 class Mob3Action_Walking : public Action<Mob3>
 {

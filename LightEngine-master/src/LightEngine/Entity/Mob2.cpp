@@ -1,29 +1,29 @@
-#include "Mob2.h"
+#include "../Entity/Mob2.h"
 
-#include "Mob2Action.h"
-#include "Mob2Condition.h"
-#include "RectangleCollider.h"
+#include "../Actions/Mob2Action.h"
+#include "../Conditions/Mob2Condition.h"
+#include "../Collision/RectangleCollider.h"
 
-#include "TestScene.h"
-#include "Player.h"
-#include "Sprite.h"
+#include "../Scene/TestScene.h"
+#include "../Entity/Player.h"
+#include "../Graphics/Sprite.h"
 
-#include "Utils/Utils.h"
+#include "../Utils/Utils.h"
 
-#include "Debug.h"
-#include "Managers.h"
+#include "../Graphics/Debug.h"
+#include "../Managers/Managers.h"
 #include <iostream>
 
 void Mob2::OnInitialize()
 {
-	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
-	m_sprite->setScale({ 0.25,0.25 });
+	m_Sprite = new Sprite();
+	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+	m_Sprite->setScale({ 0.25,0.25 });
 	SetTag(TestScene::Tag::mob2);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, { 10,10 });
+	m_Collider = new RectangleCollider(pos, { 10,10 });
 	mpStateMachine = new StateMachine<Mob2>(this, State::Count);
-	m_collider->setGizmo(true);
+	m_Collider->setGizmo(true);
 	//idle
 	{
 		Action<Mob2>* pIdle = mpStateMachine->CreateAction<Mob2Action_Idle>(State::idle);
@@ -96,7 +96,7 @@ void Mob2::OnInitialize()
 	mpStateMachine->SetState(State::idle);
 }
 
-void Mob2::onCollision(Entity* other)
+void Mob2::OnCollision(Entity* other)
 {
 	if (other->IsTag(TestScene::Tag::mob2)) return;
 }
@@ -114,8 +114,8 @@ void Mob2::OnDestroy()
 	if (rando == 0) return;
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), {0,1}, this, true);
-	bullet->setMass(10);
-	bullet->setGravityDirection(sf::Vector2f(0, 1));
+	bullet->SetMass(10);
+	bullet->SetGravityDirection(sf::Vector2f(0, 1));
 }
 
 void Mob2::Attack()
@@ -129,8 +129,8 @@ void Mob2::Attack()
 
 	Bullet* bullet = CreateEntity<Bullet>();
 	bullet->InitBullet(GetPosition(), dir, this, false);
-	bullet->setMass(1);
-	bullet->setGravityDirection(sf::Vector2f(0, 1));
+	bullet->SetMass(1);
+	bullet->SetGravityDirection(sf::Vector2f(0, 1));
 }
 
 float Mob2::GetDistanceToPlayer()

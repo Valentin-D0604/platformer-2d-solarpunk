@@ -1,6 +1,6 @@
 #pragma once
 #include "Condition.h"
-#include "Mob3.h"
+#include "../Entity/Mob3.h"
 
 class Mob3Condition_IsWalking : public Condition <Mob3>
 {
