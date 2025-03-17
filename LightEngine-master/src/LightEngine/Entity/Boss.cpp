@@ -115,8 +115,12 @@ float Boss::GetDistanceToPlayer()
 {
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
-	float distance = GetPosition().distance(player->GetPosition());
-	return distance;
+	if (player != nullptr && player->IsAlive()) {
+		sf::Vector2f playerPos = player->GetPosition();
+		sf::Vector2f mobPos = GetPosition();
+		return sqrt(pow(playerPos.x - mobPos.x, 2) + pow(playerPos.y - mobPos.y, 2));
+	}
+	else return 10000;
 }
 
 bool Boss::IsStunned()
