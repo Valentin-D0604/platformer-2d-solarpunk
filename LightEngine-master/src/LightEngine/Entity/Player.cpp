@@ -8,6 +8,7 @@
 #include "../Graphics/Debug.h"
 #include "../Managers/Managers.h"
 
+#include "../Entity/Platform.h"
 #include "../Graphics/SpriteSheet.h"
 #include "../Graphics/Animation.h"
 
@@ -64,7 +65,9 @@ void Player::OnInitialize() {
 void Player::OnCollision(Entity* other)
 {
 	if (!m_isAlive) return;
-	if (!m_Parrying) {
+	if (other->IsTag(TestScene::Tag::platform)) {
+		Platform* plat = dynamic_cast<Platform*>(other);
+
 	}
 }
 
@@ -78,7 +81,7 @@ void Player::Attack() {
 	m_shootCooldown = 2.f;
 	m_ammo -= 1;
 	Bullet* bullet = CreateEntity<Bullet>();
-	bullet->InitBullet(GetPosition(), m_lastDir,this, false);
+	bullet->InitBullet(GetPosition(), m_lastDir,this);
 	bullet->SetMass(1);
 	bullet->SetGravityDirection(sf::Vector2f(0, 1));
 

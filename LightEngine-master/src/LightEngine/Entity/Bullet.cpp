@@ -12,12 +12,11 @@
 
 #include <iostream>
 
-void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster, bool state) {
+void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster) {
 	m_caster = caster;
 	Utils::Normalize(direction);
 	m_pos = position;
 	m_dir = direction;
-	m_onTheGround = state;
 	SetPosition(position.x, position.y);
 }
 
@@ -34,13 +33,9 @@ void Bullet::OnInitialize() {
 void Bullet::OnUpdate() {
 	m_changeDirection -= GetDeltaTime();
 	m_lifeTime -= GetDeltaTime();
-	if (!m_onTheGround) {
-		SetDirection(m_dir.x, m_dir.y, 200);
-	}
-	else if (m_onTheGround) {
-		SetMass(20);
-	}
+	SetDirection(m_dir.x, m_dir.y, 200);
 }
+
 void Bullet::OnCollision(Entity* other) {
 	Player* player = dynamic_cast<Player*>(other);
 	if (other->IsTag(TestScene::Tag::mob1)) {
@@ -49,12 +44,11 @@ void Bullet::OnCollision(Entity* other) {
 	}
 	if (other->IsTag(TestScene::Tag::mob2)) {
 		Mob2* enemy = dynamic_cast<Mob2*>(other);
-		if (enemy != m_caster && !IsBulletOnGround()) enemy->TakeDamage(1);
+		if (enemy != m_caster) enemy->TakeDamage(1);
 	}
 	if (other->IsTag(TestScene::Tag::player)) {
-	if (IsBulletOnGround()) player->AddBuff(1); // drop
-		else if (other != m_caster && !IsBulletOnGround() && !player->IsParry()) player->TakeDamage(1); // playe take damage
-		else if (other != m_caster && !IsBulletOnGround() && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; } // player parry bullet
+		if (other != m_caster && !player->IsParry()) player->TakeDamage(1); // playe take damage
+		else if (other != m_caster && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; } // player parry bullet
 	}
 	if (other != m_caster && !other->IsTag(TestScene::Tag::player)) {
 		Destroy();
@@ -63,8 +57,4 @@ void Bullet::OnCollision(Entity* other) {
 		if (other != m_caster && !player->IsParry()) Destroy();
 	}
 	if (m_lifeTime <= 0) Destroy();
-}
-
-bool Bullet::IsBulletOnGround() {
-	return m_onTheGround;
 }

@@ -30,6 +30,7 @@ public:
 		mob1,
 		mob2,
 		mob3,
+		PowerUp,
 		bullet,
 		platform
 

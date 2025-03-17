@@ -7,6 +7,7 @@
 #include "../Scene/TestScene.h"
 #include "../Entity/Player.h"
 #include "../Graphics/Sprite.h"
+#include "../Entity/Collectable.h"
 
 #include "../Utils/Utils.h"
 
@@ -114,10 +115,10 @@ void Mob3::OnDestroy()
 {
 	int rando = rand() % 2;
 	if (rando == 0) return;
-	Bullet* bullet = CreateEntity<Bullet>();
-	bullet->InitBullet(GetPosition(), { 0,1 }, this, true);
-	bullet->SetMass(10);
-	bullet->SetGravityDirection(sf::Vector2f(0, 1));
+	Collectable* buff = CreateEntity<Collectable>();
+	buff->InitCollec(GetPosition(), { 0,1 }, this);
+	buff->SetMass(10);
+	buff->SetGravityDirection(sf::Vector2f(0, 1));
 }
 
 void Mob3::Attack()
