@@ -7,21 +7,26 @@ class Boss : public PhysicsEntity
 {
 	//---------stats---------
 	bool m_isAlive = true;
-	int m_life = 20;
+	int m_life = 48;
 	sf::Vector2f m_velocity;
 	float m_shootCooldown = 2.f;
 	float m_walkingTimer = 3.f;
 	bool m_isVulnerable = false;
+	float m_stunnedTimer = 3.f;
+	
 	//------------------------
 
 	StateMachine<Boss>* mpStateMachine;
 
 	enum State
 	{
+		idle,
 		rushing,
 		smashing,
 		throwing,
-		idle,
+		stunned,
+		transition,
+		movement,
 
 		Count
 	};
@@ -41,6 +46,8 @@ private:
 	friend class BossAction_GroundSmash;
 	friend class BossAction_Throwing;
 	friend class BossAction_Stunned;
+	friend class BossAction_Moving;
+	friend class BossAction_Transition;
 	friend class BossAction_Idle;
 };
 

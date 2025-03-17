@@ -22,7 +22,7 @@ void Boss::OnInitialize()
 	m_collider = new RectangleCollider(pos, { 10,10 });
 	mpStateMachine = new StateMachine<Boss>(this, State::Count);
 
-	//idle
+	//IDLE
 	{
 		Action<Boss>* pIdle = mpStateMachine->CreateAction<BossAction_Idle>(State::idle);
 		{//rushing
@@ -39,18 +39,18 @@ void Boss::OnInitialize()
 		}
 	}
 	
-	//rushing
+	//SWEEPING
 	{
-		Action<Boss>* pWalking = mpStateMachine->CreateAction<BossAction_Rushing>(State::rushing);
+		Action<Boss>* pWalking = mpStateMachine->CreateAction<BossAction_Sweeping>(State::rushing);
 		{//idle
 			auto transition = pWalking->CreateTransition(State::idle);
 			auto condition = transition->AddCondition<BossCondition_IsIdle>();
 		}
 	}
 
-	//smashing
+	//GROUND SMASH
 	{
-		Action<Boss>* pChasing = mpStateMachine->CreateAction<BossAction_Smashing>(State::smashing);
+		Action<Boss>* pChasing = mpStateMachine->CreateAction<BossAction_GroundSmash>(State::smashing);
 		
 		{//idle
 			auto transition = pChasing->CreateTransition(State::idle);
@@ -58,7 +58,7 @@ void Boss::OnInitialize()
 		}
 	}
 
-	//throwing
+	//TRHOWING
 	{
 		Action<Boss>* pAttacking = mpStateMachine->CreateAction<BossAction_Throwing>(State::throwing);
 		
@@ -78,7 +78,18 @@ void Boss::onCollision(Entity* other)
 
 void Boss::OnUpdate()
 {
+
 	if (m_life <= 0) { Destroy(); }
+
+	if (m_isVulnerable == true)
+	{
+		m_stunnedTimer -= GetDeltaTime();
+		if (m_stunnedTimer <= 0)
+		{
+			mpStateMachine->SetState(State::idle);
+			m_stunnedTimer = 3.f;
+		}
+	}
 
 	mpStateMachine->Update();
 }

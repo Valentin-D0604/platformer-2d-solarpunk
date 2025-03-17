@@ -27,3 +27,8 @@ bool BossCondition_IsIdle::OnTest(Boss* owner)
 {
     return false;
 }
+
+bool BossCondition_IsSturnned::OnTest(Boss* owner)
+{
+    
+}
