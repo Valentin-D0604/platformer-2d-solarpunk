@@ -18,13 +18,13 @@ public:
 	void UnloadFont(std::string _name);
 	sf::Font* GetFont(std::string _name);
 
-	void loadSoundBuffer(std::string _name);
-	void unloadSoundBuffer(std::string _name);
-	sf::SoundBuffer* getSoundBuffer(std::string _name);
+	void LoadSoundBuffer(std::string _name);
+	void UnloadSoundBuffer(std::string _name);
+	sf::SoundBuffer* GetSoundBuffer(std::string _name);
 
-	void loadMusic(std::string _name);
-	void unloadMusic(std::string _name);
-	sf::Music* getMusic(std::string _name);
+	void LoadMusic(std::string _name);
+	void UnloadMusic(std::string _name);
+	sf::Music* GetMusic(std::string _name);
 
 private:
 	ResourceManager();
@@ -35,8 +35,8 @@ private:
 	std::map<std::string, sf::SoundBuffer> m_SoundBuffers;
 	std::map<std::string, sf::Music> m_Musics;
 
-	void addSoundBuffer(std::string _name, std::string _path);
-	void addMusic(std::string _name, std::string _path);
+	void AddSoundBuffer(std::string _name, std::string _path);
+	void AddMusic(std::string _name, std::string _path);
 	void AddTexture(std::string _name, std::string _path);
 	void AddFont(std::string _name, std::string _path);
 

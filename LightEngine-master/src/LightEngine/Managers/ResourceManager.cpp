@@ -40,25 +40,25 @@ void ResourceManager::LoadFont(std::string _name) {
 	AddTexture(_name, OS::getFileInDirectory(TEMP_RES_PATH, _name + ".ttf"));
 }
 
-void ResourceManager::unloadFont(std::string _name) {
+void ResourceManager::UnloadFont(std::string _name) {
 	m_Fonts.erase(_name);
 }
 
-void ResourceManager::addFont(std::string _name, std::string _path) {
+void ResourceManager::AddFont(std::string _name, std::string _path) {
 	bool success = m_Fonts[_name].loadFromFile(_path);
 }
 
-void ResourceManager::addSoundBuffer(std::string _name, std::string _path)
+void ResourceManager::AddSoundBuffer(std::string _name, std::string _path)
 {
 	bool success = m_SoundBuffers[_name].loadFromFile(_path);
 }
 
-void ResourceManager::addMusic(std::string _name, std::string _path)
+void ResourceManager::AddMusic(std::string _name, std::string _path)
 {
 	bool success = m_Musics[_name].openFromFile(_path);
 }
 
-sf::Font* ResourceManager::getFont(std::string _name) {
+sf::Font* ResourceManager::GetFont(std::string _name) {
 	bool success = m_Fonts.find(_name) != m_Fonts.end();
 	if (!success) {
 		LoadFont(_name);
@@ -67,41 +67,41 @@ sf::Font* ResourceManager::getFont(std::string _name) {
 	return &m_Fonts[_name];
 }
 
-void ResourceManager::loadSoundBuffer(std::string _name)
+void ResourceManager::LoadSoundBuffer(std::string _name)
 {
-	addSoundBuffer(_name, OS::getFileInDirectory(TEMP_RES_PATH, _name + ".mp3"));
+	AddSoundBuffer(_name, OS::getFileInDirectory(TEMP_RES_PATH, _name + ".mp3"));
 }
 
-void ResourceManager::unloadSoundBuffer(std::string _name)
+void ResourceManager::UnloadSoundBuffer(std::string _name)
 {
 	m_SoundBuffers.erase(_name);
 }
 
-sf::SoundBuffer* ResourceManager::getSoundBuffer(std::string _name)
+sf::SoundBuffer* ResourceManager::GetSoundBuffer(std::string _name)
 {
 	bool success = m_SoundBuffers.find(_name) != m_SoundBuffers.end();
 	if (!success) {
-		loadFont(_name);
+		LoadFont(_name);
 		success = m_SoundBuffers.find(_name) != m_SoundBuffers.end();
 	}
 	return &m_SoundBuffers[_name];
 }
 
-void ResourceManager::loadMusic(std::string _name)
+void ResourceManager::LoadMusic(std::string _name)
 {
-	addMusic(_name, OS::getFileInDirectory(TEMP_RES_PATH, _name + ".mp3"));
+	AddMusic(_name, OS::getFileInDirectory(TEMP_RES_PATH, _name + ".mp3"));
 }
 
-void ResourceManager::unloadMusic(std::string _name)
+void ResourceManager::UnloadMusic(std::string _name)
 {
 	m_Musics.erase(_name);
 }
 
-sf::Music* ResourceManager::getMusic(std::string _name)
+sf::Music* ResourceManager::GetMusic(std::string _name)
 {
 	bool success = m_Musics.find(_name) != m_Musics.end();
 	if (!success) {
-		loadFont(_name);
+		LoadFont(_name);
 		success = m_Musics.find(_name) != m_Musics.end();
 	}
 	return &m_Musics[_name];
