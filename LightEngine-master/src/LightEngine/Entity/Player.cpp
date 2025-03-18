@@ -14,22 +14,22 @@
 
 #include <iostream>
 // boutons des manettes
-#define JOYSTICK_X sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-#define JOYSTICK_Y sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-#define BOUTON_C sf::Joystick::isButtonPressed(0, 0);
-#define BOUTON_X sf::Joystick::isButtonPressed(0, 1);
-#define BOUTON_O sf::Joystick::isButtonPressed(0, 2);
-#define BOUTON_T sf::Joystick::isButtonPressed(0, 3);
-#define BOUTON_L1 sf::Joystick::isButtonPressed(0, 4);
-#define BOUTON_R1 sf::Joystick::isButtonPressed(0, 5);
-#define BOUTON_R2 sf::Joystick::isButtonPressed(0, 6);
-#define BOUTON_L2 sf::Joystick::isButtonPressed(0, 7);
-#define BOUTON_SHARE sf::Joystick::isButtonPressed(0, 8);
-#define BOUTON_START sf::Joystick::isButtonPressed(0, 9);
-#define BOUTON_L3 sf::Joystick::isButtonPressed(0, 10);
-#define BOUTON_R3 sf::Joystick::isButtonPressed(0, 11);
-#define BOUTON_PS sf::Joystick::isButtonPressed(0, 12);
-#define BOUTON_PAVE sf::Joystick::isButtonPressed(0, 13);
+#define JOYSTICK_X sf::Joystick::getAxisPosition(0, sf::Joystick::X)
+#define JOYSTICK_Y sf::Joystick::getAxisPosition(0, sf::Joystick::Y)
+#define BOUTON_C sf::Joystick::isButtonPressed(0, 0)
+#define BOUTON_X sf::Joystick::isButtonPressed(0, 1)
+#define BOUTON_O sf::Joystick::isButtonPressed(0, 2)
+#define BOUTON_T sf::Joystick::isButtonPressed(0, 3)
+#define BOUTON_L1 sf::Joystick::isButtonPressed(0, 4)
+#define BOUTON_R1 sf::Joystick::isButtonPressed(0, 5)
+#define BOUTON_L2 sf::Joystick::isButtonPressed(0, 6)
+#define BOUTON_R2 sf::Joystick::isButtonPressed(0, 7)
+#define BOUTON_SHARE sf::Joystick::isButtonPressed(0, 8)
+#define BOUTON_START sf::Joystick::isButtonPressed(0, 9)
+#define BOUTON_L3 sf::Joystick::isButtonPressed(0, 10)
+#define BOUTON_R3 sf::Joystick::isButtonPressed(0, 11)
+#define BOUTON_PS sf::Joystick::isButtonPressed(0, 12)
+#define BOUTON_PAVE sf::Joystick::isButtonPressed(0, 13)
 // stop
 #define DASH 300
 
@@ -45,6 +45,7 @@ void Player::OnInitialize() {
 	m_sprite = spriteSheet;
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
+	std::cout << " "<< spriteSheet->getTexture()->getSize().x << " " << spriteSheet->getTexture()->getSize().y << " ";
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos,  {102,96});
 	m_collider->SetGizmo(true);
@@ -88,8 +89,10 @@ void Player::Attack() {
 
 void Player::Jump()
 {
+
 	if (m_jumpCooldown <= 0 && m_jumpCount <= m_maxJumps) {
 		std::cout << m_jumpCount;
+		SetMass(100);
 		SetGravityForce(-500);
 		m_jumpCount += 1;
 		m_jumpCooldown = 0.2f;
@@ -185,13 +188,13 @@ void Player::HandleInput()
 	 if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
 		CheckState(State::jumping);
 	}
-	 if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
+	 if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || R2) {
 		if (m_parryCooldown <= 0)CheckState(State::attacking);
 	}
 	 if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 		if (m_parryCooldown <= 0) m_life--;
 	}
-	 if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
+	 if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || L2) {
 		if (m_shootCooldown <= 0) CheckState(State::parrying);
 	}
 	 if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
@@ -297,13 +300,14 @@ void Player::OnUpdate() {
 	if (!m_isAlive) return;
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
-
 	PlayerCheckCollision();
 	DecreaseCD(dt);
 	CheckPlayerStates();
 	HandleInput();
 	PlayerMove();
 	m_pStateMachine->Update();
+	//if (!m_sideCollider.down) SetMass(100);
+	//else if(m_sideCollider.down)SetMass(0);
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
 	//std::cout << stateName << std::endl;
 	std::string life = std::to_string(m_life);
@@ -322,21 +326,22 @@ void Player::ResetCollide() {
 void Player::PlayerCheckCollision() {
 	if (m_sideCollider.up) {
 		SetGravityForce(0);
-		m_jumping = false;
-		std::cout << "up" << std::endl;
+		//m_jumping = false;
+		//std::cout << "up" << std::endl;
 	}
 	if (m_sideCollider.down) {
-		if (!m_jumping) SetGravityForce(0);
+		SetGravityForce(0);
+		SetMass(0);
 		m_jumpCount = 0;
 		m_jumping = false;
-		std::cout << "down" << std::endl;
+	}
+	else {
+		SetMass(100);
 	}
 	if (m_sideCollider.left) {
-	//	m_Speed = 0;
-		std::cout << "left" << std::endl;
+		m_Speed = 0;
 	}
 	if (m_sideCollider.right) {
-		//m_Speed = 0;
-		std::cout << "right" << std::endl;
+		m_Speed = 0;
 	}
 }

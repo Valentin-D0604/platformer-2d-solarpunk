@@ -194,13 +194,13 @@ bool Collider::GetSide(Collider* _other, Side& _side)
     {
         _side.left |= true;
         _side.right |= false;
-        std::cout << _side.left << std::endl;
+        std::cout << "left" << std::endl;
     }
     else if (_other->GetPosition(1, 0).x <= GetPosition(0, 0).x)
     {
         _side.left |= false;
         _side.right |= true;
-        std::cout << _side.right << std::endl;
+        std::cout << "right" << std::endl;
     }
 
     else
@@ -213,12 +213,14 @@ bool Collider::GetSide(Collider* _other, Side& _side)
     {
         _side.up |= true;
         _side.down |= false;
+        std::cout << "up" << std::endl;
     }
 
     else if (_other->GetPosition(0, 1).y <= GetPosition(0, 0).y)
     {
         _side.up |= false;
         _side.down |= true;
+        std::cout << "down" << std::endl;
     }
 
     else
