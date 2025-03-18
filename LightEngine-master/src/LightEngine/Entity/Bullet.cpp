@@ -4,6 +4,7 @@
 #include "../Entity/Player.h"
 #include "../Entity/Mob1.h"
 #include "../Entity/Mob2.h"
+#include "../Entity/Mob3.h"
 
 #include "../Graphics/Sprite.h"
 #include "../Managers/Managers.h"
@@ -44,6 +45,10 @@ void Bullet::OnCollision(Entity* other) {
 	}
 	if (other->IsTag(TestScene::Tag::mob2)) {
 		Mob2* enemy = dynamic_cast<Mob2*>(other);
+		if (enemy != m_caster) enemy->TakeDamage(1);
+	}
+	if (other->IsTag(TestScene::Tag::mob3)) {
+		Mob3* enemy = dynamic_cast<Mob3*>(other);
 		if (enemy != m_caster) enemy->TakeDamage(1);
 	}
 	if (other->IsTag(TestScene::Tag::player)) {

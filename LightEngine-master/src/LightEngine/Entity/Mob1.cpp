@@ -20,9 +20,10 @@ void Mob1::OnInitialize()
 
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, {10,10});
+	m_collider = new RectangleCollider(pos, { 102,96 });
+	m_collider->SetGizmo(true);
 	m_pStateMachine = new StateMachine<Mob1>(this, State::Count);
-
+	m_physicsCollision = true;
 	//idle
 	{
 		Action<Mob1>* pIdle = m_pStateMachine->CreateAction<Mob1Action_Idle>(State::idle);
@@ -138,7 +139,8 @@ void Mob1::Attack()
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
 	if (player == nullptr) return;
-	player->TakeDamage(1);
+	if (!player->IsParry()) player->TakeDamage(1);
+	else (TakeDamage(1));
 	GoToPosition(GetPosition().x+m_Direction.x, GetPosition().y + m_Direction.y,200);
 	m_shootCooldown = 2.f;
 }

@@ -11,7 +11,6 @@ class Player : public PhysicsEntity
 {
 	//--------moving---------
 	bool m_jumping = false;
-	float m_oldY = 0;
 	bool m_dash = true;
 	//sf::Vector2f m_velocity;
 	float m_acceleration = 600.0f;
@@ -32,11 +31,14 @@ class Player : public PhysicsEntity
 	float m_dashCooldown = 2.f;
 	float m_dashDuration = 1.f;
 	float m_jumpCooldown = 1.f;
+	float m_realoadTime = 2.f;
 	float m_parryTime = PARRY_DURATION;
-	//-----------abilities--------
+	//-----------abilities--------	
 	bool m_Parrying = false;
 	int m_jumpCount = 0;
-	const int m_maxJumps = 2;
+	const int m_maxJumps = 1;
+
+	Side m_sideCollider;
 
 	StateMachine<Player>* m_pStateMachine;
 
@@ -51,24 +53,26 @@ class Player : public PhysicsEntity
 
 		Count
 	};
-	State m_state = State::idle;
 	static constexpr int STATE_COUNT = static_cast<int>(State::Count);
-
+	State m_state = State::idle;
 	int mTransitions[STATE_COUNT][STATE_COUNT] =
 	{
 		// w,     j,      p ,    a,     d,     i,
 		{  0,     1,      1,     1,     1,     1}, // walking
-		{  1,     0,      1,     1,     1,     1}, // jumping
-		{  1,     1,      0,     0,     1,     1}, // parrying
-		{  1,     1,      0,     0,     1,     1}, // attacking
-		{  0,     0,      0,     0,     0,     1},  // dash
+		{  1,     1,      1,     1,     0,     1}, // jumping
+		{  1,     1,      0,     0,     0,     1}, // parrying
+		{  1,     1,      0,     0,     0,     1}, // attacking
+		{  1,     1,      0,     0,     0,     1},  // dash
 		{  1,     1,      1,     1,     1,     0}  // idle
 	};
 public:
 	void OnInitialize() override;
 	void OnCollision(Entity* _other) override;
 	void OnUpdate() override;
-	
+
+	void ResetCollide();
+	void PlayerCheckCollision();
+
 	const char* GetStateName(State _state) const;
 	void parry();
 	void Attack();
@@ -79,6 +83,7 @@ public:
 	void DecreaseCD(float time);
 	void HandleInput();
 	void CheckPlayerStates();
+	bool CheckState(State newState);
 	void PlayerMove();
 	bool IsAlive();
 	bool IsParry();

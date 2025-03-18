@@ -181,46 +181,50 @@ bool Collider::RectangleCollision(sf::Vector2f* const& _vertices1, sf::Vector2f*
 
     return true;
 }
+#include <iostream>
 
 bool Collider::GetSide(Collider* _other, Side& _side)
 {
     if (_other->GetShapeTag() != ShapeTag::rectangle)
         return false;
 
-    if (_other->GetPosition(0, 0).x > GetPosition(0, 0).x)
+   // std::cout << "Other left: " << _other->GetPosition(0, 0).x << " (>=) " << "This Right: " << GetPosition(1, 0).x << std::endl;
+    //std::cout << "Other Right: " << _other->GetPosition(1, 0).x << " (<=) " << "This left: " << GetPosition(0, 0).x << std::endl;
+    if (_other->GetPosition(0, 0).x >= GetPosition(1, 0).x)
     {
-        _side.left = true;
-        _side.right = false;
+        _side.left |= true;
+        _side.right |= false;
+        std::cout << _side.left << std::endl;
     }
-
-    else if (_other->GetPosition(1, 1).x < GetPosition(0, 0).x)
+    else if (_other->GetPosition(1, 0).x <= GetPosition(0, 0).x)
     {
-        _side.left = false;
-        _side.right = true;
-    }
-
-    else
-    {
-        _side.left = false;
-        _side.right = false;
-    }
-
-    if (_other->GetPosition(0, 0).y > GetPosition(0, 0).y)
-    {
-        _side.up = true;
-        _side.down = false;
-    }
-
-    else if (_other->GetPosition(1, 1).y < GetPosition(0, 0).y)
-    {
-        _side.up = false;
-        _side.down = true;
+        _side.left |= false;
+        _side.right |= true;
+        std::cout << _side.right << std::endl;
     }
 
     else
     {
-        _side.up = false;
-        _side.down = false;
+        _side.left |= false;
+        _side.right |= false;
+    }
+
+    if (_other->GetPosition(0, 0).y >= GetPosition(0, 1).y)
+    {
+        _side.up |= true;
+        _side.down |= false;
+    }
+
+    else if (_other->GetPosition(0, 1).y <= GetPosition(0, 0).y)
+    {
+        _side.up |= false;
+        _side.down |= true;
+    }
+
+    else
+    {
+        _side.up |= false;
+        _side.down |= false;
     }
 
     return true;

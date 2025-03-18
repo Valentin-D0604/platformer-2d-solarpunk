@@ -23,10 +23,12 @@ void Mob3::OnInitialize()
 	m_sprite->setScale({ 0.25,0.25 });
 	SetTag(TestScene::Tag::mob3);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, { 10,10 });
+	m_collider = new RectangleCollider(pos, { 102,96 });
 	m_pStateMachine = new StateMachine<Mob3>(this, State::Count);
 	m_sprite->setScale({ 0.25,0.25 });
+	m_collider->SetGizmo(true);
 	m_Speed = 300;
+	m_physicsCollision = true;
 	//idle
 	{
 		Action<Mob3>* pIdle = m_pStateMachine->CreateAction<Mob3Action_Idle>(State::idle);
@@ -140,6 +142,7 @@ void Mob3::Attack()
 			}
 			else {
 				if (!player->IsParry()) player->TakeDamage(1);
+				else (TakeDamage(1));
 			}
 		}
 }

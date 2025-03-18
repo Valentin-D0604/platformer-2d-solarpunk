@@ -43,20 +43,18 @@ void Player::OnInitialize() {
 	spriteSheet->SetAnimation(1);
 
 	m_sprite = spriteSheet;
-
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos,  {102,96});
 	m_collider->SetGizmo(true);
 	m_physicsCollision = true;
-
 	m_pStateMachine = new StateMachine<Player>(this, State::Count);
 	Action<Player>* pIdle = m_pStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
 	Action<Player>* pWalking = m_pStateMachine->CreateAction<PlayerAction_Walking>(State::walking);
 	Action<Player>* pJumping = m_pStateMachine->CreateAction<PlayerAction_jumping>(State::jumping);
-	Action<Player>* pParrying = m_pStateMachine->CreateAction<PlayerAction_Shooting>(State::parrying);
-	Action<Player>* pAttacking = m_pStateMachine->CreateAction<PlayerAction_Parrying>(State::attacking);
+	Action<Player>* pParrying = m_pStateMachine->CreateAction<PlayerAction_Parrying>(State::parrying);
+	Action<Player>* pAttacking = m_pStateMachine->CreateAction<PlayerAction_Shooting>(State::attacking);
 	Action<Player>* pDash = m_pStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
 	
     m_pStateMachine->SetState(State::idle);
@@ -67,7 +65,8 @@ void Player::OnCollision(Entity* other)
 	if (!m_isAlive) return;
 	if (other->IsTag(TestScene::Tag::platform)) {
 		Platform* plat = dynamic_cast<Platform*>(other);
-
+		Collider* collide = plat->GetCollider();
+		collide->GetSide(m_collider, m_sideCollider);
 	}
 }
 
@@ -117,6 +116,7 @@ const char* Player::GetStateName(State state) const
 	switch (state)
 	{
 	case walking: return "walking";
+	case idle: return "idle";
 	case jumping: return "jumping";
 	case parrying: return "parrying";
 	case attacking: return "attacking";
@@ -153,6 +153,7 @@ void Player::DecreaseCD(float dt)
 	m_shootCooldown -= dt;
 	m_dashCooldown -= dt;
 	m_jumpCooldown -= dt;
+	m_realoadTime -= dt;
 	if (m_dash) { m_dashDuration -= dt; }
 }
 
@@ -174,29 +175,31 @@ void Player::HandleInput()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
 		inputX = 1.0f;
 		m_lastDir = { 1,0 };
-		m_pStateMachine->SetState(State::walking);
+		CheckState(State::walking);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
+	 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
 		inputX = -1.0f;
 		m_lastDir = { -1,0 };
-		m_pStateMachine->SetState(State::walking);
+		CheckState(State::walking);
 	}
-	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
-		if (m_jumpCount <=1) m_oldY = pos.y;
-		m_pStateMachine->SetState(State::jumping);
+	 if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || X) && !m_jumping) {
+		CheckState(State::jumping);
 	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
-		if (m_parryCooldown <= 0)m_pStateMachine->SetState(State::parrying);
+	 if (sf::Mouse::isButtonPressed(sf::Mouse::Right) || L2) {
+		if (m_parryCooldown <= 0)CheckState(State::attacking);
 	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+	 if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
 		if (m_parryCooldown <= 0) m_life--;
 	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
-		if (m_shootCooldown <= 0) m_pStateMachine->SetState(State::attacking);
+	 if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || R2) {
+		if (m_shootCooldown <= 0) CheckState(State::parrying);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
-		m_pStateMachine->SetState(State::dash);
+	 if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
+		CheckState(State::dash);
 	}
+	 if (joystickX < PositiveJoystickSensibility && joystickX > -PositiveJoystickSensibility && !X && !L2 && !R2 && !R1) {
+		 CheckState(State::idle);
+	 }
 	bool reversing = (inputX != 0 && inputX != m_Direction.x);
 
 		if (inputX != 0 && (!reversing || m_Speed < 100.0f)) {
@@ -213,6 +216,12 @@ void Player::HandleInput()
 
 		if (m_Speed > MAX_SPEED) m_Speed = MAX_SPEED;
 		if (m_Speed < 0) m_Speed = 0;
+		X = false;
+		R2 = false;
+		L2 = false;
+		R1 = false;
+		joystickX = 0;
+		joystickY = 0;
 }
 
 void Player::CheckPlayerStates()
@@ -220,14 +229,7 @@ void Player::CheckPlayerStates()
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 
-	if (pos.y >= m_oldY) {
-		m_jumping = false;
-		m_jumpCount = 0;
-	}
 	if (m_parryTime) m_parryTime -= dt;
-	if (GetPosition().y >= m_oldY && m_jumping) {
-		m_jumping = false;
-	}
 	if (m_parryTime <= 0) {
 		m_Parrying = false;
 		m_parryTime = PARRY_DURATION;
@@ -239,6 +241,9 @@ void Player::CheckPlayerStates()
 	if (m_dashDuration <= 0) {
 		m_dashDuration = 1.f;
 	}
+	if (m_realoadTime <= 0 && m_ammo < 3) {
+		m_ammo += 1;
+	}
 	if (m_dash) {
 		m_dashDuration -= dt;
 		if (m_dashDuration <= 0) {
@@ -249,6 +254,18 @@ void Player::CheckPlayerStates()
 	}
 }
 
+bool Player::CheckState(State newState)
+{
+	if (mTransitions[(int)m_state][(int)newState])
+	{
+		m_state = newState;
+		m_pStateMachine->SetState(m_state);
+
+		return true;
+	}
+
+	return false;
+}
 
 void Player::PlayerMove()
 {
@@ -281,14 +298,45 @@ void Player::OnUpdate() {
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 
+	PlayerCheckCollision();
 	DecreaseCD(dt);
 	CheckPlayerStates();
 	HandleInput();
 	PlayerMove();
-	// std::cout << m_friction; Will use this later to fix dash bug
 	m_pStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
+	//std::cout << stateName << std::endl;
 	std::string life = std::to_string(m_life);
-		Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
+	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
+	ResetCollide();
+}
+
+void Player::ResetCollide() {
+	m_sideCollider.down = false;
+	m_sideCollider.up = false;
+	m_sideCollider.left = false;
+	m_sideCollider.right = false;
+}
+
+void Player::PlayerCheckCollision() {
+	if (m_sideCollider.up) {
+		SetGravityForce(0);
+		m_jumping = false;
+		std::cout << "up" << std::endl;
+	}
+	if (m_sideCollider.down) {
+		if (!m_jumping) SetGravityForce(0);
+		m_jumpCount = 0;
+		m_jumping = false;
+		std::cout << "down" << std::endl;
+	}
+	if (m_sideCollider.left) {
+	//	m_Speed = 0;
+		std::cout << "left" << std::endl;
+	}
+	if (m_sideCollider.right) {
+		//m_Speed = 0;
+		std::cout << "right" << std::endl;
+	}
 }

@@ -41,7 +41,7 @@ void TestScene::OnInitialize()
 
 	pEntitySelected = nullptr;
 	CreateView();
-	SetCameraZoom(1);
+	SetCameraZoom(2);
 
 	//for (int i = -10; i < 10; i++) {
 	//	pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192
@@ -114,20 +114,24 @@ void TestScene::LoadFromText()
 					break;
 				}
 				case '+': {
-					pEntity2 = CreateEntity<DummyEntity>();
-					pEntity2->SetPosition((i * 200), (j * 200));
-					pEntity2->SetMass(0);
-					pEntity2->SetGravityDirection(sf::Vector2f(0, -1));
+					explode = CreateEntity<Mob3>();
+					explode->SetPosition((i * 200), (j * 200));
+					explode->SetMass(100);
+					explode->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case 'O': {
 					range = CreateEntity<Mob2>();
 					range->SetPosition((i * 200), (j * 200));
+					range->SetMass(100);
+					range->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '%': {
 					monster = CreateEntity<Mob1>();
 					monster->SetPosition((i * 200), (j * 200));
+					monster->SetMass(100);
+					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '$': {
