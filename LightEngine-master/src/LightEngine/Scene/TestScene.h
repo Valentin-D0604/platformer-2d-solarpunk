@@ -7,6 +7,7 @@ class Player;
 class Mob1;
 class Mob2;
 class Mob3;
+class Boss;
 
 class Platform;
 
@@ -19,6 +20,7 @@ public:
 	Mob1* monster;
 	Mob2* range;
 	Mob3* explode;
+	Boss* boss;
 
 	Platform* pPlatform;
 

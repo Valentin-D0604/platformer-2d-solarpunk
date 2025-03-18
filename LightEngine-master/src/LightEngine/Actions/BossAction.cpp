@@ -156,7 +156,7 @@ void BossAction_Stunned::OnUpdate(Boss* _owner) {
 
 	// If the boss hands have finished being stunned, the boss goes back to idle
 
-	if (_owner->m_left->IsStunned() == false && _owner->m_right->IsStunned() == false) {
+	if (_owner->m_left->IsVulnerable() == false && _owner->m_right->IsVulnerable() == false) {
 		_owner->StartAttack(BossActionType::idle);
 	}
 }

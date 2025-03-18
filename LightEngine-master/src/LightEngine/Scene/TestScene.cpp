@@ -11,6 +11,7 @@
 #include "../Entity/Mob2.h"
 #include "../Entity/Mob3.h"
 #include "../Entity/Platform.h"
+#include "../Entity/Boss.h"
 
 
 #include <iostream>
@@ -133,6 +134,11 @@ void TestScene::LoadFromText()
 				case '$': {
 					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '*': {
+					boss = CreateEntity<Boss>();
+					boss->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				default:

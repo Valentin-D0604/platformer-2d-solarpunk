@@ -70,6 +70,8 @@ void Boss::OnInitialize()
 
 void Boss::Update() {
 	m_pStateMachine->Update();
+	m_left->OnUpdate();
+    m_right->OnUpdate();
 }
 
 void Boss::StartAttack(BossActionType action) {
