@@ -19,34 +19,10 @@
 
 void TestScene::OnInitialize()
 {
-
-	/*pEntity1 = CreateEntity<Player>();
-	pEntity1->SetPosition(300, 300);
-	pEntity1->SetMass(100);
-	pEntity1->SetGravityDirection(sf::Vector2f(0, 1));
-	
-	pEntity2 = CreateEntity<DummyEntity>();
-	pEntity2->SetPosition(100, 150);
-	pEntity2->SetMass(0);
-	pEntity2->SetGravityDirection(sf::Vector2f(0, -1));*/
-
-	/*monster = CreateEntity<Mob1>();
-	monster->SetPosition(100, 300);*/
-
-	/*range = CreateEntity<Mob2>();
-	range->SetPosition(700, 300);*/
-	
-	//Explode = CreateEntity<Mob3>();
-	//Explode->SetPosition(500, 100);
-
 	pEntitySelected = nullptr;
 	CreateView();
 	SetCameraZoom(1);
 
-	//for (int i = -10; i < 10; i++) {
-	//	pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192
-	//	pPlatform->SetPosition((i*204) + (204 * 2), 500); // TOFIX problème d'hitbox qui empeche le déplacement
-	//}
 	LoadFromText();
 }
 
