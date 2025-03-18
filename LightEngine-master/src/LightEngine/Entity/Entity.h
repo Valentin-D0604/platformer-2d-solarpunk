@@ -22,7 +22,7 @@ class Entity
     };
 
 protected:
-    Sprite* m_Sprite;
+    Sprite* m_sprite;
     sf::Vector2f m_Direction;
 	Target m_Target;
     float m_Speed = 0.f;
@@ -39,7 +39,7 @@ public:
 	void SetTag(int _tag) { m_Tag = _tag; }
 
     sf::Vector2f GetPosition(float _ratioX = 0.5f, float _ratioY = 0.5f) const;
-    Sprite* GetSprite() { return m_Sprite; }
+    Sprite* GetSprite() { return m_sprite; }
 
 	bool IsTag(int _tag) const { return m_Tag == _tag; }
 

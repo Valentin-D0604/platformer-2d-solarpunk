@@ -13,11 +13,11 @@
 
 GameManager::GameManager()
 {
-	mpWindow = nullptr;
-	mDeltaTime = 0.0f;
-	mpScene = nullptr;
-	mWindowWidth = -1;
-	mWindowHeight = -1;
+	mp_Window = nullptr;
+	m_deltaTime = 0.0f;
+	mp_Scene = nullptr;
+	m_windowWidth = -1;
+	m_windowHeight = -1;
 }
 
 GameManager* GameManager::Get()
@@ -29,10 +29,10 @@ GameManager* GameManager::Get()
 
 GameManager::~GameManager()
 {
-	delete mpWindow;
-	delete mpScene;
+	delete mp_Window;
+	delete mp_Scene;
 
-	for (Entity* entity : mEntities)
+	for (Entity* entity : m_entities)
 	{
 		delete entity;
 	}
@@ -40,33 +40,33 @@ GameManager::~GameManager()
 
 void GameManager::CreateWindow(unsigned int width, unsigned int height, const char* title, int fpsLimit, sf::Color clearColor)
 {
-	_ASSERT(mpWindow == nullptr);
+	_ASSERT(mp_Window == nullptr);
 
-	mpWindow = new sf::RenderWindow(sf::VideoMode(width, height), title);
-	mpWindow->setFramerateLimit(fpsLimit);
+	mp_Window = new sf::RenderWindow(sf::VideoMode(width, height), title);
+	mp_Window->setFramerateLimit(fpsLimit);
 
-	mWindowWidth = width;
-	mWindowHeight = height;
+	m_windowWidth = width;
+	m_windowHeight = height;
 
-	mClearColor = clearColor;
+	m_clearColor = clearColor;
 }
 
 void GameManager::Run()
 {
-	if (mpWindow == nullptr) 
+	if (mp_Window == nullptr) 
 	{
 		std::cout << "Window not created, creating default window" << std::endl;
 		CreateWindow(1280, 720, "Default window");
 	}
 
 	//#TODO : Load somewhere else
-	bool fontLoaded = mFont.loadFromFile("../../../res/Hack-Regular.ttf");
+	bool fontLoaded = m_font.loadFromFile("../../../res/Hack-Regular.ttf");
 	_ASSERT(fontLoaded);
 
-	_ASSERT(mpScene != nullptr);
+	_ASSERT(mp_Scene != nullptr);
 
 	sf::Clock clock;
-	while (mpWindow->isOpen())
+	while (mp_Window->isOpen())
 	{
 		SetDeltaTime(clock.restart().asSeconds());
 
@@ -81,23 +81,23 @@ void GameManager::Run()
 void GameManager::HandleInput()
 {
 	sf::Event event;
-	while (mpWindow->pollEvent(event))
+	while (mp_Window->pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
 		{
-			mpWindow->close();
+			mp_Window->close();
 		}
 
-		mpScene->OnEvent(event);
+		mp_Scene->OnEvent(event);
 	}
 }
 
 void GameManager::Update()
 {
-	mpScene->OnUpdate();
+	mp_Scene->OnUpdate();
 
     //Update
-    for (auto it = mEntities.begin(); it != mEntities.end(); )
+    for (auto it = m_entities.begin(); it != m_entities.end(); )
     {
 		Entity* entity = *it;
 
@@ -109,12 +109,12 @@ void GameManager::Update()
             continue;
         }
 
-        mEntitiesToDestroy.push_back(entity);
+        m_entitiesToDestroy.push_back(entity);
         
 		PhysicsEntity* physEntity = dynamic_cast<PhysicsEntity*>(*it);
 		if (physEntity != nullptr)
 		{
-			mPhysicsEntities.erase(std::find(mPhysicsEntities.begin(), mPhysicsEntities.end(), physEntity));
+			m_physicsEntities.erase(std::find(m_physicsEntities.begin(), m_physicsEntities.end(), physEntity));
 		}
 
 		else
@@ -122,22 +122,22 @@ void GameManager::Update()
 			StaticEntity* staticEntity = dynamic_cast<StaticEntity*>(*it);
 			if (staticEntity != nullptr)
 			{
-				mStaticEntities.erase(std::find(mStaticEntities.begin(), mStaticEntities.end(), staticEntity));
+				m_staticEntities.erase(std::find(m_staticEntities.begin(), m_staticEntities.end(), staticEntity));
 			}
 		}
 
-		it = mEntities.erase(it);
+		it = m_entities.erase(it);
     }
 
     //Collision
-    for (auto it1 = mPhysicsEntities.begin(); it1 != mPhysicsEntities.end(); ++it1)
+    for (auto it1 = m_physicsEntities.begin(); it1 != m_physicsEntities.end(); ++it1)
     {
         auto it2 = it1;
         ++it2;
 
 		PhysicsEntity* entity = *it1;
 		// Physics entities / physics entities
-        for (; it2 != mPhysicsEntities.end(); ++it2)
+        for (; it2 != m_physicsEntities.end(); ++it2)
         {
 			PhysicsEntity* otherEntity = *it2;
 
@@ -152,7 +152,7 @@ void GameManager::Update()
 			continue;
 
 		// Physics entities / static entities
-		for (auto it3 = mStaticEntities.begin(); it3 != mStaticEntities.end(); ++it3)
+		for (auto it3 = m_staticEntities.begin(); it3 != m_staticEntities.end(); ++it3)
 		{
 			StaticEntity* otherEntity = *it3;
 			if (entity->IsColliding(otherEntity))
@@ -164,20 +164,20 @@ void GameManager::Update()
 		}
     }
 
-	for (auto it = mEntitiesToDestroy.begin(); it != mEntitiesToDestroy.end(); ++it) 
+	for (auto it = m_entitiesToDestroy.begin(); it != m_entitiesToDestroy.end(); ++it) 
 	{
 		delete *it;
 	}
 
-    mEntitiesToDestroy.clear();
+    m_entitiesToDestroy.clear();
 
-	for (auto it = mEntitiesToAdd.begin(); it != mEntitiesToAdd.end(); ++it)
+	for (auto it = m_entitiesToAdd.begin(); it != m_entitiesToAdd.end(); ++it)
 	{
-		mEntities.push_back(*it);
+		m_entities.push_back(*it);
 		PhysicsEntity* physEntity = dynamic_cast<PhysicsEntity*>(*it);
 		if (physEntity != nullptr)
 		{
-			mPhysicsEntities.push_back(physEntity);
+			m_physicsEntities.push_back(physEntity);
 		}
 
 		else
@@ -185,26 +185,26 @@ void GameManager::Update()
 			StaticEntity* staticEntity = dynamic_cast<StaticEntity*>(*it);
 			if (staticEntity != nullptr)
 			{
-				mStaticEntities.push_back(staticEntity);
+				m_staticEntities.push_back(staticEntity);
 			}
 		}
 	}
 
-	mEntitiesToAdd.clear();
+	m_entitiesToAdd.clear();
 
-	mpWindow->setView(*(mpScene->m_view));
+	mp_Window->setView(*(mp_Scene->m_view));
 }
 
 void GameManager::Draw()
 {
-	mpWindow->clear(mClearColor);
+	mp_Window->clear(m_clearColor);
 	
-	for (Entity* entity : mEntities)
+	for (Entity* entity : m_entities)
 	{
-		mpWindow->draw(*entity->GetSprite());
+		mp_Window->draw(*entity->GetSprite());
 	}
 	
-	Debug::Get()->Draw(mpWindow);
+	Debug::Get()->Draw(mp_Window);
 
-	mpWindow->display();
+	mp_Window->display();
 }

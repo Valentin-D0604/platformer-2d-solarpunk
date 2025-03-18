@@ -6,12 +6,12 @@ void StaticEntity::Update()
 	float dt = GetDeltaTime();
 	float distance = dt * m_Speed;
 	sf::Vector2f translation = distance * m_Direction;
-	m_Sprite->move(translation);
-	m_Sprite->update();
+	m_sprite->move(translation);
+	m_sprite->Update();
 
-	m_Collider->setPosition(GetPosition());
+	m_collider->SetPosition(GetPosition());
 
 	OnUpdate();
 
-	m_Collider->update();
+	m_collider->Update();
 }

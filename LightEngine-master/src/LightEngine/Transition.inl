@@ -14,7 +14,7 @@ U* Transition<T>::AddCondition(bool expected)
 
 	pCondition->expected = expected;
 
-	mConditions.push_back(pCondition);
+	m_conditions.push_back(pCondition);
 
 	return pCondition;
 }
@@ -22,7 +22,7 @@ U* Transition<T>::AddCondition(bool expected)
 template<typename T>
 bool Transition<T>::Try(T* owner)
 {
-	for (const auto& c : mConditions)
+	for (const auto& c : m_conditions)
 	{
 		if (c->Test(owner) == false)
 			return false;

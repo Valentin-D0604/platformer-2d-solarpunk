@@ -19,23 +19,23 @@ namespace sf
 
 class GameManager
 {
-	std::list<Entity*> mEntities;
-	std::list<PhysicsEntity*> mPhysicsEntities;
-	std::list<StaticEntity*> mStaticEntities;
-	std::list<Entity*> mEntitiesToDestroy;
-	std::list<Entity*> mEntitiesToAdd;
+	std::list<Entity*> m_entities;
+	std::list<PhysicsEntity*> m_physicsEntities;
+	std::list<StaticEntity*> m_staticEntities;
+	std::list<Entity*> m_entitiesToDestroy;
+	std::list<Entity*> m_entitiesToAdd;
 
-	sf::RenderWindow* mpWindow;
-	sf::Font mFont;
+	sf::RenderWindow* mp_Window;
+	sf::Font m_font;
 
-	Scene* mpScene;
+	Scene* mp_Scene;
 
-	float mDeltaTime;
+	float m_deltaTime;
 
-	int mWindowWidth;
-	int mWindowHeight;
+	int m_windowWidth;
+	int m_windowHeight;
 
-	sf::Color mClearColor;
+	sf::Color m_clearColor;
 
 private:
 	GameManager();
@@ -46,22 +46,22 @@ private:
 	void Update();
 	void Draw();
 
-	void SetDeltaTime(float deltaTime) { mDeltaTime = deltaTime; }
+	void SetDeltaTime(float _deltaTime) { m_deltaTime = _deltaTime; }
 
-	sf::RenderWindow* GetWindow() const { return mpWindow; }
+	sf::RenderWindow* GetWindow() const { return mp_Window; }
 
 public:
 	~GameManager();
 	static GameManager* Get();
 
-	void CreateWindow(unsigned int width, unsigned int height, const char* title, int fpsLimit = 60, sf::Color clearColor = sf::Color::Black);
+	void CreateWindow(unsigned int _width, unsigned int _height, const char* _title, int _fpsLimit = 60, sf::Color _clearColor = sf::Color::Black);
 
 	template<typename T>
 	void LaunchScene();
 
-	float GetDeltaTime() const { return mDeltaTime; }
-	Scene* GetScene() const { return mpScene; }
-	sf::Font& GetFont() { return mFont; };
+	float GetDeltaTime() const { return m_deltaTime; }
+	Scene* GetScene() const { return mp_Scene; }
+	sf::Font& GetFont() { return m_font; };
 
 	friend Debug;
 	friend Scene;

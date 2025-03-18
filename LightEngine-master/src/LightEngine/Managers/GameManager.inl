@@ -8,19 +8,19 @@ template<typename T>
 void GameManager::LaunchScene()
 {
 	static_assert(std::is_base_of<Scene, T>::value, "T must be derived from Scene");
-	_ASSERT(mpScene == nullptr);
+	_ASSERT(mp_Scene == nullptr);
 
 	T* newScene = new T();
-	mpScene = newScene;
+	mp_Scene = newScene;
 
-	mpScene->SetGameManager(this);
+	mp_Scene->SetGameManager(this);
 
-	mpScene->createView();
-	mpScene->m_view->setSize(sf::Vector2f(mWindowWidth, mWindowHeight));
-	mpScene->m_view->setCenter(sf::Vector2f(mWindowWidth/2, mWindowHeight/2));
-	mpWindow->setView(*(mpScene->m_view));
+	mp_Scene->CreateView();
+	mp_Scene->m_view->setSize(sf::Vector2f(m_windowWidth, m_windowHeight));
+	mp_Scene->m_view->setCenter(sf::Vector2f(m_windowWidth/2, m_windowHeight/2));
+	mp_Window->setView(*(mp_Scene->m_view));
 
-	mpScene->OnInitialize();
+	mp_Scene->OnInitialize();
 
 	Run();
 }

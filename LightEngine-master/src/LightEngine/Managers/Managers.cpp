@@ -3,17 +3,17 @@
 #include "../Managers/GameManager.h"
 #include "../Managers/ResourceManager.h"
 
-Managers* Managers::m_Instance = nullptr;
+Managers* Managers::m_instance = nullptr;
 
 Managers::Managers()
 {
-	m_Instance = this;
+	m_instance = this;
 
-	m_ResourceManager = new ResourceManager();
-	m_GameManager = new GameManager();
+	m_resourceManager = new ResourceManager();
+	m_gameManager = new GameManager();
 }
 
-void Managers::run()
+void Managers::Run()
 {
-	m_GameManager->Run();
+	m_gameManager->Run();
 }

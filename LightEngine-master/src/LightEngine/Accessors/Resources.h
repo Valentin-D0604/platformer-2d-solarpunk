@@ -11,16 +11,16 @@ namespace sf {
 
 class Resources {
 public:
-	static void loadTexture(std::string _name);
-	static void unloadTexture(std::string _name);
-	static sf::Texture* getTexture(std::string _name);
+	static void LoadTexture(std::string _name);
+	static void UnloadTexture(std::string _name);
+	static sf::Texture* GetTexture(std::string _name);
 
-	static void loadFont(std::string _name);
-	static void unloadFont(std::string _name);
-	static sf::Font* getFont(std::string _name);
+	static void LoadFont(std::string _name);
+	static void UnloadFont(std::string _name);
+	static sf::Font* GetFont(std::string _name);
 
 private:
-	static IResourceProvider* m_Resources;
+	static IResourceProvider* m_resources;
 
 	friend class ResourceManager;
 };

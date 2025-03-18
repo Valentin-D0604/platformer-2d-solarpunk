@@ -1,6 +1,9 @@
-#include "Mob1Action.h"
+#include "../Actions/Mob1Action.h"
 #include "../Scene/TestScene.h"
 #include "../Entity/Player.h"
+
+#define DETECTING_RANGE 300.f
+#define ATTACK_RANGE  50.f
 
 #include <iostream>
 //-----------------------------------------walking-------------------------
@@ -10,12 +13,11 @@ void Mob1Action_Walking::OnStart(Mob1* _owner)
 
 void Mob1Action_Walking::OnUpdate(Mob1* _owner)
 {
-	_owner->m_WalkingTimer -= _owner->GetDeltaTime();
-	_owner->SetDirection(m_Dir.x, m_Dir.y, 200);
-	if (_owner->m_WalkingTimer <= 0) {
+	_owner->m_walkingTimer -= _owner->GetDeltaTime();
+	_owner->SetDirection(m_Dir.x, m_Dir.y,200);
+	if (_owner->m_walkingTimer <= 0) {
 		_owner->SetDirection(m_Dir.x = -m_Dir.x, m_Dir.y = -m_Dir.y, 200);
-		_owner->m_WalkingTimer = 3.f;
-		std::cout << "walking";
+		_owner->m_walkingTimer = 3.f;
 	}
 }
 
@@ -47,32 +49,27 @@ void Mob1Action_Attacking::OnStart(Mob1* _owner)
 
 void Mob1Action_Attacking::OnUpdate(Mob1* _owner)
 {
-	TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
-	Player* player = scene->GetPlayer();
-	_owner->m_ShootCooldown -= _owner->GetDeltaTime();
-	//if ((owner->GetPosition().x <= player->GetPosition().x + 50 && owner->GetPosition().x >= player->GetPosition().x - 50 && owner->GetPosition().y <= player->GetPosition().y + 50 && owner->GetPosition().y >= player->GetPosition().y - 50)) {
-	if (_owner->m_ShootCooldown <= 0) {
-		player->TakeDamage(1);
-		_owner->m_ShootCooldown = 2.f;
-		//std::cout << "attack";
+	_owner->m_shootCooldown -= _owner->GetDeltaTime();
+	if (_owner->m_shootCooldown <= 0) {
+		_owner->Attack();
 	}
 //	}
 }
 
-void Mob1Action_Attacking::OnEnd(Mob1* _owner)
+void Mob1Action_Attacking::OnEnd(Mob1* owner)
 {
 }
 
 //-----------------------------------------Idle-------------------------
-void Mob1Action_Idle::OnStart(Mob1* _owner)
+void Mob1Action_Idle::OnStart(Mob1* owner)
 {
 }
 
-void Mob1Action_Idle::OnUpdate(Mob1* _owner)
+void Mob1Action_Idle::OnUpdate(Mob1* owner)
 {
 }
 
-void Mob1Action_Idle::OnEnd(Mob1* _owner)
+void Mob1Action_Idle::OnEnd(Mob1* owner)
 {
 }
 //------------------------------------------------------------------------

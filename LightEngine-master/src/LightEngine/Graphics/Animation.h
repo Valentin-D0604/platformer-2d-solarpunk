@@ -3,11 +3,11 @@
 
 class Animation
 {
-	std::string m_Name;
-	sf::Vector2i m_Size;
-	int m_MaxFrame;
-	float m_FrameTime;
-	bool m_Looping;
+	std::string m_name;
+	sf::Vector2i m_size;
+	int m_maxFrame;
+	float m_frameTime;
+	bool m_looping;
 
 	friend class SpriteSheet;
 };

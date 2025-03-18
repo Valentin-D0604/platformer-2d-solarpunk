@@ -4,7 +4,7 @@
 #include "RectangleCollider.h"
 #include "../Managers/Managers.h"
 
-bool Collider::checkVertexInsideCircle(sf::Vector2f* const& _rect, const sf::Vector2f& _circleCenter, float _radius) {
+bool Collider::CheckVertexInsideCircle(sf::Vector2f* const& _rect, const sf::Vector2f& _circleCenter, float _radius) {
     for (int i = 0; i < 4; i++)
     {
         if (Utils::GetDistance(_rect[i], _circleCenter) <= _radius)
@@ -13,7 +13,7 @@ bool Collider::checkVertexInsideCircle(sf::Vector2f* const& _rect, const sf::Vec
     return false;
 }
 
-std::pair<sf::Vector2f, sf::Vector2f> Collider::findClosestEdge(sf::Vector2f* const& _rect, const sf::Vector2f& _circleCenter)
+std::pair<sf::Vector2f, sf::Vector2f> Collider::FindClosestEdge(sf::Vector2f* const& _rect, const sf::Vector2f& _circleCenter)
 {
     float minDistance = std::numeric_limits<float>::max();
     std::pair<sf::Vector2f, sf::Vector2f> closestEdge;
@@ -48,7 +48,7 @@ std::pair<sf::Vector2f, sf::Vector2f> Collider::findClosestEdge(sf::Vector2f* co
     return closestEdge;
 }
 
-bool Collider::checkEdgeCollision(const sf::Vector2f& _A, const sf::Vector2f& _B, const sf::Vector2f& _circleCenter, float _radius) {
+bool Collider::CheckEdgeCollision(const sf::Vector2f& _A, const sf::Vector2f& _B, const sf::Vector2f& _circleCenter, float _radius) {
 
     sf::Vector2f AB = { _B.x - _A.x, _B.y - _A.y };
     sf::Vector2f AC = { _circleCenter.x - _A.x, _circleCenter.y - _A.y };
@@ -65,8 +65,8 @@ bool Collider::checkEdgeCollision(const sf::Vector2f& _A, const sf::Vector2f& _B
     return Utils::GetDistance(closest, _circleCenter) <= _radius;
 }
 
-bool Collider::circleRectangleCollision(const sf::Vector2f& _circleCenter, float _radius, sf::Vector2f* const& _rect) {
-    if (Collider::checkVertexInsideCircle(_rect, _circleCenter, _radius))
+bool Collider::CircleRectangleCollision(const sf::Vector2f& _circleCenter, float _radius, sf::Vector2f* const& _rect) {
+    if (Collider::CheckVertexInsideCircle(_rect, _circleCenter, _radius))
         return true;
 
     for (size_t i = 0; i < 4; ++i)
@@ -74,28 +74,28 @@ bool Collider::circleRectangleCollision(const sf::Vector2f& _circleCenter, float
         sf::Vector2f A = _rect[i];
         sf::Vector2f B = _rect[(i + 1) % 4];
 
-        if (Collider::checkEdgeCollision(A, B, _circleCenter, _radius))
+        if (Collider::CheckEdgeCollision(A, B, _circleCenter, _radius))
             return true;
     }
 
     return false;
 }
 
-sf::Vector2f Collider::findClosestPointOnRectangle(const sf::Vector2f& circleCenter, sf::Vector2f* const& rect)
+sf::Vector2f Collider::FindClosestPointOnRectangle(const sf::Vector2f& _circleCenter, sf::Vector2f* const& _rect)
 {
     sf::Vector2f closestPoint;
     float minDistance = std::numeric_limits<float>::max();
 
     for (size_t i = 0; i < 4; ++i)
     {
-        sf::Vector2f A = rect[i];
-        sf::Vector2f B = rect[(i + 1) % 4];
+        sf::Vector2f A = _rect[i];
+        sf::Vector2f B = _rect[(i + 1) % 4];
 
         sf::Vector2f edge = B - A;
         float edgeLength = std::sqrt(edge.x * edge.x + edge.y * edge.y);
         sf::Vector2f edgeDir = edge / edgeLength;
 
-        sf::Vector2f AToCenter = circleCenter - A;
+        sf::Vector2f AToCenter = _circleCenter - A;
         float projection = (AToCenter.x * edgeDir.x + AToCenter.y * edgeDir.y);
 
         sf::Vector2f pointOnEdge = A + projection * edgeDir;
@@ -103,7 +103,7 @@ sf::Vector2f Collider::findClosestPointOnRectangle(const sf::Vector2f& circleCen
         if (projection < 0) pointOnEdge = A;
         else if (projection > edgeLength) pointOnEdge = B;
 
-        float dist = Utils::GetDistance(circleCenter, pointOnEdge);
+        float dist = Utils::GetDistance(_circleCenter, pointOnEdge);
         if (dist < minDistance)
         {
             minDistance = dist;
@@ -114,7 +114,7 @@ sf::Vector2f Collider::findClosestPointOnRectangle(const sf::Vector2f& circleCen
     return closestPoint;
 }
 
-bool Collider::circleCollision(const sf::Vector2f& _posCircle1, const float& _radCircle1, const sf::Vector2f& _posCircle2, const float& _radCircle2)
+bool Collider::CircleCollision(const sf::Vector2f& _posCircle1, const float& _radCircle1, const sf::Vector2f& _posCircle2, const float& _radCircle2)
 {
     float distance = Utils::GetDistance(_posCircle1, _posCircle2);
 
@@ -124,7 +124,7 @@ bool Collider::circleCollision(const sf::Vector2f& _posCircle1, const float& _ra
     return false;
 }
 
-void Collider::rotateVertices(sf::Vector2f* const& _vertices, float _angle)
+void Collider::RotateVertices(sf::Vector2f* const& _vertices, float _angle)
 {
     sf::Vector2f center = (_vertices[0] + _vertices[2]) * 0.5f;
 
@@ -141,7 +141,7 @@ void Collider::rotateVertices(sf::Vector2f* const& _vertices, float _angle)
     }
 }
 
-bool Collider::rectangleCollision(sf::Vector2f* const& _vertices1, sf::Vector2f* const& _vertices2)
+bool Collider::RectangleCollision(sf::Vector2f* const& _vertices1, sf::Vector2f* const& _vertices2)
 {
     std::vector<sf::Vector2f> axes;
 
@@ -182,18 +182,18 @@ bool Collider::rectangleCollision(sf::Vector2f* const& _vertices1, sf::Vector2f*
     return true;
 }
 
-bool Collider::getSide(Collider* _other, Side& _side)
+bool Collider::GetSide(Collider* _other, Side& _side)
 {
-    if (_other->getShapeTag() != ShapeTag::Rectangle)
+    if (_other->GetShapeTag() != ShapeTag::rectangle)
         return false;
 
-    if (_other->getPosition(0, 0).x > getPosition(0, 0).x)
+    if (_other->GetPosition(0, 0).x > GetPosition(0, 0).x)
     {
         _side.left = true;
         _side.right = false;
     }
 
-    else if (_other->getPosition(1, 1).x < getPosition(0, 0).x)
+    else if (_other->GetPosition(1, 1).x < GetPosition(0, 0).x)
     {
         _side.left = false;
         _side.right = true;
@@ -205,13 +205,13 @@ bool Collider::getSide(Collider* _other, Side& _side)
         _side.right = false;
     }
 
-    if (_other->getPosition(0, 0).y > getPosition(0, 0).y)
+    if (_other->GetPosition(0, 0).y > GetPosition(0, 0).y)
     {
         _side.up = true;
         _side.down = false;
     }
 
-    else if (_other->getPosition(1, 1).y < getPosition(0, 0).y)
+    else if (_other->GetPosition(1, 1).y < GetPosition(0, 0).y)
     {
         _side.up = false;
         _side.down = true;

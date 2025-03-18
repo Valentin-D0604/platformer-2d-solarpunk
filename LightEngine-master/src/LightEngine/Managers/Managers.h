@@ -1,6 +1,6 @@
 #pragma once
 
-#define GET_MANAGER(type) Managers::get##<type>()
+#define GET_MANAGER(type) Managers::Get##<type>()
 
 class GameManager;
 class SceneManager;
@@ -12,16 +12,16 @@ public:
 	Managers();
 
 	template<typename T>
-	static T* get();
+	static T* Get();
 
-	void run();
+	void Run();
 
 private:
-	static Managers* m_Instance;
+	static Managers* m_instance;
 
-	GameManager* m_GameManager;
-	SceneManager* m_SceneManager;
-	ResourceManager* m_ResourceManager;
+	GameManager* m_gameManager;
+	SceneManager* m_sceneManager;
+	ResourceManager* m_resourceManager;
 };
 
 #include "Managers.inl"

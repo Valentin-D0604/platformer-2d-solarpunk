@@ -22,69 +22,69 @@ inline json loadFromFile(const std::string& _path) {
 
 SpriteSheet::SpriteSheet(Entity* _entity, std::string _path)
 {
-	m_Entity = _entity;
+	m_entity = _entity;
 
-	setTexture(*(GET_MANAGER(ResourceManager)->getTexture(_path)));
+	setTexture(*(GET_MANAGER(ResourceManager)->GetTexture(_path)));
 
-	deserialize(loadFromFile("../../../res/" + _path + ".json"));
+	Deserialize(loadFromFile("../../../res/" + _path + ".json"));
 }
 
-void SpriteSheet::addAnimation(Animation* _animation)
+void SpriteSheet::AddAnimation(Animation* _animation)
 {
-	m_Animations.push_back(_animation);
+	m_animations.push_back(_animation);
 }
 
-void SpriteSheet::setAnimation(int _index)
+void SpriteSheet::SetAnimation(int _index)
 {
-	_ASSERT(_index <= m_Animations.size());
+	_ASSERT(_index <= m_animations.size());
 
-	m_AnimationIndex = _index;
-	m_AnimationFrame = 0;
+	m_animationIndex = _index;
+	m_animationFrame = 0;
 
-	sf::Vector2i pos = sf::Vector2i(m_AnimationFrame * m_Animations[m_AnimationIndex]->m_Size.x, m_AnimationIndex * m_Animations[m_AnimationIndex]->m_Size.y);
-	sf::Vector2i size = sf::Vector2i(m_Animations[m_AnimationIndex]->m_Size.x, m_Animations[m_AnimationIndex]->m_Size.y);
+	sf::Vector2i pos = sf::Vector2i(m_animationFrame * m_animations[m_animationIndex]->m_size.x, m_animationIndex * m_animations[m_animationIndex]->m_size.y);
+	sf::Vector2i size = sf::Vector2i(m_animations[m_animationIndex]->m_size.x, m_animations[m_animationIndex]->m_size.y);
 	setTextureRect(sf::IntRect(pos, size));
 }
 
-std::string SpriteSheet::getCurrentAnimationName()
+std::string SpriteSheet::GetCurrentAnimationName()
 {
-	return m_Animations[m_AnimationIndex]->m_Name;
+	return m_animations[m_animationIndex]->m_name;
 }
 
-void SpriteSheet::deserialize(const nlohmann::json& _json)
+void SpriteSheet::Deserialize(const nlohmann::json& _json)
 {
 	for (auto& animation : _json["animations"].items())
 	{
 		Animation* anim = new Animation;
-		animation.value().at("frames").get_to(anim->m_MaxFrame);
-		animation.value().at("loop").get_to(anim->m_Looping);
-		anim->m_Name = animation.key();
+		animation.value().at("frames").get_to(anim->m_maxFrame);
+		animation.value().at("loop").get_to(anim->m_looping);
+		anim->m_name = animation.key();
 
-		anim->m_Size = sf::Vector2i(_json["frame_size"]["width"], _json["frame_size"]["height"]);
+		anim->m_size = sf::Vector2i(_json["frame_size"]["width"], _json["frame_size"]["height"]);
 
-		animation.value().at("frame_time").get_to(anim->m_FrameTime);
+		animation.value().at("frame_time").get_to(anim->m_frameTime);
 
-		addAnimation(anim);
+		AddAnimation(anim);
 	}
 }
 
-void SpriteSheet::update()
+void SpriteSheet::Update()
 {
 	float dt = GET_MANAGER(GameManager)->GetDeltaTime();
-	m_Timer += dt;
-	if (m_Timer >= m_Animations[m_AnimationIndex]->m_FrameTime)
+	m_timer += dt;
+	if (m_timer >= m_animations[m_animationIndex]->m_frameTime)
 	{
-		m_Timer = 0;
+		m_timer = 0;
 
-		++m_AnimationFrame %= m_Animations[m_AnimationIndex]->m_MaxFrame;
+		++m_animationFrame %= m_animations[m_animationIndex]->m_maxFrame;
 
-		if (m_AnimationFrame == 0 && !m_Animations[m_AnimationIndex]->m_Looping) // On animation end
+		if (m_animationFrame == 0 && !m_animations[m_animationIndex]->m_looping) // On animation end
 		{
-			m_Entity->OnAnimationEnd(m_AnimationIndex);
+			m_entity->OnAnimationEnd(m_animationIndex);
 		}
 		
-		sf::Vector2i pos = sf::Vector2i(m_AnimationFrame * m_Animations[m_AnimationIndex]->m_Size.x, m_AnimationIndex * m_Animations[m_AnimationIndex]->m_Size.y);
-		sf::Vector2i size = sf::Vector2i(m_Animations[m_AnimationIndex]->m_Size.x, m_Animations[m_AnimationIndex]->m_Size.y);
+		sf::Vector2i pos = sf::Vector2i(m_animationFrame * m_animations[m_animationIndex]->m_size.x, m_animationIndex * m_animations[m_animationIndex]->m_size.y);
+		sf::Vector2i size = sf::Vector2i(m_animations[m_animationIndex]->m_size.x, m_animations[m_animationIndex]->m_size.y);
 		setTextureRect(sf::IntRect(pos, size));
 	}
 }

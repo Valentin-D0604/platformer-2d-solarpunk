@@ -8,8 +8,8 @@ class StaticEntity;
 class PhysicsEntity : public Entity
 {
 public:	
-	float m_Mass;
-	sf::Vector2f m_GravityDirection;
+	float m_mass;
+	sf::Vector2f m_gravityDirection;
 
 	void SetMass(float _mass);
 	void SetGravityForce(float _gravityForce);
@@ -21,9 +21,9 @@ public:
 	virtual void OnCollision(Entity* _collidedWith) {};
 
 protected:
-	float m_GravityForce;
-	sf::Vector2f m_Velocity;
-	Collider* m_Collider;
+	float m_gravityForce;
+	sf::Vector2f m_velocity;
+	Collider* m_collider;
 	bool m_physicsCollision;
 
 private:

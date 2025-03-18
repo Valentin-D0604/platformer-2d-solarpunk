@@ -1,54 +1,60 @@
-#include "Bullet.h"
+#include "../Entity/Bullet.h"
 #include "../Collision/RectangleCollider.h"
 #include "../Scene/TestScene.h"
-#include "Player.h"
-#include "Mob1.h"
+#include "../Entity/Player.h"
+#include "../Entity/Mob1.h"
+#include "../Entity/Mob2.h"
+
 #include "../Graphics/Sprite.h"
 #include "../Managers/Managers.h"
+#include"../Utils/Utils.h"
+
 
 #include <iostream>
 
-void Bullet::InitBullet(sf::Vector2f position, sf::Vector2f direction,Entity* caster, bool state) {
-	std::cout << "m_lastDir: " << direction.x << ", " << direction.y << std::endl;
-	m_Caster = caster;
-	m_Pos = position;
-	m_Dir = direction;
-	m_OnTheGround = state;
-	SetPosition(position.x, position.y);
+void Bullet::InitBullet(sf::Vector2f _position, sf::Vector2f _direction,Entity* _caster) {
+	m_caster = _caster;
+	Utils::Normalize(_direction);
+	m_pos = _position;
+	m_dir = _direction;
+	SetPosition(_position.x, _position.y);
 }
 
 void Bullet::OnInitialize() {
-	m_Sprite = new Sprite();
-	m_Sprite->setTexture(*(GET_MANAGER(ResourceManager)->getTexture("test")));
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
-	m_Collider = new RectangleCollider(pos, size);
+	m_collider = new RectangleCollider(pos, size);
 	SetTag(TestScene::Tag::bullet);
 }
 
 void Bullet::OnUpdate() {
-	if (!m_OnTheGround) {
-		SetDirection(m_Dir.x, m_Dir.y, m_Speed);
-	}
-	else if (m_OnTheGround) {
-		SetMass(20);
-	}
+	m_changeDirection -= GetDeltaTime();
+	m_lifeTime -= GetDeltaTime();
+	SetDirection(m_dir.x, m_dir.y, 200);
 }
 
 void Bullet::OnCollision(Entity* other) {
+	Player* player = dynamic_cast<Player*>(other);
 	if (other->IsTag(TestScene::Tag::mob1)) {
 		Mob1* enemy = dynamic_cast<Mob1*>(other);
 		enemy->TakeDamage(1);
 	}
-	if (other->IsTag(TestScene::Tag::player)) {
-		Player* player = dynamic_cast<Player*>(other);
-		if (IsBulletOnGround()) player->AddBullet(1);
-		else if (other != m_Caster && !IsBulletOnGround()) player->TakeDamage(1);
+	if (other->IsTag(TestScene::Tag::mob2)) {
+		Mob2* enemy = dynamic_cast<Mob2*>(other);
+		if (enemy != m_caster) enemy->TakeDamage(1);
 	}
-	if(other != m_Caster)Destroy();
-}
-
-bool Bullet::IsBulletOnGround() {
-	return m_OnTheGround;
+	if (other->IsTag(TestScene::Tag::player)) {
+		if (other != m_caster && !player->IsParry()) player->TakeDamage(1); // playe take damage
+		else if (other != m_caster && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; } // player parry bullet
+	}
+	if (other != m_caster && !other->IsTag(TestScene::Tag::player)) {
+		Destroy();
+	}
+	if (other != m_caster && other->IsTag(TestScene::Tag::player)) {
+		if (other != m_caster && !player->IsParry()) Destroy();
+	}
+	if (m_lifeTime <= 0) Destroy();
 }

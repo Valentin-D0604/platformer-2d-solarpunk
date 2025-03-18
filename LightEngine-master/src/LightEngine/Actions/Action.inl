@@ -7,7 +7,7 @@
 template<typename T>
 Action<T>::~Action()
 {
-    for (auto it : mTransitions)
+    for (auto it : m_transitions)
     {
         delete it;
     }
@@ -17,7 +17,7 @@ template<typename T>
 Transition<T>* Action<T>::CreateTransition(int state)
 {
     Transition<T>* pTransition = new Transition<T>(state);
-    mTransitions.push_back(pTransition);
+    m_transitions.push_back(pTransition);
 
     return pTransition;
 }
@@ -27,7 +27,7 @@ int Action<T>::Update(T* pOwner)
 {
     OnUpdate(pOwner);
 
-    for (const auto& t : mTransitions)
+    for (const auto& t : m_transitions)
     {
         if (t->Try(pOwner))
         {

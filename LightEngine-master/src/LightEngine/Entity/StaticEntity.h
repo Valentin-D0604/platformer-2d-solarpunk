@@ -5,7 +5,7 @@
 class StaticEntity : public Entity
 {
 protected:
-	RectangleCollider* m_Collider;
+	RectangleCollider* m_collider;
 
 	virtual void OnInitialize() {};
 	virtual void OnCollision(Entity* _other) {};

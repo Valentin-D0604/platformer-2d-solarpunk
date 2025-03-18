@@ -1,0 +1,37 @@
+#pragma once
+#include "../Actions/Action.h"
+#include "../Entity/Mob2.h"
+
+class Mob2Action_Walking : public Action<Mob2>
+{
+	sf::Vector2f m_dir = { 1,0 };
+public:
+	void OnStart(Mob2* _player) override;
+	void OnUpdate(Mob2* _player) override;
+	void OnEnd(Mob2* _player) override;
+};
+
+class Mob2Action_Chasing : public Action<Mob2>
+{
+public:
+	void OnStart(Mob2* _player) override;
+	void OnUpdate(Mob2* _player) override;
+	void OnEnd(Mob2* _player) override;
+};
+
+class Mob2Action_Attacking : public Action<Mob2>
+{
+public:
+	void OnStart(Mob2* _player) override;
+	void OnUpdate(Mob2* _player) override;
+	void OnEnd(Mob2* _player) override;
+};
+
+class Mob2Action_Idle : public Action<Mob2>
+{
+public:
+	void OnStart(Mob2* _player) override;
+	void OnUpdate(Mob2* _player) override;
+	void OnEnd(Mob2* _player) override;
+};
+
