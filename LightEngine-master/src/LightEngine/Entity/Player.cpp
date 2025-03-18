@@ -309,7 +309,7 @@ void Player::OnUpdate() {
 	//if (!m_sideCollider.down) SetMass(100);
 	//else if(m_sideCollider.down)SetMass(0);
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
-	//std::cout << stateName << std::endl;
+	std::cout << stateName << std::endl;
 	std::string life = std::to_string(m_life);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);

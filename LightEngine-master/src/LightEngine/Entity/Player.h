@@ -57,13 +57,13 @@ class Player : public PhysicsEntity
 	State m_state = State::idle;
 	int mTransitions[STATE_COUNT][STATE_COUNT] =
 	{
-		// w,     j,      p ,    a,     d,     i,
-		{  0,     1,      1,     1,     1,     1}, // walking
-		{  1,     1,      1,     1,     0,     1}, // jumping
-		{  1,     1,      0,     0,     0,     1}, // parrying
-		{  1,     1,      0,     0,     0,     1}, // attacking
-		{  1,     1,      0,     0,     0,     1},  // dash
-		{  1,     1,      1,     1,     1,     0}  // idle
+		// w,     j,      p ,    a,     i,     d,
+		{  0,     1,      1,     1,     1,     0}, // walking
+		{  1,     1,      1,     1,     1,     0}, // jumping
+		{  1,     1,      0,     0,     1,     0}, // parrying
+		{  1,     1,      0,     0,     1,     0}, // attacking
+		{  1,     1,      1,     1,     0,     1}, // idle
+		{  1,     1,      0,     0,     1,     0}  // dash
 	};
 public:
 	void OnInitialize() override;
