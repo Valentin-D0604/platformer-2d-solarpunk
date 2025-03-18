@@ -19,7 +19,7 @@
 
 void TestScene::OnInitialize()
 {
-	
+
 	/*pEntity1 = CreateEntity<Player>();
 	pEntity1->SetPosition(300, 300);
 	pEntity1->SetMass(100);

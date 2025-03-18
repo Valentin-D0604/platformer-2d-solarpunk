@@ -9,7 +9,7 @@
 
 void Platform::OnInitialize() {
 	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("Test")));
 	sf::Vector2f size = sf::Vector2f(m_sprite->getTexture()->getSize());
 	sf::Vector2 pos = GetPosition();
 	SetTag(TestScene::Tag::platform);
