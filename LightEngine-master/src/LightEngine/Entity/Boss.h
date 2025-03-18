@@ -43,7 +43,6 @@ public:
 	bool IsGroundSmashing();
 	bool IsThrowing();
 
-
 private:
 	friend class BossAction_Sweeping;
 	friend class BossAction_GroundSmash;

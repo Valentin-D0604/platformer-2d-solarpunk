@@ -18,14 +18,16 @@
 
 void Hand::OnInitialize()
 {
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
+	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
+    m_collider = new RectangleCollider(pos, { 10,10 });
+
 	m_isVulnerable = false;
 	m_isSweeping = false;
 	m_isGroundSmashing = false;
 	m_isThrowing = false;
 }
-
-
-Hand::Hand(bool isLeft) : m_isLeft(isLeft) {}
 
 // Mise à jour des actions de la main
 void Hand::OnUpdate() {
@@ -122,7 +124,14 @@ bool Hand::IsTouchingGround() {
 
 // Animation Idle (légères oscillations)
 void Hand::Idle() {
+
+    if (m_sprite == nullptr) {
+        std::cerr << "Erreur: m_sprite est nullptr dans Hand::Idle()" << std::endl;
+        return;
+    }
+
     float amplitude = 10.0f; // Oscillation de 10 pixels
     float speed = 2.0f;      // Fréquence de l'oscillation
-    SetPosition(GetPosition().x, 400 + amplitude * sin(GetDeltaTime() * speed));
+    if (this != nullptr)
+        SetPosition(GetPosition().x, 400 + amplitude * sin(GetDeltaTime() * speed));
 }

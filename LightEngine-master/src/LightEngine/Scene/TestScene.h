@@ -20,7 +20,7 @@ public:
 	Mob1* monster;
 	Mob2* range;
 	Mob3* explode;
-	Boss* boss;
+	Boss* pBoss;
 
 	Platform* pPlatform;
 
@@ -32,10 +32,10 @@ public:
 		mob1,
 		mob2,
 		mob3,
+		boss,
 		PowerUp,
 		bullet,
-		platform
-
+		platform,
 	};
 
 	void OnInitialize() override;

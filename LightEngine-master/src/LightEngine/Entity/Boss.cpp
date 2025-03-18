@@ -1,11 +1,12 @@
 #include "Boss.h"
+#include "Player.h"
 
 #include "../Actions/BossAction.h"
 #include "../Conditions/BossCondition.h"
 #include "../Collision/RectangleCollider.h"
 
 #include "../Scene/TestScene.h"
-#include "../Entity/Player.h"
+
 #include "../Graphics/Sprite.h"
 
 #include "../Graphics/Debug.h"
@@ -14,6 +15,26 @@
 
 void Boss::OnInitialize()
 {
+	m_sprite = new Sprite();
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
+
+	SetTag(TestScene::Tag::boss);
+	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
+	m_pStateMachine = new StateMachine<Boss>(this, count);
+
+	m_left = GetScene()->CreateEntity<Hand>();
+	m_left->m_isLeft = true;
+
+	m_right = GetScene()->CreateEntity<Hand>();
+	m_right->m_isLeft = false;
+
+	m_left->SetOwner(this);
+	m_right->SetOwner(this);
+
+	if (m_left == nullptr || m_right == nullptr) {
+		std::cout << "Erreur : Mains non allouées correctement !" << std::endl;
+	}
+
 	//IDLE
 	{
 		Action<Boss>* pIdle = m_pStateMachine->CreateAction<BossAction_Idle>(BossActionType::idle);
@@ -64,14 +85,38 @@ void Boss::OnInitialize()
 		}
 	}
 
+	//STUNNED
+	{
+		Action<Boss>* pStunned = m_pStateMachine->CreateAction<BossAction_Stunned>(BossActionType::stunned);
+
+		{//idle
+			auto transition = pStunned->CreateTransition(BossActionType::idle);
+			auto condition = transition->AddCondition<BossCondition_IsIdle>();
+		}
+	}
+
 	m_pStateMachine->SetState(BossActionType::idle);
 }
 
 
 void Boss::Update() {
 	m_pStateMachine->Update();
-	m_left->OnUpdate();
-    m_right->OnUpdate();
+	
+	if (m_left != nullptr) {
+		m_left->OnUpdate();
+	}
+	else {
+		std::cout << " main gauche nullptr " << std::endl;
+	}
+
+	if (m_right != nullptr)
+	{
+		m_right->OnUpdate();
+	}
+	else
+	{
+		std::cout << " main droite nullptr " << std::endl;
+	}
 }
 
 void Boss::StartAttack(BossActionType action) {

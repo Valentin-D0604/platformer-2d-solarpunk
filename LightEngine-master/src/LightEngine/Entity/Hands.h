@@ -17,8 +17,6 @@ private:
     float m_timer = 0.0f;
 
 public:
-    
-    Hand(bool isLeft);
 
     void OnInitialize() override;
     void OnUpdate() override;
@@ -53,4 +51,7 @@ public:
     void RemoveArmor() { m_isVulnerable = false; }
 	
     Boss* GetOwner() { return m_owner; }
+
+private:
+	friend class Boss;
 };
