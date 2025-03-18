@@ -20,11 +20,13 @@ class SpriteSheet: public Sprite
 	int m_animationIndex;
 	int m_animationFrame;
 	float m_timer;
+	bool m_playing;
 	
 public:
 	SpriteSheet(Entity* _entity, std::string _path);
 	void AddAnimation(Animation* _animation);
 	void SetAnimation(int _index);
+	void SetPlaying(bool _playing);
 	std::string GetCurrentAnimationName();
 	virtual void Deserialize(const nlohmann::json& _json);
 	virtual void Update() override;

@@ -56,6 +56,7 @@ public:
     T* CreateEntity();
 
     virtual void OnAnimationEnd(int _animationIndex) {};
+    virtual void OnFrameChange(int _animationIndex, int _frame) {};
 
 protected:
     Entity() = default;

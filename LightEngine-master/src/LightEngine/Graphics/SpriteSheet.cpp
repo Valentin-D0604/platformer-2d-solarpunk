@@ -27,6 +27,8 @@ SpriteSheet::SpriteSheet(Entity* _entity, std::string _path)
 	setTexture(*(GET_MANAGER(ResourceManager)->GetTexture(_path)));
 
 	Deserialize(loadFromFile("../../../res/" + _path + ".json"));
+
+	m_playing = true;
 }
 
 void SpriteSheet::AddAnimation(Animation* _animation)
@@ -44,6 +46,13 @@ void SpriteSheet::SetAnimation(int _index)
 	sf::Vector2i pos = sf::Vector2i(m_animationFrame * m_animations[m_animationIndex]->m_size.x, m_animationIndex * m_animations[m_animationIndex]->m_size.y);
 	sf::Vector2i size = sf::Vector2i(m_animations[m_animationIndex]->m_size.x, m_animations[m_animationIndex]->m_size.y);
 	setTextureRect(sf::IntRect(pos, size));
+
+	m_playing = true;
+}
+
+void SpriteSheet::SetPlaying(bool _playing)
+{
+	m_playing = _playing;
 }
 
 std::string SpriteSheet::GetCurrentAnimationName()
@@ -70,6 +79,9 @@ void SpriteSheet::Deserialize(const nlohmann::json& _json)
 
 void SpriteSheet::Update()
 {
+	if (!m_playing)
+		return;
+
 	float dt = GET_MANAGER(GameManager)->GetDeltaTime();
 	m_timer += dt;
 	if (m_timer >= m_animations[m_animationIndex]->m_frameTime)
@@ -80,8 +92,12 @@ void SpriteSheet::Update()
 
 		if (m_animationFrame == 0 && !m_animations[m_animationIndex]->m_looping) // On animation end
 		{
+			m_playing = false;
 			m_entity->OnAnimationEnd(m_animationIndex);
+			return;
 		}
+
+		m_entity->OnFrameChange(m_animationIndex, m_animationFrame);
 		
 		sf::Vector2i pos = sf::Vector2i(m_animationFrame * m_animations[m_animationIndex]->m_size.x, m_animationIndex * m_animations[m_animationIndex]->m_size.y);
 		sf::Vector2i size = sf::Vector2i(m_animations[m_animationIndex]->m_size.x, m_animations[m_animationIndex]->m_size.y);
