@@ -11,7 +11,7 @@ class Player : public PhysicsEntity
 {
 	//--------moving---------
 	bool m_jumping = false;
-	bool m_dash = true;
+	bool m_dash = false;
 	int m_oldX, m_oldY;
 	//sf::Vector2f m_velocity;
 	float m_acceleration = 600.0f;
@@ -31,7 +31,7 @@ class Player : public PhysicsEntity
 	float m_shootCooldown = 2.f;
 	float m_dashCooldown = 2.f;
 	float m_dashDuration = 4.f;
-	float m_jumpCooldown = 1.f;
+	float m_jumpCooldown = 0.f;
 	float m_realoadTime = 2.f;
 	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------	

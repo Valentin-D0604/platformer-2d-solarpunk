@@ -115,6 +115,7 @@ void Mob2::OnUpdate()
 	if (m_life <= 0) { Destroy(); }
 
 	m_pStateMachine->Update();
+	Mob2CheckCollision();
 }
 
 void Mob2::OnDestroy()
@@ -166,16 +167,13 @@ void Mob2::ResetCollide() {
 	m_sideCollider.right = false;
 }
 
-void Mob2::PlayerCheckCollision() {
+void Mob2::Mob2CheckCollision() {
 	if (m_sideCollider.up) {
 		SetGravityForce(0);
 	}
 	if (m_sideCollider.down) {
 		SetGravityForce(0);
 		SetMass(0);
-	}
-	else {
-		SetMass(100);
 	}
 	if (m_sideCollider.left) {
 		m_Speed = 0;

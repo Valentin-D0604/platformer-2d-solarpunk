@@ -117,6 +117,7 @@ void Mob3::OnUpdate()
 	if (m_life <= 0) { Attack(); Destroy(); }
 
 	m_pStateMachine->Update();
+	Mob3CheckCollision();
 }
 
 void Mob3::OnDestroy()
@@ -180,21 +181,19 @@ void Mob3::ResetCollide() {
 	m_sideCollider.right = false;
 }
 
-void Mob3::PlayerCheckCollision() {
+void Mob3::Mob3CheckCollision() {
 	if (m_sideCollider.up) {
 		SetGravityForce(0);
 	}
 	if (m_sideCollider.down) {
-			SetGravityForce(-100);
-			SetMass(-100);
+			SetGravityForce(0);
+			SetMass(0);
 	}
 	else {
 		SetMass(100);
 	}
 	if (m_sideCollider.left) {
-		m_Speed = 0;
 	}
 	if (m_sideCollider.right) {
-		m_Speed = 0;
 	}
 }

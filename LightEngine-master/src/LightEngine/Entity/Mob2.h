@@ -31,7 +31,7 @@ public:
 	void OnDestroy() override;
 
 	void ResetCollide();
-	void PlayerCheckCollision();
+	void Mob2CheckCollision();
 
 	void Attack();
 	float GetDistanceToPlayer();

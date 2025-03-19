@@ -94,27 +94,26 @@ void Player::Jump()
 		SetMass(100);
 		SetGravityForce(-500);
 		m_jumpCount += 1;
-		m_jumpCooldown = 0.2f;
+		m_jumpCooldown = 0.5f;
 	}
 }
 
 void Player::Dash() {
 	if (m_dashCooldown <= 0 && !m_dash) {
 		m_dash = true;
-		m_dashDuration = 0.2f;
+		m_dashDuration = 0.3f;
 		m_dashCooldown = 1.5f; 
 
-		float dashSpeed = 12000.0f;
+		float dashSpeed = 1000.f;
 		m_friction = 0.0f; 
 		SetMass(0);
-
+		SetGravityForce(0);
 		if (m_lastDir.x != 0) {
 			m_Direction.x = m_lastDir.x;
 		}
 		else {
 			m_Direction.x = 1;
 		}
-
 		m_Speed = dashSpeed;
 	}
 }
@@ -223,7 +222,7 @@ void Player::HandleInput()
 			if (m_Speed < 0) m_Speed = 0;
 		}
 
-		if (m_Speed > MAX_SPEED) m_Speed = MAX_SPEED;
+		if (m_Speed > MAX_SPEED && !m_dash) m_Speed = MAX_SPEED;
 		if (m_Speed < 0) m_Speed = 0;
 		X = false;
 		R2 = false;
@@ -252,9 +251,8 @@ void Player::CheckPlayerStates()
 	}
 	if (m_dashDuration <= 0) {
 		m_dash = false;
-		m_friction = 400.f;  // Réactiver la friction
+		m_friction = 400.f;
 		m_dashDuration = 2.f;
-		//m_Speed *= 0.5f; // Réduire la vitesse pour éviter un mouvement excessif après le dash
 	}
 	if (GetPosition().y >= 2100) {
 		m_life -= 1;
@@ -313,7 +311,7 @@ void Player::OnUpdate() {
 	HandleInput();
 	PlayerMove();
 	m_pStateMachine->Update();
-
+	if (m_Parrying)std::cout << "parry" << std::endl;
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
 	std::string life = std::to_string(m_life);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);

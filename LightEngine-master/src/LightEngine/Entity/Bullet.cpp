@@ -34,14 +34,13 @@ void Bullet::OnInitialize() {
 void Bullet::OnUpdate() {
 	m_changeDirection -= GetDeltaTime();
 	m_lifeTime -= GetDeltaTime();
-	SetDirection(m_dir.x, m_dir.y, 500);
-	std::cout << GetPosition().x << " " << GetPosition().y << std::endl;
+	SetDirection(m_dir.x, m_dir.y, 200);
 	m_spawnTime -= GetDeltaTime();
 }
 
 void Bullet::OnDestroy()
 {
-	std::cout << " destroyed" << std::endl;
+
 }
 
 void Bullet::OnCollision(Entity* other) {
