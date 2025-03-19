@@ -9,7 +9,10 @@ class Boss;
 class Hand : public PhysicsEntity {
 private:
     Boss* m_owner;
-    bool m_isLeft;
+	bool m_isLeft;
+    int m_animationIndex;
+    float m_frameTimer;
+    const float FRAME_DURATION = 0.1f;
     bool m_isSweeping = false;
     bool m_isGroundSmashing = false;
     bool m_isThrowing = false;
@@ -33,6 +36,7 @@ public:
 	
     
     bool IsTouchingGround();
+    void PlayAnimation(const std::vector<sf::Vector2f>& positions);
 	bool IsSweeping() { return m_isSweeping; }
 	bool IsGroundSmashing() { return m_isGroundSmashing; }
 	bool IsThrowing() { return m_isThrowing; }
@@ -51,7 +55,12 @@ public:
     void RemoveArmor() { m_isVulnerable = false; }
 	
     Boss* GetOwner() { return m_owner; }
+    
+    std::vector<sf::Vector2f> idlePositions;
+    std::vector<sf::Vector2f> groundSmashPositions;
+    std::vector<sf::Vector2f> throwPositions;
+    std::vector<sf::Vector2f> sweepPositions;
 
 private:
-	friend class Boss;
+    friend class Boss;
 };
