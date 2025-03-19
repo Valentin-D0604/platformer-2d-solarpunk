@@ -8,6 +8,7 @@
 #include "../Entity/Player.h"
 #include "../Graphics/Sprite.h"
 #include "../Entity/Collectable.h"
+#include "../Entity/Platform.h"
 
 #include "../Graphics/Debug.h"
 #include "../Managers/Managers.h"
@@ -99,6 +100,11 @@ void Mob1::OnInitialize()
 void Mob1::OnCollision(Entity* _other)
 {
 	if (_other->IsTag(TestScene::Tag::mob1)) return;
+	if (_other->IsTag(TestScene::Tag::platform)) {
+		Platform* plat = dynamic_cast<Platform*>(_other);
+		Collider* collide = plat->GetCollider();
+		collide->GetSide(m_collider, m_sideCollider);
+	}
 }
 
 void Mob1::OnUpdate()
@@ -145,3 +151,28 @@ void Mob1::Attack()
 	m_shootCooldown = 2.f;
 }
 
+void Mob1::ResetCollide() {
+	m_sideCollider.down = false;
+	m_sideCollider.up = false;
+	m_sideCollider.left = false;
+	m_sideCollider.right = false;
+}
+
+void Mob1::PlayerCheckCollision() {
+	if (m_sideCollider.up) {
+		SetGravityForce(0);
+	}
+	if (m_sideCollider.down) {
+		SetGravityForce(0);
+		SetMass(0);
+	}
+	else {
+		SetMass(100);
+	}
+	if (m_sideCollider.left) {
+		m_Speed = 0;
+	}
+	if (m_sideCollider.right) {
+		m_Speed = 0;
+	}
+}

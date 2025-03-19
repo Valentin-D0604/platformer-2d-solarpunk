@@ -8,6 +8,7 @@
 #include "../Entity/Player.h"
 #include "../Graphics/Sprite.h"
 #include "../Entity/Collectable.h"
+#include "../Entity/Platform.h"
 
 #include "../Utils/Utils.h"
 
@@ -102,6 +103,11 @@ void Mob2::OnInitialize()
 void Mob2::OnCollision(Entity* _other)
 {
 	if (_other->IsTag(TestScene::Tag::mob2)) return;
+	if (_other->IsTag(TestScene::Tag::platform)) {
+		Platform* plat = dynamic_cast<Platform*>(_other);
+		Collider* collide = plat->GetCollider();
+		collide->GetSide(m_collider, m_sideCollider);
+	}
 }
 
 void Mob2::OnUpdate()
@@ -151,4 +157,30 @@ float Mob2::GetDistanceToPlayer()
 void Mob2::TakeDamage(int _damage) {
 	m_life -= _damage;
 	std::cout << m_life;
+}
+
+void Mob2::ResetCollide() {
+	m_sideCollider.down = false;
+	m_sideCollider.up = false;
+	m_sideCollider.left = false;
+	m_sideCollider.right = false;
+}
+
+void Mob2::PlayerCheckCollision() {
+	if (m_sideCollider.up) {
+		SetGravityForce(0);
+	}
+	if (m_sideCollider.down) {
+		SetGravityForce(0);
+		SetMass(0);
+	}
+	else {
+		SetMass(100);
+	}
+	if (m_sideCollider.left) {
+		m_Speed = 0;
+	}
+	if (m_sideCollider.right) {
+		m_Speed = 0;
+	}
 }

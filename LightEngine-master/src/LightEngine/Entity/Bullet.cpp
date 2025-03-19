@@ -34,20 +34,28 @@ void Bullet::OnInitialize() {
 void Bullet::OnUpdate() {
 	m_changeDirection -= GetDeltaTime();
 	m_lifeTime -= GetDeltaTime();
-	SetDirection(m_dir.x, m_dir.y, 200);
+	SetDirection(m_dir.x, m_dir.y, 500);
+	std::cout << GetPosition().x << " " << GetPosition().y << std::endl;
+	m_spawnTime -= GetDeltaTime();
+}
+
+void Bullet::OnDestroy()
+{
+	std::cout << " destroyed" << std::endl;
 }
 
 void Bullet::OnCollision(Entity* other) {
+	if (m_spawnTime > 0) { return; }
 	Player* player = dynamic_cast<Player*>(other);
-	if (other->IsTag(TestScene::Tag::mob1)) {
+	if (other->IsTag(TestScene::Tag::mob1) && !m_caster->IsTag(TestScene::Tag::mob1)) {
 		Mob1* enemy = dynamic_cast<Mob1*>(other);
-		enemy->TakeDamage(1);
+		if (enemy != m_caster) enemy->TakeDamage(1);
 	}
-	if (other->IsTag(TestScene::Tag::mob2)) {
+	if (other->IsTag(TestScene::Tag::mob2) && !m_caster->IsTag(TestScene::Tag::mob2)) {
 		Mob2* enemy = dynamic_cast<Mob2*>(other);
 		if (enemy != m_caster) enemy->TakeDamage(1);
 	}
-	if (other->IsTag(TestScene::Tag::mob3)) {
+	if (other->IsTag(TestScene::Tag::mob3) && !m_caster->IsTag(TestScene::Tag::mob3)) {
 		Mob3* enemy = dynamic_cast<Mob3*>(other);
 		if (enemy != m_caster) enemy->TakeDamage(1);
 	}
@@ -56,10 +64,15 @@ void Bullet::OnCollision(Entity* other) {
 		else if (other != m_caster && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; } // player parry bullet
 	}
 	if (other != m_caster && !other->IsTag(TestScene::Tag::player)) {
+		if (other->IsTag(TestScene::Tag::mob1) && m_caster->IsTag(TestScene::Tag::mob1)) return;
+		if (other->IsTag(TestScene::Tag::mob2) && m_caster->IsTag(TestScene::Tag::mob2)) return;
+		if (other->IsTag(TestScene::Tag::mob3) && m_caster->IsTag(TestScene::Tag::mob3)) return;
 		Destroy();
 	}
 	if (other != m_caster && other->IsTag(TestScene::Tag::player)) {
 		if (other != m_caster && !player->IsParry()) Destroy();
 	}
-	if (m_lifeTime <= 0) Destroy();
+	if (m_lifeTime <= 0) {
+		Destroy();
+	}
 }

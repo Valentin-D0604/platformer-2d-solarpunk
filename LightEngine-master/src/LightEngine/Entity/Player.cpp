@@ -45,7 +45,6 @@ void Player::OnInitialize() {
 	m_sprite = spriteSheet;
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
-	std::cout << " "<< spriteSheet->getTexture()->getSize().x << " " << spriteSheet->getTexture()->getSize().y << " ";
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos,  {102,96});
 	m_collider->SetGizmo(true);
@@ -99,20 +98,27 @@ void Player::Jump()
 	}
 }
 
-void Player::Dash()
-{
+void Player::Dash() {
 	if (m_dashCooldown <= 0 && !m_dash) {
 		m_dash = true;
-		m_dashDuration = 1.f; 
-		m_dashCooldown = 1.5f;
+		m_dashDuration = 0.2f;
+		m_dashCooldown = 1.5f; 
 
-		float dashSpeed = 15000.0f;
-		m_friction = 0.f;
+		float dashSpeed = 12000.0f;
+		m_friction = 0.0f; 
+		SetMass(0);
+
+		if (m_lastDir.x != 0) {
+			m_Direction.x = m_lastDir.x;
+		}
+		else {
+			m_Direction.x = 1;
+		}
 
 		m_Speed = dashSpeed;
-		m_Direction.x = (m_lastDir.x != 0) ? m_lastDir.x : 1;
 	}
 }
+
 
 const char* Player::GetStateName(State state) const
 {
@@ -157,7 +163,7 @@ void Player::DecreaseCD(float dt)
 	m_dashCooldown -= dt;
 	m_jumpCooldown -= dt;
 	m_realoadTime -= dt;
-	if (m_dash) { m_dashDuration -= dt; }
+	if (m_dash) { m_dashDuration -= dt;}
 }
 
 void Player::HandleInput()
@@ -241,19 +247,19 @@ void Player::CheckPlayerStates()
 		m_life = 0;
 		m_isAlive = false;
 	}
-	if (m_dashDuration <= 0) {
-		m_dashDuration = 1.f;
-	}
 	if (m_realoadTime <= 0 && m_ammo < 3) {
 		m_ammo += 1;
 	}
-	if (m_dash) {
-		m_dashDuration -= dt;
-		if (m_dashDuration <= 0) {
-			m_dash = false;
-			m_Speed *= 0.5f; 
-			m_friction = 400.f;
-		}
+	if (m_dashDuration <= 0) {
+		m_dash = false;
+		m_friction = 400.f;  // Réactiver la friction
+		m_dashDuration = 2.f;
+		//m_Speed *= 0.5f; // Réduire la vitesse pour éviter un mouvement excessif après le dash
+	}
+	if (GetPosition().y >= 2100) {
+		m_life -= 1;
+		SetPosition(m_oldX -200, m_oldY);
+		if (!m_sideCollider.down) SetPosition(GetPosition().x - 200, m_oldY);
 	}
 }
 
@@ -300,16 +306,15 @@ void Player::OnUpdate() {
 	if (!m_isAlive) return;
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
+
 	PlayerCheckCollision();
 	DecreaseCD(dt);
 	CheckPlayerStates();
 	HandleInput();
 	PlayerMove();
 	m_pStateMachine->Update();
-	//if (!m_sideCollider.down) SetMass(100);
-	//else if(m_sideCollider.down)SetMass(0);
+
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
-	std::cout << stateName << std::endl;
 	std::string life = std::to_string(m_life);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
@@ -326,16 +331,22 @@ void Player::ResetCollide() {
 void Player::PlayerCheckCollision() {
 	if (m_sideCollider.up) {
 		SetGravityForce(0);
-		//m_jumping = false;
-		//std::cout << "up" << std::endl;
 	}
 	if (m_sideCollider.down) {
-		SetGravityForce(0);
-		SetMass(0);
-		m_jumpCount = 0;
-		m_jumping = false;
+		m_oldX = GetPosition().x-50;
+		m_oldY = GetPosition().y;
+		if (m_trying >= 5) {
+			SetGravityForce(0);
+			SetMass(0);
+			m_jumpCount = 0;
+			m_jumping = false;
+			m_trying = 0;
+		}
+		else {
+			m_trying += 1;
+		}
 	}
-	else {
+	else if (!m_dash) {
 		SetMass(100);
 	}
 	if (m_sideCollider.left) {
