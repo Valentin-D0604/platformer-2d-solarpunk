@@ -185,8 +185,8 @@ void Mob3::PlayerCheckCollision() {
 		SetGravityForce(0);
 	}
 	if (m_sideCollider.down) {
-			SetGravityForce(0);
-			SetMass(0);
+			SetGravityForce(-100);
+			SetMass(-100);
 	}
 	else {
 		SetMass(100);
