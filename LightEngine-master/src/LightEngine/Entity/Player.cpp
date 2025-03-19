@@ -71,9 +71,11 @@ void Player::OnCollision(Entity* other)
 }
 
 void Player::parry() {
-	m_parryCooldown = 2.f;
-	m_Parrying = true;
-	std::cout << "going to parry !" << std::endl;
+	if (m_parryCooldown <= 0) {
+		m_parryCooldown = 4.f;
+		m_Parrying = true;
+		std::cout << "going to parry !" << std::endl;
+	}
 }
 
 void Player::Attack() {
@@ -251,6 +253,7 @@ void Player::CheckPlayerStates()
 	}
 	if (m_dashDuration <= 0) {
 		m_dash = false;
+		SetMass(100);
 		m_friction = 400.f;
 		m_dashDuration = 2.f;
 	}
@@ -311,7 +314,6 @@ void Player::OnUpdate() {
 	HandleInput();
 	PlayerMove();
 	m_pStateMachine->Update();
-	if (m_Parrying)std::cout << "parry" << std::endl;
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
 	std::string life = std::to_string(m_life);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
@@ -335,7 +337,6 @@ void Player::PlayerCheckCollision() {
 		m_oldY = GetPosition().y;
 		if (m_trying >= 5) {
 			SetGravityForce(0);
-			SetMass(0);
 			m_jumpCount = 0;
 			m_jumping = false;
 			m_trying = 0;
@@ -343,9 +344,6 @@ void Player::PlayerCheckCollision() {
 		else {
 			m_trying += 1;
 		}
-	}
-	else if (!m_dash) {
-		SetMass(100);
 	}
 	if (m_sideCollider.left) {
 		m_Speed = 0;

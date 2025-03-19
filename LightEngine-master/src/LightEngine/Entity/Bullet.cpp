@@ -60,12 +60,17 @@ void Bullet::OnCollision(Entity* other) {
 	}
 	if (other->IsTag(TestScene::Tag::player)) {
 		if (other != m_caster && !player->IsParry()) player->TakeDamage(1); // playe take damage
-		else if (other != m_caster && player->IsParry() && m_changeDirection <= 0) { m_dir = -m_dir; m_changeDirection = 1.f; m_caster = player; } // player parry bullet
+		else if (other != m_caster && player->IsParry() && m_changeDirection <= 0) {
+			m_dir = -m_dir;
+			m_changeDirection = 2.f;
+			m_caster = player;
+		}
 	}
-	if (other != m_caster && !other->IsTag(TestScene::Tag::player)) {
+	if (other != m_caster && !other->IsTag(TestScene::Tag::player)&& !other->IsTag(TestScene::Tag::platform) && !other->IsTag(TestScene::Tag::PowerUp)) {
+		if (other->IsTag(TestScene::Tag::player) && m_caster->IsTag(TestScene::Tag::player)) return;
 		if (other->IsTag(TestScene::Tag::mob1) && m_caster->IsTag(TestScene::Tag::mob1)) return;
 		if (other->IsTag(TestScene::Tag::mob2) && m_caster->IsTag(TestScene::Tag::mob2)) return;
-		if (other->IsTag(TestScene::Tag::mob3) && m_caster->IsTag(TestScene::Tag::mob3)) return;
+		if (other->IsTag(TestScene::Tag::mob3) && m_caster->IsTag(TestScene::Tag::platform)) return;
 		Destroy();
 	}
 	if (other != m_caster && other->IsTag(TestScene::Tag::player)) {

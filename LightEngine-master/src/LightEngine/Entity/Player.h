@@ -4,7 +4,7 @@
 #include "../Utils/StateMachine.h"
 
 #define MAX_SPEED 400
-#define PARRY_DURATION 10.f
+#define PARRY_DURATION 2.f
 
 
 class Player : public PhysicsEntity

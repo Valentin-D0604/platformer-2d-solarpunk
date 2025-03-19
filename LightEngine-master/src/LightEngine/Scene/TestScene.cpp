@@ -19,20 +19,24 @@
 
 void TestScene::OnInitialize()
 {
-	
+
 	LoadFromText();
 	pEntitySelected = nullptr;
 	CreateView();
 	SetCameraZoom(2);
-	if (m_firstCreation) {
-		if (pEntity1) pEntity1->Destroy();
-		//if (pEntity2) pEntity2->Destroy();
-		//if (range) range->Destroy();
-		//if (explode) explode->Destroy();
-		//if (monster) monster->Destroy();
-		LoadFromText();
-		m_firstCreation = false;
-	}
+	/*if (m_firstCreation) {
+
+		if (pEntity1) {
+			pEntity1->Destroy();
+			int posx = pEntity1->GetPosition().x;
+			int posy = pEntity1->GetPosition().y;
+			pEntity1 = CreateEntity<Player>();
+			pEntity1->SetPosition(posx, posy, 0.5f, 0.f);
+			pEntity1->SetMass(100);
+			pEntity1->SetGravityDirection(sf::Vector2f(0, 1));
+			m_firstCreation = false;
+		}
+	}*/
 }
 
 void TestScene::OnEvent(const sf::Event& event)
