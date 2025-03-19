@@ -26,6 +26,7 @@ public:
 
 	Entity* pEntitySelected;
 
+	bool m_firstCreation = true;
 	enum Tag
 	{
 		player,

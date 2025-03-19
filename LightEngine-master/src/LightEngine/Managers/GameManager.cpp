@@ -5,6 +5,7 @@
 #include "../Entity/StaticEntity.h"
 #include "../Graphics/Debug.h"
 #include "../Graphics/Sprite.h"
+#include "Managers.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -18,6 +19,7 @@ GameManager::GameManager()
 	mp_Scene = nullptr;
 	m_windowWidth = -1;
 	m_windowHeight = -1;
+	m_font = *(GET_MANAGER(ResourceManager)->GetFont("Hack-Regular"));
 }
 
 GameManager* GameManager::Get()

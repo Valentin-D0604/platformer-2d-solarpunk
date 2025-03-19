@@ -8,6 +8,7 @@
 #include "../Entity/Player.h"
 #include "../Graphics/Sprite.h"
 #include "../Entity/Collectable.h"
+#include "../Entity/Platform.h"
 
 #include "../Graphics/Debug.h"
 #include "../Managers/Managers.h"
@@ -20,9 +21,10 @@ void Mob1::OnInitialize()
 
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, {10,10});
+	m_collider = new RectangleCollider(pos, { 102,96 });
+	m_collider->SetGizmo(true);
 	m_pStateMachine = new StateMachine<Mob1>(this, State::Count);
-
+	m_physicsCollision = true;
 	//idle
 	{
 		Action<Mob1>* pIdle = m_pStateMachine->CreateAction<Mob1Action_Idle>(State::idle);
@@ -98,6 +100,11 @@ void Mob1::OnInitialize()
 void Mob1::OnCollision(Entity* _other)
 {
 	if (_other->IsTag(TestScene::Tag::mob1)) return;
+	if (_other->IsTag(TestScene::Tag::platform)) {
+		Platform* plat = dynamic_cast<Platform*>(_other);
+		Collider* collide = plat->GetCollider();
+		collide->GetSide(m_collider, m_sideCollider);
+	}
 }
 
 void Mob1::OnUpdate()
@@ -105,6 +112,7 @@ void Mob1::OnUpdate()
 	if (m_Life <= 0) { Destroy(); }
 
 	m_pStateMachine->Update();
+	Mob1CheckCollision();
 }
 
 void Mob1::OnDestroy()
@@ -138,8 +146,34 @@ void Mob1::Attack()
 	TestScene* scene = dynamic_cast<TestScene*>(GetScene());
 	Player* player = scene->GetPlayer();
 	if (player == nullptr) return;
-	player->TakeDamage(1);
+	if (!player->IsParry()) player->TakeDamage(1);
+	else (TakeDamage(1));
 	GoToPosition(GetPosition().x+m_Direction.x, GetPosition().y + m_Direction.y,200);
 	m_shootCooldown = 2.f;
 }
 
+void Mob1::ResetCollide() {
+	m_sideCollider.down = false;
+	m_sideCollider.up = false;
+	m_sideCollider.left = false;
+	m_sideCollider.right = false;
+}
+
+void Mob1::Mob1CheckCollision() {
+	if (m_sideCollider.up) {
+		SetGravityForce(0);
+	}
+	if (m_sideCollider.down) {
+		SetGravityForce(0);
+		SetMass(0);
+	}
+	else {
+		SetMass(100);
+	}
+	if (m_sideCollider.left) {
+		m_Speed = 0;
+	}
+	if (m_sideCollider.right) {
+		m_Speed = 0;
+	}
+}

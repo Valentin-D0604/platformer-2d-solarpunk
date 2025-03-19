@@ -8,6 +8,7 @@
 #include "../Entity/Player.h"
 #include "../Graphics/Sprite.h"
 #include "../Entity/Collectable.h"
+#include "../Entity/Platform.h"
 
 #include "../Utils/Utils.h"
 
@@ -19,12 +20,14 @@ void Mob2::OnInitialize()
 {
 	m_sprite = new Sprite();
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
-	m_sprite->setScale({ 0.25,0.25 });
+	m_sprite->setScale({ 1,1 });
 	SetTag(TestScene::Tag::mob2);
-	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, { 10,10 });
+	sf::Vector2f pos = GetPosition(0.5,0.5);
+	m_collider = new RectangleCollider(pos, { 102,96 });
 	m_pStateMachine = new StateMachine<Mob2>(this, State::Count);
 	m_collider->SetGizmo(true);
+
+	m_physicsCollision = true;
 	//idle
 	{
 		Action<Mob2>* pIdle = m_pStateMachine->CreateAction<Mob2Action_Idle>(State::idle);
@@ -100,6 +103,11 @@ void Mob2::OnInitialize()
 void Mob2::OnCollision(Entity* _other)
 {
 	if (_other->IsTag(TestScene::Tag::mob2)) return;
+	if (_other->IsTag(TestScene::Tag::platform)) {
+		Platform* plat = dynamic_cast<Platform*>(_other);
+		Collider* collide = plat->GetCollider();
+		collide->GetSide(m_collider, m_sideCollider);
+	}
 }
 
 void Mob2::OnUpdate()
@@ -107,6 +115,7 @@ void Mob2::OnUpdate()
 	if (m_life <= 0) { Destroy(); }
 
 	m_pStateMachine->Update();
+	Mob2CheckCollision();
 }
 
 void Mob2::OnDestroy()
@@ -149,4 +158,27 @@ float Mob2::GetDistanceToPlayer()
 void Mob2::TakeDamage(int _damage) {
 	m_life -= _damage;
 	std::cout << m_life;
+}
+
+void Mob2::ResetCollide() {
+	m_sideCollider.down = false;
+	m_sideCollider.up = false;
+	m_sideCollider.left = false;
+	m_sideCollider.right = false;
+}
+
+void Mob2::Mob2CheckCollision() {
+	if (m_sideCollider.up) {
+		SetGravityForce(0);
+	}
+	if (m_sideCollider.down) {
+		SetGravityForce(0);
+		SetMass(0);
+	}
+	if (m_sideCollider.left) {
+		m_Speed = 0;
+	}
+	if (m_sideCollider.right) {
+		m_Speed = 0;
+	}
 }

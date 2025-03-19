@@ -13,6 +13,6 @@ void Platform::OnInitialize() {
 	sf::Vector2f size = sf::Vector2f(m_sprite->getTexture()->getSize());
 	sf::Vector2 pos = GetPosition();
 	SetTag(TestScene::Tag::platform);
-	m_collider = new RectangleCollider({ pos.x, pos.y}, {200, 200});
+	m_collider = new RectangleCollider({ pos.x, pos.y}, {204, 192});
 	m_collider->SetGizmo(true);
 }
