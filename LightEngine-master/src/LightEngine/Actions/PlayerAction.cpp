@@ -43,7 +43,7 @@ void PlayerAction_jumping::OnEnd(Player* player) {
 void PlayerAction_Shooting::OnStart(Player* _player) {
 	if (_player->m_ammo > 0 && _player->m_shootCooldown <= 0) {
 		_player->Attack();
-		if (!_player->m_jumping && !_player->m_dash) dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("parry");
+		if (!_player->m_jumping && !_player->m_dash) dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("attack");
 	}
 }
 

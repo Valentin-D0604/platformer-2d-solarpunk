@@ -1,6 +1,6 @@
 #include "Mob1Condition.h"
 #define DETECTING_RANGE 300.f
-#define ATTACK_RANGE  50.f
+#define ATTACK_RANGE  100.f
 
 bool Mob1Condition_IsWalking::OnTest(Mob1* _owner)
 {
@@ -13,7 +13,7 @@ bool Mob1Condition_IsWalking::OnTest(Mob1* _owner)
 bool Mob1Condition_IsChasing::OnTest(Mob1* _owner)
 {
     float distance = _owner->GetDistanceToPlayer();
-    if (distance > ATTACK_RANGE && distance <= DETECTING_RANGE)return true;
+    if (distance > ATTACK_RANGE && distance <= DETECTING_RANGE && distance> 10)return true;
     return false;
 }
 

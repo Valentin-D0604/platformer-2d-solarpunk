@@ -16,12 +16,15 @@
 
 void Mob1::OnInitialize()
 {
-	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("Test")));
+	SpriteSheet* spriteSheet = new SpriteSheet(this, GET_MANAGER(ResourceManager)->GetSpriteSheet("mob1"));
+
+	spriteSheet->SetAnimation("walk");
+
+	m_sprite = spriteSheet;
 
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, { 102,96 });
+	m_collider = new RectangleCollider(pos, { 200,200 });
 	m_collider->SetGizmo(true);
 	m_pStateMachine = new StateMachine<Mob1>(this, State::Count);
 	m_physicsCollision = true;

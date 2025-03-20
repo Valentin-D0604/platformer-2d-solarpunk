@@ -28,32 +28,13 @@ void TestScene::OnInitialize()
 
 void TestScene::OnEvent(const sf::Event& event)
 {
-	if (event.type != sf::Event::EventType::MouseButtonPressed)
-		return;
-
-	if (event.mouseButton.button == sf::Mouse::Button::Right)
-	{
-	//	TrySetSelectedEntity(pEntity2, event.mouseButton.x, event.mouseButton.y);
-	}
-
-	if (event.mouseButton.button == sf::Mouse::Button::Left)
-	{
-		if (pEntitySelected != nullptr)
-		{
-			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
-		}
-	}
+	
 }
 
 void TestScene::OnUpdate()
 {
 	float fps = 1.f / GetDeltaTime();
 	std::cout << fps << std::endl;
-	if (pEntitySelected != nullptr)
-	{
-		sf::Vector2f position = pEntitySelected->GetPosition();
-		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
-	}
 	if (pEntity1->IsAlive()) SetCameraCenter(pEntity1->GetPosition());
 	else {
 		SetCameraCenter({ 0,0 });
@@ -94,7 +75,7 @@ void TestScene::LoadFromText()
 				case '%': {
 					monster = CreateEntity<Mob1>();
 					monster->SetPosition((i * 200), (j * 200));
-					monster->SetMass(100);
+					monster->SetMass(0);
 					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}

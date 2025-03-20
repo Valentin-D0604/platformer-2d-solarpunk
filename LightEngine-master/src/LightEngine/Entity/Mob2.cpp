@@ -19,8 +19,8 @@
 void Mob2::OnInitialize()
 {
 	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("Test")));
-	m_sprite->setScale({ 0.25,0.25 });
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("mob2_corps")));
+	//m_sprite->setScale({ 0.25,0.25 });
 	SetTag(TestScene::Tag::mob2);
 	sf::Vector2f pos = GetPosition(0.5,0.5);
 	m_collider = new RectangleCollider(pos, { 102,96 });
