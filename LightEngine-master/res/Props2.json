@@ -1,0 +1,17 @@
+{
+    "frame_size": {
+        "width": 200,
+        "height": 400
+    },
+    "structure": "grid",
+    "elements": {
+        "Wind_turbine": {
+            "x": 0,
+            "y": 0
+        },
+        "Mossy_turbine": {
+            "x": 200,
+            "y": 0
+        }
+    }
+}

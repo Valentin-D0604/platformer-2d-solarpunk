@@ -20,20 +20,11 @@
 
 void TestScene::OnInitialize()
 {
-	
+
 	LoadFromText();
 	pEntitySelected = nullptr;
 	CreateView();
 	SetCameraZoom(2);
-	if (m_firstCreation) {
-		if (pEntity1) pEntity1->Destroy();
-		//if (pEntity2) pEntity2->Destroy();
-		//if (range) range->Destroy();
-		//if (explode) explode->Destroy();
-		//if (monster) monster->Destroy();
-		LoadFromText();
-		m_firstCreation = false;
-	}
 }
 
 void TestScene::OnEvent(const sf::Event& event)

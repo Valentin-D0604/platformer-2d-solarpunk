@@ -17,7 +17,7 @@
 void Mob1::OnInitialize()
 {
 	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
+	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("Test")));
 
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
