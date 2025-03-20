@@ -25,8 +25,10 @@ protected:
 	sf::Vector2f m_velocity;
 	Collider* m_collider;
 	bool m_physicsCollision;
+	virtual void OnFixedUpdate() {};
 
 private:
+	virtual void FixedUpdate();
 	virtual void Update();
 	friend class GameManager;
 };

@@ -1,6 +1,11 @@
 #include "StaticEntity.h"
 #include "../Graphics/Sprite.h"
 
+void StaticEntity::FixedUpdate()
+{
+	
+}
+
 void StaticEntity::Update()
 {
 	float dt = GetDeltaTime();

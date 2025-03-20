@@ -34,7 +34,7 @@ public:
 	bool GoToDirection(int _x, int _y, float _speed = -1.f);
     bool GoToPosition(int _x, int _y, float _speed = -1.f);
     void SetPosition(float _x, float _y, float _ratioX = 0.5f, float _ratioY = 0.5f);
-    void Move(float _x, float _y);
+    virtual void Move(float _x, float _y);
 	void SetDirection(float _x, float _y, float _speed = -1.f);
 	void SetSpeed(float _speed) { m_Speed = _speed; }
 	void SetTag(int _tag) { m_Tag = _tag; }
@@ -69,9 +69,11 @@ protected:
 	
 private:
     virtual void Update();
+    virtual void FixedUpdate();
 	void Initialize();
 
     friend class GameManager;
+    friend class ResourceManager;
     friend Scene;
 };
 

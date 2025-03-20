@@ -31,6 +31,7 @@ class GameManager
 	Scene* mp_Scene;
 
 	float m_deltaTime;
+	float m_timeSinceFixed;
 
 	int m_windowWidth;
 	int m_windowHeight;
@@ -43,6 +44,8 @@ private:
 	void Run();
 	
 	void HandleInput();
+	void Clear();
+	void FixedUpdate();
 	void Update();
 	void Draw();
 

@@ -20,11 +20,11 @@
 
 void TestScene::OnInitialize()
 {
-
-	LoadFromText();
 	pEntitySelected = nullptr;
 	CreateView();
-	SetCameraZoom(2);
+	SetCameraZoom(1);
+
+	LoadFromText();
 }
 
 void TestScene::OnEvent(const sf::Event& event)
@@ -90,11 +90,11 @@ void TestScene::LoadFromText()
 					pEntity1->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
-				case '+': {
-					explode = CreateEntity<Mob3>();
-					explode->SetPosition((i * 204), (j * 192));
-					explode->SetMass(100);
-					explode->SetGravityDirection(sf::Vector2f(0, 1));
+				case '%': {
+					monster = CreateEntity<Mob1>();
+					monster->SetPosition((i * 204), (j * 192));
+					monster->SetMass(100);
+					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case 'O': {
@@ -104,11 +104,11 @@ void TestScene::LoadFromText()
 					range->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
-				case '%': {
-					monster = CreateEntity<Mob1>();
-					monster->SetPosition((i * 204), (j * 192));
-					monster->SetMass(100);
-					monster->SetGravityDirection(sf::Vector2f(0, 1));
+				case '+': {
+					explode = CreateEntity<Mob3>();
+					explode->SetPosition((i * 204), (j * 192));
+					explode->SetMass(100);
+					explode->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '$': {

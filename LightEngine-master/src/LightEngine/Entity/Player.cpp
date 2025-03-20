@@ -38,7 +38,7 @@
 void Player::OnInitialize() {
 	m_isAlive = true;
 	SetTag(TestScene::Tag::player);
-	SpriteSheet* spriteSheet = new SpriteSheet(this, "Player");
+	SpriteSheet* spriteSheet = new SpriteSheet(this, GET_MANAGER(ResourceManager)->GetSpriteSheet("Player"));
 	
 	spriteSheet->SetAnimation("idle");
 
@@ -55,7 +55,9 @@ void Player::OnInitialize() {
 	Action<Player>* pParrying = m_pStateMachine->CreateAction<PlayerAction_Parrying>(State::parrying);
 	Action<Player>* pAttacking = m_pStateMachine->CreateAction<PlayerAction_Shooting>(State::attacking);
 	Action<Player>* pDash = m_pStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
-	
+	Action<Player>* pFall = m_pStateMachine->CreateAction<PlayerAction_Falling>(State::falling);
+	Action<Player>* pLand = m_pStateMachine->CreateAction<PlayerAction_Landing>(State::land);
+
     m_pStateMachine->SetState(State::idle);
 }
 
@@ -67,6 +69,10 @@ void Player::OnCollision(Entity* other)
 		Collider* collide = plat->GetCollider();
 		collide->GetSide(m_collider, m_sideCollider);
 	}
+	std::cout << "Down: " << m_sideCollider.down;
+	std::cout << "Up: " << m_sideCollider.up;
+	std::cout << "Left: " << m_sideCollider.left;
+	std::cout << "Right: " << m_sideCollider.right << std::endl;
 }
 
 void Player::parry() {
@@ -130,6 +136,8 @@ const char* Player::GetStateName(State state) const
 	case parrying: return "parrying";
 	case attacking: return "attacking";
 	case dash: return "Dashing";
+	case falling: return "falling";
+	case land: return "landing";
 	default: return "Unknown";
 	}
 }
@@ -206,7 +214,7 @@ void Player::HandleInput()
 	 if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
 		CheckState(State::dash);
 	}
-	 if (joystickX < PositiveJoystickSensibility && joystickX > -PositiveJoystickSensibility && !X && !L2 && !R2 && !R1) {
+	 if (joystickX < PositiveJoystickSensibility && joystickX > -PositiveJoystickSensibility && !X && !L2 && !R2 && !R1 && m_state != land) {
 		 CheckState(State::idle);
 	 }
 	bool reversing = (inputX != 0 && inputX != m_Direction.x);
@@ -320,6 +328,20 @@ void Player::OnUpdate() {
 	ResetCollide();
 }
 
+void Player::OnAnimationEnd(const std::string& _animationIndex)
+{
+	if (_animationIndex == "jump")
+	{
+		CheckState(State::falling);
+	}
+
+	else if(_animationIndex == "land")
+	{ 
+		CheckState(State::idle);
+	}
+}
+	
+
 void Player::ResetCollide() {
 	m_sideCollider.down = false;
 	m_sideCollider.up = false;
@@ -334,15 +356,12 @@ void Player::PlayerCheckCollision() {
 	if (m_sideCollider.down) {
 		m_oldX = GetPosition().x-50;
 		m_oldY = GetPosition().y;
-		if (m_trying >= 5) {
-			SetGravityForce(0);
-			m_jumpCount = 0;
-			m_jumping = false;
-			m_trying = 0;
-		}
-		else {
-			m_trying += 1;
-		}
+		SetGravityForce(0);
+		m_jumpCount = 0;
+		m_jumping = false;
+	}
+	else if (!m_jumping && !m_sideCollider.down) {
+		CheckState(State::falling);
 	}
 	if (m_sideCollider.left) {
 		m_Speed = 0;
