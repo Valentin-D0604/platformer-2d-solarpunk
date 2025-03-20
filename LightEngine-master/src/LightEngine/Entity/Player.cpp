@@ -350,7 +350,7 @@ void Player::PlayerCheckCollision() {
 		SetGravityForce(0);
 	}
 	if (m_sideCollider.down) {
-		m_oldX = GetPosition().x-50;
+		m_oldX = GetPosition().x;
 		m_oldY = GetPosition().y;
 		SetGravityForce(0);
 		m_jumpCount = 0;
