@@ -102,6 +102,11 @@ void GameManager::HandleInput()
 	}
 }
 
+void GameManager::Clear()
+{
+
+}
+
 void GameManager::Update()
 {
 	mp_Scene->OnUpdate();
@@ -172,6 +177,11 @@ void GameManager::Update()
 
 void GameManager::FixedUpdate()
 {
+	for (auto it1 = m_entities.begin(); it1 != m_entities.end(); ++it1)
+	{
+		(*it1)->FixedUpdate();
+	}
+
 	for (auto it1 = m_physicsEntities.begin(); it1 != m_physicsEntities.end(); ++it1)
 	{
 		auto it2 = it1;
@@ -203,11 +213,6 @@ void GameManager::FixedUpdate()
 				otherEntity->OnCollision(entity);
 			}
 		}
-	}
-
-	for (auto it1 = m_physicsEntities.begin(); it1 != m_physicsEntities.end(); ++it1)
-	{
-		(*it1)->FixedUpdate();
 	}
 }
 

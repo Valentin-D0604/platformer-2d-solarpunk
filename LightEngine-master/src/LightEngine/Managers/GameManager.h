@@ -44,8 +44,9 @@ private:
 	void Run();
 	
 	void HandleInput();
-	void Update();
+	void Clear();
 	void FixedUpdate();
+	void Update();
 	void Draw();
 
 	void SetDeltaTime(float _deltaTime) { m_deltaTime = _deltaTime; }

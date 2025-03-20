@@ -95,6 +95,7 @@ void PhysicsEntity::Repulse(StaticEntity* _other)
 		{
 			Move(0, fromTop ? -minOverlapY : minOverlapY);
 		}
+		m_collider->SetPosition(GetPosition());
 	}
 }
 
