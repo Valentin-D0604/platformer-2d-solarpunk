@@ -1,34 +1,28 @@
 #include "BossCondition.h"
-#define DETECTING_RANGE 300.f
-#define ATTACK_RANGE  50.f
 
-bool BossCondition_IsSweeping::OnTest(Boss* _owner)
-{
-    float distance = _owner->GetDistanceToPlayer();
-    if (distance > DETECTING_RANGE) return true;
-    return false;
-}
-
-bool BossCondition_IsGroundSmashing::OnTest(Boss* _owner)
-{
-    float distance = _owner->GetDistanceToPlayer();
-    if (distance > ATTACK_RANGE && distance <= DETECTING_RANGE)return true;
-    return false;
-}
-
-bool BossCondition_IsThrowing::OnTest(Boss* _owner)
-{
-    float distance = _owner->GetDistanceToPlayer();
-    if (distance <= ATTACK_RANGE)return true;
-    return false;
-}
-
-bool BossCondition_IsIdle::OnTest(Boss* _owner)
-{
-	return true;
-}
-
-bool BossCondition_IsStunned::OnTest(Boss* _owner)
-{
-	return _owner->IsStunned();
-}
+//bool BossCondition_IsGroundSmashing::OnTest(Boss* _owner)
+//{
+//	return _owner->IsGroundSmashing();
+//}
+//
+//bool BossCondition_IsRetreating::OnTest(Boss* _owner)
+//{
+//	return _owner->IsRetreating();
+//}
+//
+//bool BossCondition_IsThrowing::OnTest(Boss* _owner)
+//{
+//	return _owner->IsThrowing();
+//}
+//
+//bool BossCondition_IsIdle::OnTest(Boss* _owner)
+//{
+//	bool toreturn = false;
+//	if (!_owner->IsGrabbingRock() || !_owner->IsGroundSmashing() || !_owner->IsRetreating() || !_owner->IsThrowing())	{toreturn = true;}
+//	return toreturn;
+//}
+//
+//bool BossCondition_IsGrabbingRock::OnTest(Boss* _owner)
+//{
+//	return _owner->IsGrabbingRock();
+//}

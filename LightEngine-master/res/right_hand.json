@@ -1,0 +1,16 @@
+{
+    "frame_size": { "width": 300, "height": 300 },
+    "structure":  "single",
+    "animations": {
+
+        "idle": { "frames": 10,  "frame_time": 0.2, "loop": true},
+
+        "slam": {  "frames": 10, "frame_time": 0.2, "loop": false},
+
+        "grab": { "frames": 10, "frame_time": 0.2,  "loop": false},
+
+        "throw": { "frames": 10, "frame_time": 0.2, "loop": false},
+
+        "retreat": { "frames": 10, "frame_time": 0.2, "loop": false}
+    }
+}

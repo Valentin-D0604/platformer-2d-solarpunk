@@ -2,41 +2,47 @@
 #include "Action.h"
 #include "../Entity/Boss.h"
 
-class BossAction_Sweeping : public Action<Boss>
+class BossAction_GroundSmash : public Action<Boss>
 {
-	sf::Vector2f _dir = { 1,0 };
+	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;
 	void OnEnd(Boss* _player) override;
 };
 
-class BossAction_GroundSmash : public Action<Boss>
+class BossAction_GrabRock : public Action<Boss>
 {
+	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;
 	void OnEnd(Boss* _player) override;
 };
+
 
 class BossAction_Throwing : public Action<Boss>
 {
+	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;
 	void OnEnd(Boss* _player) override;
 };
 
-class BossAction_Stunned : public Action<Boss>
+class BossAction_Retreat : public Action<Boss>
 {
+	bool createprojectil = false;
+	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;
 	void OnEnd(Boss* _player) override;
 };
-
 class BossAction_Idle : public Action<Boss>
 {
+	float m_idleTimer = 5.0f;
+	bool AttackType = 0;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;

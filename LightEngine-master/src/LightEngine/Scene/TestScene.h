@@ -9,17 +9,16 @@ class Mob2;
 class Mob3;
 
 class Platform;
+class Overlay;
 
 class TestScene : public Scene
 {
 public:
 
-	Player* pEntity1;
 	DummyEntity* pEntity2;
+	Player* m_player;
 
-	Platform* pPlatform;
-
-	Entity* pEntitySelected;
+	Overlay* m_overlay;
 
 	bool m_firstCreation = true;
 	enum Tag
@@ -28,6 +27,7 @@ public:
 		mob1,
 		mob2,
 		mob3,
+		boss,
 		PowerUp,
 		bullet,
 		platform

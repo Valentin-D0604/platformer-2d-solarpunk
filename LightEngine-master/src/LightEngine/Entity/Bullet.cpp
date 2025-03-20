@@ -5,6 +5,7 @@
 #include "../Entity/Mob1.h"
 #include "../Entity/Mob2.h"
 #include "../Entity/Mob3.h"
+#include "../Entity/Boss.h"
 
 #include "../Graphics/Sprite.h"
 #include "../Managers/Managers.h"
@@ -61,6 +62,7 @@ void Bullet::OnCollision(Entity* other) {
 		Mob3* enemy = dynamic_cast<Mob3*>(other);
 		if (enemy != m_caster) enemy->TakeDamage(1);
 	}
+
 	if (other->IsTag(TestScene::Tag::player)) {
 		if (other != m_caster && !player->IsParry()) player->TakeDamage(1); // playe take damage
 		else if (other != m_caster && player->IsParry() && m_changeDirection <= 0) {

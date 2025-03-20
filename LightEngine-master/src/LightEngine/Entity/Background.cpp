@@ -10,6 +10,8 @@ void Background::OnInitialize()
 
 void Background::OnUpdate()
 {
+	if (m_player->ToDestroy() || m_player == nullptr)
+		return;
 	sf::Vector2f pos = sf::Vector2f(0.8f * m_player->GetPosition().x, 0.95f * m_player->GetPosition().y) + m_basePos;
 	//sf::Vector2f pos = m_player->GetPosition();
 	SetPosition(pos.x, pos.y);

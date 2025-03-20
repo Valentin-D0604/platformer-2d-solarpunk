@@ -9,28 +9,31 @@ class Boss;
 class Hand : public PhysicsEntity {
 private:
     Boss* m_owner;
-	bool m_isVulnerable = false;
-    bool m_isSweeping = false;
-	bool m_isGroundSmashing = false;
-	bool m_isThrowing = false;
+	bool m_isLeft;
+    int m_animationIndex;
+    float m_frameTimer;
+    const float FRAME_DURATION = 0.1f;
+	bool timerisOn = false;
+    float m_timer = 0.0f;
 
 public:
-	void OnInitialize() override;
-	void OnUpdate() override;
-    void OnCollision(Entity* _collidedWith) override;
 
-	void Stun();
-    void PerformSweep();
-    void PerformGroundSmash();
-    void ThrowRock();
-    void RemoveArmor();
-    void SetVulnerable(bool _vulnerable);
+    void OnInitialize() override;
+	void PositionSettings(std::vector<sf::Vector2f> _idlePositions, std::vector<sf::Vector2f> _groundSmashPositions, std::vector<sf::Vector2f> _grabRockPosition, std::vector<sf::Vector2f> _throwPositions, std::vector<sf::Vector2f> _retreatPositions);
+    void OnUpdate() override;
+    void OnCollision(Entity* _collidedWith) override; 
+
+    void PlayAnimation(const std::vector<sf::Vector2f> positions);
+	
+    void SetOwner(Boss* _owner);
+    Boss* GetOwner() { return m_owner; }
     
-    bool IsSweeping() { return m_isSweeping; }
-	bool IsGroundSmashing() { return m_isGroundSmashing; }
-	bool IsThrowing() { return m_isThrowing; }
-	bool IsStunned() { return m_isVulnerable; }
+    std::vector<sf::Vector2f> idlePositions;
+    std::vector<sf::Vector2f> groundSmashPositions;
+    std::vector<sf::Vector2f> grabRockPosition;
+    std::vector<sf::Vector2f> throwPositions;
+	std::vector<sf::Vector2f> retreatPositions;
 
 private:
-	friend class Boss;
+    friend class Boss;
 };

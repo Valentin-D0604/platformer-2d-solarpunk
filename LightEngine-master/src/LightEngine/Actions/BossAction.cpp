@@ -1,174 +1,143 @@
 #include "BossAction.h"
 #include "../Scene/TestScene.h"
 #include "../Entity/Player.h"
+#include "../Managers/Managers.h"
 
-// ----------------------------------------- BALAYAGE DU TERRAIN -------------------------
-void BossAction_Sweeping::OnStart(Boss* _owner) {
-    // The boss hands start sweeping the terrain, setting an animation or state if needed
-	_owner->m_left->SetVulnerable(true);
-	_owner->m_right->SetVulnerable(true);
-	_owner->m_left->PerformSweep();
-	_owner->m_right->PerformSweep();
+
+// ----------------------------------------- IDLE -------------------------
+void BossAction_Idle::OnStart(Boss* _owner)
+{
+	m_idleTimer = 5.0f;
+	_owner->m_isIdle = true;
+	_owner->SetAnimation("idle");
 }
 
-void BossAction_Sweeping::OnUpdate(Boss* _owner) {
-    // Moves the boss hands in a sweeping motion from one side to the other
-	TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
-	Player* player = scene->GetPlayer();
-	
-	// If the player is hit by the boss hands, the player takes damage
-
-	if (_owner->m_left->IsColliding(player) || _owner->m_right->IsColliding(player)) {
-		player->TakeDamage(1);
+void BossAction_Idle::OnUpdate(Boss* _owner)
+{
+	m_idleTimer -= GET_MANAGER(GameManager)->GetDeltaTime();
+	if (_owner->GetPosition() != _owner->m_position)
+	{
+		_owner->GoToPosition(_owner->m_position.x, _owner->m_position.y, 0.1f);
 	}
-
-	// If the player parry the boss hands, the hand he parried is stunned and the other one go back to idle
-
-	if (player->IsParry() && _owner->m_left->IsColliding(player)) {
-		_owner->m_left->Stun();
-		_owner->StartAttack(BossActionType::idle);
-	}
-	else if (player->IsParry() && _owner->m_right->IsColliding(player)) {
-		_owner->m_right->Stun();
-		_owner->StartAttack(BossActionType::idle);
-	}
-
-	// If the boss hands have finished sweeping, the boss goes back to idle
-
-	if (_owner->m_left->IsSweeping() == false && _owner->m_right->IsSweeping() == false) {
-		_owner->StartAttack(BossActionType::idle);
+	if (m_idleTimer <= 0.0f)
+	{
+		if (AttackType == 0)
+		{
+			_owner->CheckState(BossActionType::groundSmash);
+			AttackType = 1;
+		}
+		else
+		{
+			_owner->CheckState(BossActionType::grabRock);
+			AttackType = 0;
+		}
 	}
 }
 
-void BossAction_Sweeping::OnEnd(Boss* _owner) {
-	// The boss hands stop sweeping the terrain
-	_owner->m_left->SetVulnerable(false);
-	_owner->m_right->SetVulnerable(false);
+void BossAction_Idle::OnEnd(Boss* _owner)
+{
 }
 
-// ----------------------------------------- FRAPPE AU SOL -------------------------
-void BossAction_GroundSmash::OnStart(Boss* _owner) {
-    // The boss hands prepare for the ground smash
-	_owner->m_left->SetVulnerable(true);
-	_owner->m_right->SetVulnerable(true);
-	_owner->m_left->PerformGroundSmash();
-	_owner->m_right->PerformGroundSmash();
+// ----------------------------------------- GroundSmash -------------------------
+void BossAction_GroundSmash::OnStart(Boss* _owner)
+{
+	m_Timer = 4.0f;
+	_owner->m_isGroundSmashing = true;
+	_owner->SetAnimation("slam");
 }
 
-void BossAction_GroundSmash::OnUpdate(Boss* _owner) {
-    // Hands slam the ground, creating a delay after impact
-	TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
-	Player* player = scene->GetPlayer();
-	
-	// If the player is hit by the boss hands, the player takes damage
+void BossAction_GroundSmash::OnUpdate(Boss* _owner) 
+{
+	m_Timer -= GET_MANAGER(GameManager)->GetDeltaTime();
 
-	if (_owner->m_left->IsColliding(player) || _owner->m_right->IsColliding(player)) {
-		player->TakeDamage(1);
-	}
+}
 
-	// If the player parry the boss hands, the hand he parried is stunned and the other one go back to idle
+void BossAction_GroundSmash::OnEnd(Boss* _owner) 
+{
 
-	if (player->IsParry() && _owner->m_left->IsColliding(player)) {
-		_owner->m_left->Stun();
-		_owner->StartAttack(BossActionType::idle);
-	}
-	
-	else if (player->IsParry() && _owner->m_right->IsColliding(player)) {
-		_owner->m_right->Stun();
-		_owner->StartAttack(BossActionType::idle);
-	}
+}
 
-	// If the boss hands have finished slamming the ground, the boss goes back to idle
+// ----------------------------------------- GRAB ROCK -------------------------
+void BossAction_GrabRock::OnStart(Boss* _player)
+{
+	m_Timer = 4.0f;
+	_player->m_GrabRock = true;
+	_player->SetAnimation("grab");
+}
 
-	if (_owner->m_left->IsGroundSmashing() == false && _owner->m_right->IsGroundSmashing() == false) {
-		_owner->StartAttack(BossActionType::idle);
+void BossAction_GrabRock::OnUpdate(Boss* _player)
+{
+	m_Timer -= GET_MANAGER(GameManager)->GetDeltaTime();
+	if (m_Timer <= 0.0f)
+	{
+		_player->CheckState(BossActionType::throwRock);
+		_player->m_GrabRock = false;
+
 	}
 }
 
-void BossAction_GroundSmash::OnEnd(Boss* _owner) {
-	// The boss hands stop the ground smash and go back to idle
-	_owner->m_left->SetVulnerable(false);
-	_owner->m_right->SetVulnerable(false);
+void BossAction_GrabRock::OnEnd(Boss* _player)
+{
+
 }
 
 // ----------------------------------------- LANCEMENT DE PROJECTILES -------------------------
-void BossAction_Throwing::OnStart(Boss* _owner) {
-	// one of the boss hand prepare to throw a projectile at the player
-	_owner->m_left->SetVulnerable(true);
-	_owner->m_right->SetVulnerable(true);
-	_owner->m_left->ThrowRock();
-
+void BossAction_Throwing::OnStart(Boss* _owner) 
+{
+	m_Timer = 4.0f;
+	_owner->m_isThrowing = true;
+	_owner->SetAnimation("throw");
 }
 
-void BossAction_Throwing::OnUpdate(Boss* _owner) {
-    TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
-    Player* player = scene->GetPlayer();
-
-	// If the player is hit by the boss hands, the player takes damage
-	if (_owner->m_left->IsColliding(player) || _owner->m_right->IsColliding(player)) {
-		player->TakeDamage(1);
-	}
-
-	// If the boss hands throw a projectile, but the player parry it, the projectile go hit the boss and stunns him
-	if (player->IsParry() && _owner->m_left->IsThrowing() && _owner->m_left->IsColliding(player)) {
-		_owner->Stun();
-	}
-
-	// If the boss hands have finished throwing the projectile, the boss goes back to idle
-
-	if (_owner->m_left->IsThrowing() == false && _owner->m_right->IsThrowing() == false) {
-		_owner->StartAttack(BossActionType::idle);
-	}
-
-}
-
-void BossAction_Throwing::OnEnd(Boss* _owner) {
-	// The boss hands stop throwing the projectile
-	_owner->m_left->SetVulnerable(false);
-	_owner->m_right->SetVulnerable(false);
-}
-
-// ----------------------------------------- STUN STATE -------------------------
-void BossAction_Stunned::OnStart(Boss* _owner) {
-	// The boss is stunned, setting an animation or state if needed
-	_owner->m_isStunned = true;
-}
-
-void BossAction_Stunned::OnUpdate(Boss* _owner) {
-	// The boss is stunned, waiting for the stun to end
-	TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
-	Player* player = scene->GetPlayer();
-
-	// If the player is hit by the boss hands, the player takes damage
-	if (_owner->m_left->IsColliding(player) || _owner->m_right->IsColliding(player)) {
-		player->TakeDamage(1);
-	}
-
-	// If the player parry the boss hands, the hand he parried is stunned and the other one go back to idle
-	if (player->IsParry() && _owner->m_left->IsColliding(player)) {
-		_owner->m_left->Stun();
-		_owner->StartAttack(BossActionType::idle);
-	}
-	else if (player->IsParry() && _owner->m_right->IsColliding(player)) {
-		_owner->m_right->Stun();
-		_owner->StartAttack(BossActionType::idle);
-	}
-
-	// If the boss hands have finished being stunned, the boss goes back to idle
-
-	if (_owner->m_left->IsStunned() == false && _owner->m_right->IsStunned() == false) {
-		_owner->StartAttack(BossActionType::idle);
+void BossAction_Throwing::OnUpdate(Boss* _owner) 
+{
+	m_Timer -= GET_MANAGER(GameManager)->GetDeltaTime();
+	if (m_Timer <= 0.0f)
+	{
+		_owner->CheckState(BossActionType::retreat);
 	}
 }
 
-void BossAction_Stunned::OnEnd(Boss* _owner) {
-	// The boss is no longer stunned
-	_owner->m_isStunned = false;
+void BossAction_Throwing::OnEnd(Boss* _owner) 
+{
+
 }
+//------------------------------------------RETRAIT --------------------------------
+void BossAction_Retreat::OnStart(Boss* _owner)
+{
+	m_Timer = 4.0f;
+	_owner->m_isRetreating = true;
+	_owner->SetAnimation("retreat");
+}
+void BossAction_Retreat::OnUpdate(Boss* _owner) 
+{
+	m_Timer -= GET_MANAGER(GameManager)->GetDeltaTime();
+	if (m_Timer <= 2.0f)
+	{
+		if (!createprojectil)
+		{
+			Bullet* bullet = _owner->CreateEntity<Bullet>();
+			bullet->SetDirection(0, 1, 9.f);
+			bullet->InitBullet(_owner->GetPosition(), {0, 1},_owner);
+			bullet->SetMass(1);
+			bullet->SetGravityDirection(sf::Vector2f(0, 1));
+			//over the players head
+			Player* player = dynamic_cast<TestScene*>(_owner->GetScene())->GetPlayer();
+			sf::Vector2f playerPos = player->GetPosition();
+			bullet->SetPosition(playerPos.x,playerPos.y-500);
+			createprojectil = true;
+		}
 
-// ----------------------------------------- IDLE -------------------------
-void BossAction_Idle::OnStart(Boss* _owner) {}
+	}
 
-void BossAction_Idle::OnUpdate(Boss* _owner) {}
+	if (m_Timer <= 0.0f)
+	{
+		_owner->CheckState(BossActionType::idle);
+		createprojectil = false;
+	}
 
-void BossAction_Idle::OnEnd(Boss* _owner) {}
+}
+void BossAction_Retreat::OnEnd(Boss* _owner)
+{
+
+}
