@@ -53,6 +53,7 @@ class Player : public PhysicsEntity
 		attacking,
 		idle,
 		dash,
+		falling,
 
 		Count
 	};
@@ -60,18 +61,20 @@ class Player : public PhysicsEntity
 	State m_state = State::idle;
 	int mTransitions[STATE_COUNT][STATE_COUNT] =
 	{
-		// w,     j,      p ,    a,     i,     d,
-		{  0,     1,      1,     1,     1,     1}, // walking
-		{  1,     1,      1,     1,     1,     1}, // jumping
-		{  1,     1,      0,     0,     1,     0}, // parrying
-		{  1,     1,      0,     0,     1,     0}, // attacking
-		{  1,     1,      1,     1,     0,     1}, // idle
-		{  1,     1,      0,     0,     1,     0}  // dash
+		// w,     j,      p ,    a,     i,     d,   f
+		{  0,     1,      1,     1,     1,     1,	0}, // walking
+		{  1,     1,      1,     1,     0,     1,	1}, // jumping
+		{  1,     1,      0,     0,     1,     0,	0}, // parrying
+		{  1,     1,      0,     0,     1,     0,	0}, // attacking
+		{  1,     1,      1,     1,     0,     1,	1}, // idle
+		{  1,     1,      0,     0,     1,     0,	0},  // dash
+		{  0,     1,      0,     0,     0,     0,	0}  // falling
 	};
 public:
 	void OnInitialize() override;
 	void OnCollision(Entity* _other) override;
 	void OnUpdate() override;
+	virtual void OnAnimationEnd(const std::string& _animationIndex) override;
 
 	void ResetCollide();
 	void PlayerCheckCollision();
@@ -98,6 +101,7 @@ protected:
 	friend class PlayerAction_Parrying;
 	friend class PlayerAction_Idle;
 	friend class PlayerAction_Dash;
+	friend class PlayerAction_Falling;
 };
 
 

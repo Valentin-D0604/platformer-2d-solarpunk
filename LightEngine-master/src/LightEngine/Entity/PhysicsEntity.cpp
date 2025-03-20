@@ -21,7 +21,7 @@ void PhysicsEntity::Update()
 
 	m_velocity = distance * m_Direction; // Character Input movement
 	m_velocity += m_gravityDirection * m_gravityForce * GetDeltaTime(); // Gravity
-	
+
 	sf::Vector2f translation = m_velocity;
 	m_sprite->move(translation);
 
@@ -29,9 +29,9 @@ void PhysicsEntity::Update()
 
 	m_collider->SetPosition(GetPosition());
 
-	OnUpdate();
-
 	m_collider->Update();
+
+	OnUpdate();
 }
 
 void PhysicsEntity::SetMass(float _mass)
@@ -88,6 +88,7 @@ void PhysicsEntity::Repulse(StaticEntity* _other)
 		{
 			Move(0, fromTop ? -minOverlapY : minOverlapY);
 		}
+		m_collider->SetPosition(GetPosition());
 	}
 }
 

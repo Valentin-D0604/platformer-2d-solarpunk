@@ -55,7 +55,7 @@ void Player::OnInitialize() {
 	Action<Player>* pParrying = m_pStateMachine->CreateAction<PlayerAction_Parrying>(State::parrying);
 	Action<Player>* pAttacking = m_pStateMachine->CreateAction<PlayerAction_Shooting>(State::attacking);
 	Action<Player>* pDash = m_pStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
-	
+	Action<Player>* pFall = m_pStateMachine->CreateAction<PlayerAction_Falling>(State::falling);
     m_pStateMachine->SetState(State::idle);
 }
 
@@ -96,6 +96,7 @@ void Player::Jump()
 		SetGravityForce(-500);
 		m_jumpCount += 1;
 		m_jumpCooldown = 0.5f;
+		OnAnimationEnd("jump");
 	}
 }
 
@@ -320,6 +321,11 @@ void Player::OnUpdate() {
 	ResetCollide();
 }
 
+void Player::OnAnimationEnd(const std::string& _animationIndex)
+{
+	CheckState(State::walking);
+}
+
 void Player::ResetCollide() {
 	m_sideCollider.down = false;
 	m_sideCollider.up = false;
@@ -343,6 +349,9 @@ void Player::PlayerCheckCollision() {
 		else {
 			m_trying += 1;
 		}
+	}
+	else if (!m_jumping) {
+		CheckState(State::falling);
 	}
 	if (m_sideCollider.left) {
 		m_Speed = 0;
