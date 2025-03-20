@@ -19,3 +19,18 @@ inline T* Scene::CreateEntity()
 
 	return newEntity;
 }
+
+template<typename T>
+inline T* Scene::CreateBackgroundEntity()
+{
+	static_assert(std::is_base_of<Entity, T>::value, "T must be derived from Entity");
+
+	T* newEntity = new T();
+
+	Entity* entity = newEntity;
+	entity->Initialize();
+
+	mp_GameManager->m_entitiesToAdd.push_front(newEntity);
+
+	return newEntity;
+}
