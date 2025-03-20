@@ -35,7 +35,7 @@ void Hand::PositionSettings(std::vector<sf::Vector2f> _idlePositions, std::vecto
 
 void Hand::OnUpdate() {
 	BossActionType Type = GetOwner()->GetCurrentAction();
-
+	SpriteSheet* spriteSheet = dynamic_cast<SpriteSheet*>(m_sprite);
     if (timerisOn)
     {
         m_timer -= GetDeltaTime();
@@ -44,30 +44,6 @@ void Hand::OnUpdate() {
 			timerisOn = false;
 			m_timer = 4.0f;
 		}
-    }
-
-    if (Type == BossActionType::groundSmash) {
-        dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("slam");
-        PlayAnimation(groundSmashPositions);
-    }
-    else if (Type == BossActionType::grabRock) {
-        dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("grab");
-        PlayAnimation(grabRockPosition);
-	}
-	else if (Type == BossActionType::throwRock) {
-		dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("throw");
-		PlayAnimation(throwPositions);
-	}
-	else if (Type == BossActionType::retreat) {
-		dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("retreat");
-		PlayAnimation(retreatPositions);
-	}
-    else 
-    {
-		std::cout << GetPosition().x << " " << GetPosition().y << std::endl;
-		std::cout << "hand side :" << m_isLeft << std::endl;
-		dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("idle");
-		PlayAnimation(idlePositions);
     }
 }
 
@@ -103,9 +79,9 @@ void Hand::PlayAnimation(const std::vector<sf::Vector2f> positions) {
             m_animationIndex = 0; // Boucle sur l'animation
         }
     }
-
-    SetPosition(positions[m_animationIndex].x + GetOwner()->GetPosition().x, positions[m_animationIndex].y + GetOwner()->GetPosition().y);
-	std::cout << positions[m_animationIndex].x + GetOwner()->GetPosition().x << std::endl;
+	sf::Vector2f position = GetOwner()->GetPosition(0,0);
+    SetPosition(positions[m_animationIndex].x + position.x, positions[m_animationIndex].y + position.y);
+	std::cout << positions[m_animationIndex].x + position.x << std::endl;
 }
 
 void Hand::SetOwner(Boss* _owner)
@@ -125,7 +101,6 @@ void Hand::SetOwner(Boss* _owner)
         dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("idle");
         SetPosition(GetPosition().x + 411, GetPosition().y + 302);
     }
-    sf::Vector2f size = sf::Vector2f(m_sprite->getTexture()->getSize());
-    m_collider = new RectangleCollider(GetPosition(), size);
+    m_collider = new RectangleCollider(GetPosition(), { 100, 100 });
     m_collider->SetGizmo(true);
 }

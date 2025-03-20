@@ -10,6 +10,7 @@
 #include "../Entity/Mob1.h"
 #include "../Entity/Mob2.h"
 #include "../Entity/Mob3.h"
+#include "../Entity/Boss.h"
 #include "../Entity/Platform.h"
 #include "../Entity/Background.h"
 #include "../Entity/Overlay.h"
@@ -58,7 +59,7 @@ void TestScene::Destroy()
 void TestScene::LoadFromText()
 {
 	int j = 0;
-	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\edit.txt", std::ios::in | std::ios::out);
+	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\ppppp.txt", std::ios::in | std::ios::out);
 	if (fichier)
 	{
 		std::string contenu;
@@ -265,6 +266,11 @@ void TestScene::LoadFromText()
 					pPlatform->SetTexture("Props1", "box");
 					pPlatform->GetSprite()->setScale(0.75, 0.75);
 					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '*': {
+					Boss* boss = CreateEntity<Boss>();
+					boss->SetPosition((i * 200), (j * 200),0.5,0.5);
 					break;
 				}
 				default:

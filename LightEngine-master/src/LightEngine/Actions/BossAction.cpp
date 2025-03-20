@@ -9,7 +9,7 @@ void BossAction_Idle::OnStart(Boss* _owner)
 {
 	m_idleTimer = 5.0f;
 	_owner->m_isIdle = true;
-	dynamic_cast<SpriteSheet*>(_owner->m_sprite)->SetAnimation("idle");
+	_owner->SetAnimation("idle");
 }
 
 void BossAction_Idle::OnUpdate(Boss* _owner)
@@ -43,15 +43,13 @@ void BossAction_GroundSmash::OnStart(Boss* _owner)
 {
 	m_Timer = 4.0f;
 	_owner->m_isGroundSmashing = true;
+	_owner->SetAnimation("slam");
 }
 
 void BossAction_GroundSmash::OnUpdate(Boss* _owner) 
 {
 	m_Timer -= GET_MANAGER(GameManager)->GetDeltaTime();
-	if (m_Timer <= 0.0f)
-	{
-		_owner->StartAttack(BossActionType::idle);
-	}
+
 }
 
 void BossAction_GroundSmash::OnEnd(Boss* _owner) 
@@ -64,6 +62,7 @@ void BossAction_GrabRock::OnStart(Boss* _player)
 {
 	m_Timer = 4.0f;
 	_player->m_GrabRock = true;
+	_player->SetAnimation("grab");
 }
 
 void BossAction_GrabRock::OnUpdate(Boss* _player)
@@ -71,7 +70,9 @@ void BossAction_GrabRock::OnUpdate(Boss* _player)
 	m_Timer -= GET_MANAGER(GameManager)->GetDeltaTime();
 	if (m_Timer <= 0.0f)
 	{
-		_player->StartAttack(BossActionType::throwRock);
+		_player->CheckState(BossActionType::throwRock);
+		_player->m_GrabRock = false;
+
 	}
 }
 
@@ -85,6 +86,7 @@ void BossAction_Throwing::OnStart(Boss* _owner)
 {
 	m_Timer = 4.0f;
 	_owner->m_isThrowing = true;
+	_owner->SetAnimation("throw");
 }
 
 void BossAction_Throwing::OnUpdate(Boss* _owner) 
@@ -92,7 +94,7 @@ void BossAction_Throwing::OnUpdate(Boss* _owner)
 	m_Timer -= GET_MANAGER(GameManager)->GetDeltaTime();
 	if (m_Timer <= 0.0f)
 	{
-		_owner->StartAttack(BossActionType::retreat);
+		_owner->CheckState(BossActionType::retreat);
 	}
 }
 
@@ -105,16 +107,33 @@ void BossAction_Retreat::OnStart(Boss* _owner)
 {
 	m_Timer = 4.0f;
 	_owner->m_isRetreating = true;
+	_owner->SetAnimation("retreat");
 }
 void BossAction_Retreat::OnUpdate(Boss* _owner) 
 {
-	//Bullet* bullet new Bullet();
+	m_Timer -= GET_MANAGER(GameManager)->GetDeltaTime();
+	if (m_Timer <= 2.0f)
+	{
+		if (!createprojectil)
+		{
+			Bullet* bullet = _owner->CreateEntity<Bullet>();
+			bullet->SetDirection(0, 1, 9.f);
+			bullet->InitBullet(_owner->GetPosition(), {0, 1},_owner);
+			bullet->SetMass(1);
+			bullet->SetGravityDirection(sf::Vector2f(0, 1));
+			//over the players head
+			Player* player = dynamic_cast<TestScene*>(_owner->GetScene())->GetPlayer();
+			sf::Vector2f playerPos = player->GetPosition();
+			bullet->SetPosition(playerPos.x,playerPos.y-500);
+			createprojectil = true;
+		}
 
-	//bullet->SetPosition()
-	_owner->m_left->GoToPosition(0, 0);
-	_owner->m_right->GoToPosition(0, 0);
-	if (_owner->m_left->GetPosition().x == 0 && _owner->m_left->GetPosition().y == 0) {
-		_owner->StartAttack(BossActionType::idle);
+	}
+
+	if (m_Timer <= 0.0f)
+	{
+		_owner->CheckState(BossActionType::idle);
+		createprojectil = false;
 	}
 
 }

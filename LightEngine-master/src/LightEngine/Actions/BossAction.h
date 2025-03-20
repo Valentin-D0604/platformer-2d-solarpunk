@@ -32,6 +32,7 @@ public:
 
 class BossAction_Retreat : public Action<Boss>
 {
+	bool createprojectil = false;
 	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
