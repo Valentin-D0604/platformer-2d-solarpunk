@@ -2,6 +2,7 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <string>
 
 namespace sf 
 {
@@ -55,8 +56,8 @@ public:
     template<typename T>
     T* CreateEntity();
 
-    virtual void OnAnimationEnd(int _animationIndex) {};
-    virtual void OnFrameChange(int _animationIndex, int _frame) {};
+    virtual void OnAnimationEnd(const std::string& _animationIndex) {};
+    virtual void OnFrameChange(const std::string& _animationIndex, int _frame) {};
 
 protected:
     Entity() = default;
