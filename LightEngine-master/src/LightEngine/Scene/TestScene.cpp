@@ -84,31 +84,35 @@ void TestScene::LoadFromText()
 				{
 				case 'P': {
 					pEntity1 = CreateEntity<Player>();
-					pEntity1->SetPosition((i*200), (j*200), 0.5f, 0.f);
+					pEntity1->SetPosition((i*204), (j*192), 0.5f, 0.f);
 					pEntity1->SetMass(100);
 					pEntity1->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '+': {
-					pEntity2 = CreateEntity<DummyEntity>();
-					pEntity2->SetPosition((i * 200), (j * 200));
-					pEntity2->SetMass(0);
-					pEntity2->SetGravityDirection(sf::Vector2f(0, -1));
+					explode = CreateEntity<Mob3>();
+					explode->SetPosition((i * 204), (j * 192));
+					explode->SetMass(100);
+					explode->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case 'O': {
 					range = CreateEntity<Mob2>();
-					range->SetPosition((i * 200), (j * 200));
+					range->SetPosition((i * 204), (j * 192));
+					range->SetMass(0);
+					range->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '%': {
 					monster = CreateEntity<Mob1>();
-					monster->SetPosition((i * 200), (j * 200));
+					monster->SetPosition((i * 204), (j * 192));
+					monster->SetMass(100);
+					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '$': {
 					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
-					pPlatform->SetPosition((i * 200), (j * 200));
+					pPlatform->SetPosition((i * 204), (j * 192));
 					break;
 				}
 				default:

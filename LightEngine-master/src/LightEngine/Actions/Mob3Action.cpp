@@ -34,7 +34,7 @@ void Mob3Action_Chasing::OnUpdate(Mob3* _owner)
 {
 	TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
 	Player* player = scene->GetPlayer();
-	_owner->GoToDirection(player->GetPosition().x, player->GetPosition().y, _owner->m_Speed);
+	_owner->GoToDirection(player->GetPosition().x, _owner->GetPosition().y, _owner->m_Speed);
 	//	std::cout << "chasing";
 }
 

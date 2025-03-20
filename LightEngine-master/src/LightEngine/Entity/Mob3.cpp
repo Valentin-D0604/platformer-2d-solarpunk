@@ -8,6 +8,7 @@
 #include "../Entity/Player.h"
 #include "../Graphics/Sprite.h"
 #include "../Entity/Collectable.h"
+#include "../Entity/Platform.h"
 
 #include "../Utils/Utils.h"
 
@@ -23,10 +24,12 @@ void Mob3::OnInitialize()
 	m_sprite->setScale({ 0.25,0.25 });
 	SetTag(TestScene::Tag::mob3);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos, { 10,10 });
+	m_collider = new RectangleCollider(pos, { 102,96 });
 	m_pStateMachine = new StateMachine<Mob3>(this, State::Count);
 	m_sprite->setScale({ 0.25,0.25 });
+	m_collider->SetGizmo(true);
 	m_Speed = 300;
+	m_physicsCollision = true;
 	//idle
 	{
 		Action<Mob3>* pIdle = m_pStateMachine->CreateAction<Mob3Action_Idle>(State::idle);
@@ -101,7 +104,12 @@ void Mob3::OnInitialize()
 
 void Mob3::OnCollision(Entity* _other)
 {
-	if (_other->IsTag(TestScene::Tag::mob2)) return;
+	if (_other->IsTag(TestScene::Tag::mob3)) return;
+	if (_other->IsTag(TestScene::Tag::platform)) {
+		Platform* plat = dynamic_cast<Platform*>(_other);
+		Collider* collide = plat->GetCollider();
+		collide->GetSide(m_collider, m_sideCollider);
+	}
 }
 
 void Mob3::OnUpdate()
@@ -109,6 +117,7 @@ void Mob3::OnUpdate()
 	if (m_life <= 0) { Attack(); Destroy(); }
 
 	m_pStateMachine->Update();
+	Mob3CheckCollision();
 }
 
 void Mob3::OnDestroy()
@@ -140,6 +149,7 @@ void Mob3::Attack()
 			}
 			else {
 				if (!player->IsParry()) player->TakeDamage(1);
+				else (TakeDamage(1));
 			}
 		}
 }
@@ -161,5 +171,29 @@ void Mob3::TakeDamage(int _damage) {
 	m_life -= _damage;
 	if (m_canExplode) {
 		Attack();
+	}
+}
+
+void Mob3::ResetCollide() {
+	m_sideCollider.down = false;
+	m_sideCollider.up = false;
+	m_sideCollider.left = false;
+	m_sideCollider.right = false;
+}
+
+void Mob3::Mob3CheckCollision() {
+	if (m_sideCollider.up) {
+		SetGravityForce(0);
+	}
+	if (m_sideCollider.down) {
+			SetGravityForce(0);
+			SetMass(0);
+	}
+	else {
+		SetMass(100);
+	}
+	if (m_sideCollider.left) {
+	}
+	if (m_sideCollider.right) {
 	}
 }

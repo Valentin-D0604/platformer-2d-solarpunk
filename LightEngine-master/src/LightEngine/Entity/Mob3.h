@@ -15,7 +15,7 @@ class Mob3 : public PhysicsEntity
 	//------------------------
 
 	StateMachine<Mob3>* m_pStateMachine;
-
+	Side m_sideCollider;
 	enum State
 	{
 		walking,
@@ -30,6 +30,9 @@ public:
 	void OnCollision(Entity* other) override;
 	void OnUpdate() override;
 	void OnDestroy() override;
+
+	void ResetCollide();
+	void Mob3CheckCollision();
 
 	void Attack();
 	float GetDistanceToPlayer();
