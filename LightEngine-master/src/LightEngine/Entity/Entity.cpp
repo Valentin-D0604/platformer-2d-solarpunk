@@ -100,13 +100,21 @@ void Entity::SetDirection(float _x, float _y, float _speed)
 
 void Entity::Update()
 {
-	float dt = GetDeltaTime();
+	/*float dt = GetDeltaTime();
 	float distance = dt * m_Speed;
 	sf::Vector2f translation = distance * m_Direction;
-	m_sprite->move(translation);
+	m_sprite->move(translation);*/
 	m_sprite->Update();
 
 	OnUpdate();
+}
+
+void Entity::FixedUpdate()
+{
+	float dt = 1.f/60.f;
+	float distance = dt * m_Speed;
+	sf::Vector2f translation = distance * m_Direction;
+	m_sprite->move(translation);
 }
 
 Scene* Entity::GetScene() const

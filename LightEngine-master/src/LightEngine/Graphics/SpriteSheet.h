@@ -24,7 +24,8 @@ class SpriteSheet: public Sprite
 	bool m_playing;
 	
 public:
-	SpriteSheet(Entity* _entity, std::string _path);
+	SpriteSheet(std::string _path);
+	SpriteSheet(Entity* _entity, SpriteSheet* _copy);
 	void AddAnimation(Animation* _animation);
 	void SetAnimation(const std::string& _name);
 	void SetSprite(const std::string& _name);
@@ -32,4 +33,6 @@ public:
 	std::string GetCurrentAnimationName();
 	virtual void Deserialize(const nlohmann::ordered_json& _json);
 	virtual void Update() override;
+
+	friend class ResourceManager;
 };

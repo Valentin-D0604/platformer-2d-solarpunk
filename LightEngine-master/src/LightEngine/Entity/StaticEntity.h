@@ -11,6 +11,7 @@ protected:
 	virtual void OnCollision(Entity* _other) {};
 
 private:
+	virtual void FixedUpdate();
 	virtual void Update();
 
 	friend class PhysicsEntity;
