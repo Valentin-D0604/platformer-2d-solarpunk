@@ -118,7 +118,8 @@ void TestScene::LoadFromText()
 				}
 				case '*': {
 					pBoss = CreateEntity<Boss>();
-					pBoss->SetPosition((i * 200), (j * 200));
+					pBoss->SetPosition((i * 200), (j * 192
+						));
 					break;
 				}
 				default:
