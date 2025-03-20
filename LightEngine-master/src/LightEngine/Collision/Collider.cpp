@@ -213,7 +213,7 @@ bool Collider::GetSide(Collider* _other, Side& _side)
         _side.down |= false;
     }
 
-    else if (_other->GetPosition(0, 1).y <= GetPosition(0, 0).y)
+    else if (_other->GetPosition(0, 0.9).y <= GetPosition(0, 0).y)
     {
         _side.up |= false;
         _side.down |= true;
