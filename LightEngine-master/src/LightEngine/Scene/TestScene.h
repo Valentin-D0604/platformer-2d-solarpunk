@@ -16,9 +16,6 @@ public:
 
 	Player* pEntity1;
 	DummyEntity* pEntity2;
-	Mob1* monster;
-	Mob2* range;
-	Mob3* explode;
 
 	Platform* pPlatform;
 

@@ -11,9 +11,11 @@ void PlayerAction_Walking::OnStart(Player* _player) {
   sf::Vector2f pos = _player->GetPosition();
   if (_player->m_lastDir.x == -1) {
 	  dynamic_cast<SpriteSheet*>(_player->m_sprite)->setScale(-1, 1);
+	  _player->SetPosition(pos.x, pos.y);
   }
   if (_player->m_lastDir.x == 1) {
 	  dynamic_cast<SpriteSheet*>(_player->m_sprite)->setScale(1, 1);
+	  _player->SetPosition(pos.x, pos.y);
   }
 }
 

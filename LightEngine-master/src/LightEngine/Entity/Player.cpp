@@ -46,7 +46,6 @@ void Player::OnInitialize() {
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos, {100, 100});
-	m_collider->SetGizmo(true);
 	m_physicsCollision = true;
 
 	m_pStateMachine = new StateMachine<Player>(this, State::Count);
@@ -191,6 +190,12 @@ void Player::HandleInput()
 		m_lastDir = { 1,0 };
 		CheckState(State::walking);
 	}
+	/*if (joystickY > 50) {
+			dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("land");
+	}
+	if (joystickY < -50 && dynamic_cast<SpriteSheet*>(m_sprite)->GetCurrentAnimationName() == "land") {
+		 dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("idle");
+	}*/
 	 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
 		inputX = -1.0f;
 		m_lastDir = { -1,0 };
@@ -312,6 +317,9 @@ void Player::OnUpdate() {
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
 
+	for(int i = 0; i < m_life; i++){
+
+	}
 	PlayerCheckCollision();
 	DecreaseCD(dt);
 	CheckPlayerStates();

@@ -50,7 +50,7 @@ void TestScene::OnUpdate()
 void TestScene::Destroy()
 {
 	pEntity2->Destroy();
-	monster->Destroy();
+	//monster->Destroy();
 	//range->Destroy();
 	//Explode->Destroy();
 }
@@ -76,21 +76,21 @@ void TestScene::LoadFromText()
 					break;
 				}
 				case '%': {
-					monster = CreateEntity<Mob1>();
+					Mob1* monster = CreateEntity<Mob1>();
 					monster->SetPosition((i * 200), (j * 200));
 					monster->SetMass(0);
 					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case 'O': {
-					range = CreateEntity<Mob2>();
+					Mob2* range = CreateEntity<Mob2>();
 					range->SetPosition((i * 200), (j * 200));
 					range->SetMass(0);
 					range->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '+': {
-					explode = CreateEntity<Mob3>();
+					Mob3* explode = CreateEntity<Mob3>();
 					explode->SetPosition((i * 200), (j * 200));
 					explode->SetMass(100);
 					explode->SetGravityDirection(sf::Vector2f(0, 1));

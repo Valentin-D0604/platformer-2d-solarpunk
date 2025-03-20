@@ -12,6 +12,7 @@
 
 #include "../Graphics/Debug.h"
 #include "../Managers/Managers.h"
+
 #include <iostream>
 
 void Mob1::OnInitialize()
@@ -25,7 +26,6 @@ void Mob1::OnInitialize()
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos, { 200,200 });
-	m_collider->SetGizmo(true);
 	m_pStateMachine = new StateMachine<Mob1>(this, State::Count);
 	m_physicsCollision = true;
 	//idle

@@ -18,19 +18,19 @@ void Bullet::InitBullet(sf::Vector2f _position, sf::Vector2f _direction,Entity* 
 	Utils::Normalize(_direction);
 	m_pos = _position;
 	m_dir = _direction;
+	std::cout << m_dir.x << std::endl;
+	if (m_dir.x >= 0) { m_sprite->setScale(0.1, 0.1); }
+	if (m_dir.x < 0) { m_sprite->setScale(-0.1, 0.1);}
 	SetPosition(_position.x, _position.y);
 }
 
 void Bullet::OnInitialize() {
 	m_sprite = new Sprite();
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("Bullet")));
-	m_sprite->setScale(0.1, 0.1);
-
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
 	m_collider = new RectangleCollider(pos, size);
 	m_collider->SetGizmo(true);
-	m_sprite->setPosition(pos.x - 200, pos.y - 300);
 	SetTag(TestScene::Tag::bullet);
 }
 

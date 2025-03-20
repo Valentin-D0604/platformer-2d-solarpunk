@@ -21,7 +21,7 @@ void Explode::OnInitialize()
 
 	SpriteSheet* spriteSheet = new SpriteSheet(this, GET_MANAGER(ResourceManager)->GetSpriteSheet("FX"));
 
-	dynamic_cast<SpriteSheet*>(spriteSheet)->SetAnimation("explosion"); //spriteSheet->SetAnimation("explosion");
+	spriteSheet->SetAnimation("explode");
 
 	m_sprite = spriteSheet;
 

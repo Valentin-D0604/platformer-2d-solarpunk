@@ -7,6 +7,7 @@
 #include "../Scene/TestScene.h"
 #include "../Entity/Player.h"
 #include "../Graphics/Sprite.h"
+#include "../Graphics/SpriteSheet.h"
 #include "../Entity/Collectable.h"
 #include "../Entity/Platform.h"
 
@@ -20,14 +21,18 @@
 void Mob3::OnInitialize()
 {
 	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("Test")));
-	m_sprite->setScale({ 0.25,0.25 });
+
+	SpriteSheet* spriteSheet = new SpriteSheet(this, GET_MANAGER(ResourceManager)->GetSpriteSheet("mob3"));
+
+	spriteSheet->SetAnimation("walk");
+
+	m_sprite = spriteSheet;
+
+	//m_sprite->setScale({ 0.25,0.25 });
 	SetTag(TestScene::Tag::mob3);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos, { 102,96 });
 	m_pStateMachine = new StateMachine<Mob3>(this, State::Count);
-	m_sprite->setScale({ 0.25,0.25 });
-	m_collider->SetGizmo(true);
 	m_Speed = 300;
 	m_physicsCollision = true;
 	//idle

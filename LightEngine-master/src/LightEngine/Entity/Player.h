@@ -34,6 +34,7 @@ class Player : public PhysicsEntity
 	float m_jumpCooldown = 0.f;
 	float m_realoadTime = 2.f;
 	float m_landDuration = 1.f;
+	float m_TbagTime = 0.2f;
 	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------	
 	bool m_Parrying = false;

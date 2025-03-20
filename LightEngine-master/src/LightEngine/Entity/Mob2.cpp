@@ -26,7 +26,6 @@ void Mob2::OnInitialize()
 	m_collider = new RectangleCollider(pos, { 102,96 });
 	m_pStateMachine = new StateMachine<Mob2>(this, State::Count);
 	m_collider->SetGizmo(true);
-
 	m_physicsCollision = true;
 	//idle
 	{
