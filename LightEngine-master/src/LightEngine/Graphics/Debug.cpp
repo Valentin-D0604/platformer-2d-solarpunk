@@ -1,6 +1,7 @@
 #include "Debug.h"
 
-#include "../Managers/GameManager.h"
+#include "../Managers/Managers.h"
+
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -81,7 +82,7 @@ void Debug::DrawText(float x, float y, const std::string& text, float ratioX, fl
 
 	sf::Text sfText;
 
-	sfText.setFont(GameManager::Get()->GetFont());
+	sfText.setFont(GET_MANAGER(GameManager)->GetFont());
 	sfText.setString(text);
 	sfText.setCharacterSize(20);
 	sfText.setFillColor(color);

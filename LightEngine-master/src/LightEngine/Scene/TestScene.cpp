@@ -2,6 +2,7 @@
 
 
 #include "../Graphics/Debug.h"
+
 #include "../Graphics/Sprite.h"
 #include "../Managers/Managers.h"
 
@@ -42,7 +43,13 @@ void TestScene::OnUpdate()
 
 	float fps = 1.f / GetDeltaTime();
 	std::cout << fps << std::endl;
-	if (m_player->IsAlive()) SetCameraCenter(m_player->GetPosition());
+	
+	if (m_player->IsAlive())
+	{
+		SetCameraCenter(m_player->GetPosition());
+		Debug::DrawText(m_player->GetPosition().x - GetWindowWidth()/2, m_player->GetPosition().y - GetWindowHeight()/2, "FPS: " + std::to_string(fps), sf::Color::Blue);
+
+	}
 	else {
 		SetCameraCenter({ 0,0 });
 		SetCameraZoom(5);
