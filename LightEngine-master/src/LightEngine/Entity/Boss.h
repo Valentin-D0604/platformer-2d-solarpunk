@@ -9,6 +9,7 @@ class RectangleCollider;
 class Hand;
 
 enum BossActionType {
+
 	idle,
 	groundSmash, 
     throwRock,
@@ -33,14 +34,16 @@ private:
 	float m_timerforRetreat = 0.0f;
 	float m_timerforIdle = 0.0f;
 	float m_timerforGrabRock = 0.0f;
-
+	BossActionType m_currentAction;
 	sf::Vector2f m_position;
 	
     StateMachine<Boss>* m_pStateMachine;
 
 public:
     void OnInitialize() override;
+	void OnAnimationEnd(const std::string& _animationIndex) override;
     void Update() override;
+	BossActionType GetCurrentAction();
     void StartAttack(BossActionType action);
 	float GetDistanceToPlayer();
 

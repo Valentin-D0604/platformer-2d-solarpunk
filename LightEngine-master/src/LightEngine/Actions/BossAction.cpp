@@ -5,8 +5,6 @@
 // ----------------------------------------- FRAPPE AU SOL -------------------------
 void BossAction_GroundSmash::OnStart(Boss* _owner) {
     // The boss hands prepare for the ground smash
-	_owner->m_left->PerformGroundSmash();
-	_owner->m_right->PerformGroundSmash();
 }
 
 void BossAction_GroundSmash::OnUpdate(Boss* _owner) {
@@ -29,10 +27,6 @@ void BossAction_GroundSmash::OnUpdate(Boss* _owner) {
 	}
 
 	// If the boss hands have finished slamming the ground, the boss goes back to idle
-
-	if (_owner->m_left->IsGroundSmashing() == false && _owner->m_right->IsGroundSmashing() == false) {
-		_owner->StartAttack(BossActionType::idle);
-	}
 }
 
 void BossAction_GroundSmash::OnEnd(Boss* _owner) {
@@ -42,7 +36,6 @@ void BossAction_GroundSmash::OnEnd(Boss* _owner) {
 // ----------------------------------------- LANCEMENT DE PROJECTILES -------------------------
 void BossAction_Throwing::OnStart(Boss* _owner) {
 	// one of the boss hand prepare to throw a projectile at the player
-	_owner->m_left->ThrowRock();
 
 }
 
@@ -55,11 +48,6 @@ void BossAction_Throwing::OnUpdate(Boss* _owner) {
 		player->TakeDamage(1);
 	}
 	// If the boss hands have finished throwing the projectile, the boss goes back to idle
-
-	if (_owner->m_left->IsThrowing() == false && _owner->m_right->IsThrowing() == false) {
-		_owner->StartAttack(BossActionType::idle);
-	}
-
 }
 
 void BossAction_Throwing::OnEnd(Boss* _owner) {
@@ -68,8 +56,6 @@ void BossAction_Throwing::OnEnd(Boss* _owner) {
 //------------------------------------------RETRAIT --------------------------------
 void BossAction_Retreat::OnStart(Boss* _owner) {
 	// The boss hands prepare to retreat
-	_owner->m_left->Stop();
-	_owner->m_right->Stop();
 }
 void BossAction_Retreat::OnUpdate(Boss* _owner) {
 	// The boss hands retreat
