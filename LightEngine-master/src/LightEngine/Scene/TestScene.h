@@ -2,6 +2,7 @@
 #include "../Scene/Scene.h"
 
 class PhysicsEntity;
+class Background;
 class DummyEntity;
 class Player;
 class Mob1;
