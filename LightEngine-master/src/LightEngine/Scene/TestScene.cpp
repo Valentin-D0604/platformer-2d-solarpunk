@@ -58,7 +58,7 @@ void TestScene::Destroy()
 void TestScene::LoadFromText()
 {
 	int j = 0;
-	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\ppppp.txt", std::ios::in | std::ios::out);
+	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\edit.txt", std::ios::in | std::ios::out);
 	if (fichier)
 	{
 		std::string contenu;

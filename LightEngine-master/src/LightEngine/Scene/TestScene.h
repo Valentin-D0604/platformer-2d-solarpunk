@@ -26,6 +26,7 @@ public:
 		mob1,
 		mob2,
 		mob3,
+		boss,
 		PowerUp,
 		bullet,
 		platform
