@@ -12,6 +12,7 @@
 #include "../Entity/Mob3.h"
 #include "../Entity/Platform.h"
 #include "../Entity/Props.h"
+#include "../Entity/Background.h"
 
 #include <iostream>
 #include <fstream>
@@ -24,6 +25,8 @@ void TestScene::OnInitialize()
 	SetCameraZoom(1);
 
 	LoadFromText();
+
+	CreateBackgroundEntity<Background>()->SetPlayer(pEntity1);
 }
 
 void TestScene::OnEvent(const sf::Event& event)

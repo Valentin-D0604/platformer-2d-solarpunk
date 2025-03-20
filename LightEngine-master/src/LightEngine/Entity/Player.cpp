@@ -261,10 +261,10 @@ void Player::CheckPlayerStates()
 		m_friction = 400.f;
 		m_dashDuration = 2.f;
 	}
-	if (GetPosition().y >= 2100) {
+	if (pos.y >= 2100 && pos.x < 2300) {
 		m_life -= 1;
 		SetPosition(m_oldX -200, m_oldY);
-		if (!m_sideCollider.down) SetPosition(GetPosition().x - 200, m_oldY);
+		if (!m_sideCollider.down) SetPosition(pos.x - 200, m_oldY);
 	}
 }
 

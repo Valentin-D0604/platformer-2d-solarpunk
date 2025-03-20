@@ -29,7 +29,7 @@ void ResourceManager::AddTexture(std::string _name, std::string _path) {
 }
 sf::Texture* ResourceManager::GetTexture(std::string _name) {
 	bool success = m_Textures.find(_name) != m_Textures.end();
-	//bool success = false;
+
 	if (!success) {
 		LoadTexture(_name);
 		success = m_Textures.find(_name) != m_Textures.end();
