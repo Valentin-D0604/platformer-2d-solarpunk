@@ -10,6 +10,7 @@
 #include "../Entity/Mob1.h"
 #include "../Entity/Mob2.h"
 #include "../Entity/Mob3.h"
+#include "../Entity/Boss.h"
 #include "../Entity/Platform.h"
 #include "../Entity/Background.h"
 
@@ -114,6 +115,11 @@ void TestScene::LoadFromText()
 				case '$': {
 					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetPosition((i * 204), (j * 192));
+					break;
+				}
+				case '*': {
+					pBoss = CreateEntity<Boss>();
+					pBoss->SetPosition((i * 204), (j * 192));
 					break;
 				}
 				default:

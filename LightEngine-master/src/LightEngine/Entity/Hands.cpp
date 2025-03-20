@@ -114,13 +114,15 @@ void Hand::SetOwner(Boss* _owner)
 
     if (m_isLeft)
     {
-        m_sprite = ((GET_MANAGER(ResourceManager)->GetSpriteSheet("left_hand")));
+        m_sprite = new SpriteSheet(this,(GET_MANAGER(ResourceManager)->GetSpriteSheet("left_hand")));
+        dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("idle");
         SetPosition(GetPosition().x + 89, GetPosition().y + 304);
 
     }
     else
     {
-        m_sprite = ((GET_MANAGER(ResourceManager)->GetSpriteSheet("right_hand")));
+        m_sprite = new SpriteSheet(this,(GET_MANAGER(ResourceManager)->GetSpriteSheet("right_hand")));
+        dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("idle");
         SetPosition(GetPosition().x + 411, GetPosition().y + 302);
     }
     sf::Vector2f size = sf::Vector2f(m_sprite->getTexture()->getSize());

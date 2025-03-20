@@ -30,8 +30,7 @@ void Boss::OnInitialize()
 	
 	m_hp = 18;
 
-	m_sprite = ((GET_MANAGER(ResourceManager)->GetSpriteSheet("body")));
-
+	m_sprite = new SpriteSheet(this,(GET_MANAGER(ResourceManager)->GetSpriteSheet("body")));
 	SetTag(TestScene::Tag::boss);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_position = pos;
