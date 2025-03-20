@@ -27,6 +27,9 @@ public:
 	template<typename T>
 	T* CreateEntity();
 
+	template<typename T>
+	T* CreateBackgroundEntity();
+
 	float GetDeltaTime() const;
 
 	int GetWindowWidth() const;
