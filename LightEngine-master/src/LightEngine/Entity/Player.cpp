@@ -290,3 +290,8 @@ void Player::OnUpdate() {
 		Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
 	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
 }
+
+void Player::OnFixedUpdate()
+{
+	std::cout << GetPosition().x << ", " << GetPosition().y << std::endl;
+}

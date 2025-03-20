@@ -31,6 +31,7 @@ class GameManager
 	Scene* mp_Scene;
 
 	float m_deltaTime;
+	float m_timeSinceFixed;
 
 	int m_windowWidth;
 	int m_windowHeight;
@@ -44,6 +45,7 @@ private:
 	
 	void HandleInput();
 	void Update();
+	void FixedUpdate();
 	void Draw();
 
 	void SetDeltaTime(float _deltaTime) { m_deltaTime = _deltaTime; }

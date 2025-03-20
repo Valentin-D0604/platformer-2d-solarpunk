@@ -68,6 +68,7 @@ public:
 	void OnInitialize() override;
 	void OnCollision(Entity* _other) override;
 	void OnUpdate() override;
+	void OnFixedUpdate() override;
 	
 	const char* GetStateName(State _state) const;
 	void parry();
