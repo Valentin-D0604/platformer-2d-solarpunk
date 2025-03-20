@@ -22,7 +22,7 @@ void TestScene::OnInitialize()
 {
 	pEntitySelected = nullptr;
 	CreateView();
-	SetCameraZoom(1);
+	SetCameraZoom(5);
 
 	LoadFromText();
 

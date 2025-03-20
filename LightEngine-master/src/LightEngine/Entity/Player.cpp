@@ -1,5 +1,6 @@
 #include "../Entity/Player.h"
 #include "../Collision/RectangleCollider.h"
+#include "HUD.h"
 
 #include "../Actions/PlayerAction.h"
 
@@ -318,7 +319,9 @@ void Player::OnUpdate() {
 	float dt = GetDeltaTime();
 
 	for(int i = 0; i < m_life; i++){
-
+		HUD* hud = CreateEntity<HUD>();
+		hud->SetPosition(GetPosition().x + (200*i), GetPosition().y);
+		hud->InitText("Pv_Full", { GetPosition().x, GetPosition().y });
 	}
 	PlayerCheckCollision();
 	DecreaseCD(dt);
