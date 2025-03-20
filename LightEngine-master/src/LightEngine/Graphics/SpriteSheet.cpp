@@ -27,8 +27,6 @@ SpriteSheet::SpriteSheet(Entity* _entity, std::string _path)
 	setTexture(*(GET_MANAGER(ResourceManager)->GetTexture(_path)));
 
 	Deserialize(loadFromFile("../../../res/" + _path + ".json"));
-
-	m_playing = true;
 }
 
 void SpriteSheet::AddAnimation(Animation* _animation)
@@ -48,6 +46,11 @@ void SpriteSheet::SetAnimation(const std::string& _name)
 	m_playing = true;
 }
 
+void SpriteSheet::SetSprite(const std::string& _name)
+{
+	setTextureRect(m_sprites[_name]);
+}
+
 void SpriteSheet::SetPlaying(bool _playing)
 {
 	m_playing = _playing;
@@ -60,21 +63,37 @@ std::string SpriteSheet::GetCurrentAnimationName()
 
 void SpriteSheet::Deserialize(const nlohmann::ordered_json& _json)
 {
-	int i = 0;
-	for (auto& animation : _json["animations"].items())
+	if (_json["structure"] == "grid")
 	{
-		Animation* anim = new Animation;
-		animation.value().at("frames").get_to(anim->m_maxFrame);
-		animation.value().at("loop").get_to(anim->m_looping);
-		anim->m_name = animation.key();
+		m_playing = false;
+		sf::Vector2i size = sf::Vector2i(_json["frame_size"]["width"], _json["frame_size"]["height"]);
 
-		anim->m_size = sf::Vector2i(_json["frame_size"]["width"], _json["frame_size"]["height"]);
+		for (auto& element : _json["elements"].items())
+		{
+			sf::Vector2i pos = sf::Vector2i(element.value().at("x"), element.value().at("y"));
+			m_sprites[element.key()] = sf::IntRect(pos, size);
+		}
+	}
 
-		animation.value().at("frame_time").get_to(anim->m_frameTime);
+	else if (_json["structure"] == "single" || _json["structure"] == "byLine")
+	{
+		int i = 0;
+		m_playing = true;
+		for (auto& animation : _json["animations"].items())
+		{
+			Animation* anim = new Animation;
+			animation.value().at("frames").get_to(anim->m_maxFrame);
+			animation.value().at("loop").get_to(anim->m_looping);
+			anim->m_name = animation.key();
 
-		anim->m_line = i++;
+			anim->m_size = sf::Vector2i(_json["frame_size"]["width"], _json["frame_size"]["height"]);
 
-		AddAnimation(anim);
+			animation.value().at("frame_time").get_to(anim->m_frameTime);
+
+			anim->m_line = i++;
+
+			AddAnimation(anim);
+		}
 	}
 }
 
@@ -99,7 +118,7 @@ void SpriteSheet::Update()
 		}
 
 		m_entity->OnFrameChange(m_animationName, m_animationFrame);
-		
+
 		sf::Vector2i pos = sf::Vector2i(m_animationFrame * m_animations[m_animationName]->m_size.x, m_animations[m_animationName]->m_line * m_animations[m_animationName]->m_size.y);
 		sf::Vector2i size = sf::Vector2i(m_animations[m_animationName]->m_size.x, m_animations[m_animationName]->m_size.y);
 		setTextureRect(sf::IntRect(pos, size));

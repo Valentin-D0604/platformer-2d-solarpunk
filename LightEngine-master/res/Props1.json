@@ -1,0 +1,29 @@
+{
+    "frame_size": {
+        "width": 200,
+        "height": 200
+    },
+    "structure": "grid",
+    "elements": {
+        "airs": {
+            "x": 0,
+            "y": 0
+        },
+        "box": {
+            "x": 200,
+            "y": 0
+        },
+        "signal": {
+            "x": 400,
+            "y": 0
+        },
+        "tentacle2": {
+            "x": 0,
+            "y": 200
+        },
+        "VineTentacle": {
+            "x": 200,
+            "y": 200
+        }
+    }
+}
