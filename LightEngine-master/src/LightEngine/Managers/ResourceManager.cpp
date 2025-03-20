@@ -4,6 +4,7 @@ const std::string TEMP_RES_PATH = "../../../res/";
 
 #include "../Utils/OS.h"
 #include "../Accessors/Resources.h"
+#include "../Entity/Entity.h"
 
 ResourceManager::ResourceManager() {
 	Resources::m_resources = this;
@@ -105,4 +106,18 @@ sf::Music* ResourceManager::GetMusic(std::string _name)
 		success = m_Musics.find(_name) != m_Musics.end();
 	}
 	return &m_Musics[_name];
+}
+
+void ResourceManager::LoadSpriteSheet(std::string _name)
+{
+	m_SpriteSheets[_name] = new SpriteSheet(_name);
+}
+
+SpriteSheet* ResourceManager::GetSpriteSheet(std::string _name)
+{
+	bool success = m_SpriteSheets.find(_name) != m_SpriteSheets.end();
+	if (!success) {
+		LoadSpriteSheet(_name);
+	}
+	return m_SpriteSheets[_name];
 }

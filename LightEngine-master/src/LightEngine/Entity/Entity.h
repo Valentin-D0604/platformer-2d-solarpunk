@@ -72,6 +72,7 @@ private:
 	void Initialize();
 
     friend class GameManager;
+    friend class ResourceManager;
     friend Scene;
 };
 

@@ -7,6 +7,7 @@
 #include <map>
 
 #include "../Interfaces/IResourceProvider.h"
+#include "../Graphics/SpriteSheet.h"
 
 class ResourceManager : IResourceProvider{
 public:
@@ -26,6 +27,10 @@ public:
 	void UnloadMusic(std::string _name);
 	sf::Music* GetMusic(std::string _name);
 
+	void LoadSpriteSheet(std::string _name);
+	SpriteSheet* GetSpriteSheet(std::string _name);
+
+
 private:
 	ResourceManager();
 	~ResourceManager();
@@ -34,6 +39,7 @@ private:
 	std::map<std::string, sf::Font> m_Fonts;
 	std::map<std::string, sf::SoundBuffer> m_SoundBuffers;
 	std::map<std::string, sf::Music> m_Musics;
+	std::map<std::string, SpriteSheet*> m_SpriteSheets;
 
 	void AddSoundBuffer(std::string _name, std::string _path);
 	void AddMusic(std::string _name, std::string _path);

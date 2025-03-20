@@ -38,7 +38,7 @@
 void Player::OnInitialize() {
 	m_isAlive = true;
 	SetTag(TestScene::Tag::player);
-	SpriteSheet* spriteSheet = new SpriteSheet(this, "Player");
+	SpriteSheet* spriteSheet = new SpriteSheet(this, GET_MANAGER(ResourceManager)->GetSpriteSheet("Player"));
 	
 	spriteSheet->SetAnimation("idle");
 
