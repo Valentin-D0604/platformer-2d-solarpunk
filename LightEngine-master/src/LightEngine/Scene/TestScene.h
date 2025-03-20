@@ -9,20 +9,15 @@ class Mob2;
 class Mob3;
 
 class Platform;
+class Overlay;
 
 class TestScene : public Scene
 {
 public:
 
-	Player* pEntity1;
-	DummyEntity* pEntity2;
-	Mob1* monster;
-	Mob2* range;
-	Mob3* explode;
+	Player* m_player;
 
-	Platform* pPlatform;
-
-	Entity* pEntitySelected;
+	Overlay* m_overlay;
 
 	bool m_firstCreation = true;
 	enum Tag

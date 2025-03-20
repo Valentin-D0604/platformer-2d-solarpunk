@@ -43,11 +43,17 @@ namespace Utils
 
 		return std::atan2(det, dot) * 180 / 3.14159265;
 	}
+
 	float Clamp(float _value, float _min, float _max)
 	{
 		_value = _value < _min ? _min : _value;
 		_value = _value > _max ? _max : _value;
 
 		return _value;
+	}
+
+	float Lerp(float _value, float _target, float _factor) 
+	{
+		return _value * (1 - _factor) + _target * (_factor);
 	}
 }

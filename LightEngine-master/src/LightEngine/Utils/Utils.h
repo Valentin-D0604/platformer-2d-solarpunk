@@ -9,4 +9,5 @@ namespace Utils
 	float GetDistance(sf::Vector2f _v1, sf::Vector2f _v2);
 	float GetAngleDegree(const sf::Vector2f& _v1, const sf::Vector2f& _v2);
 	float Clamp(float _value, float _min, float _max);
+	float Lerp(float _value, float _target, float _factor);
 }

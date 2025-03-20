@@ -12,6 +12,7 @@
 #include "../Entity/Mob3.h"
 #include "../Entity/Platform.h"
 #include "../Entity/Background.h"
+#include "../Entity/Overlay.h"
 
 
 #include <iostream>
@@ -20,42 +21,26 @@
 
 void TestScene::OnInitialize()
 {
-	pEntitySelected = nullptr;
 	CreateView();
 	SetCameraZoom(1);
 
 	LoadFromText();
 
-	CreateBackgroundEntity<Background>()->SetPlayer(pEntity1);
+	CreateBackgroundEntity<Background>()->SetPlayer(m_player);
+	m_overlay = CreateEntity<Overlay>(); 
+	m_overlay->SetPlayer(m_player);
+	m_overlay->FadeInOut(5, 5);
 }
 
 void TestScene::OnEvent(const sf::Event& event)
 {
 	if (event.type != sf::Event::EventType::MouseButtonPressed)
 		return;
-
-	if (event.mouseButton.button == sf::Mouse::Button::Right)
-	{
-	//	TrySetSelectedEntity(pEntity2, event.mouseButton.x, event.mouseButton.y);
-	}
-
-	if (event.mouseButton.button == sf::Mouse::Button::Left)
-	{
-		if (pEntitySelected != nullptr)
-		{
-			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
-		}
-	}
 }
 
 void TestScene::OnUpdate()
 {
-	if (pEntitySelected != nullptr)
-	{
-		sf::Vector2f position = pEntitySelected->GetPosition();
-		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
-	}
-	if (pEntity1->IsAlive()) SetCameraCenter(pEntity1->GetPosition());
+	if (m_player->IsAlive()) SetCameraCenter(m_player->GetPosition());
 	else {
 		SetCameraCenter({ 0,0 });
 		SetCameraZoom(5);
@@ -66,10 +51,7 @@ void TestScene::OnUpdate()
 
 void TestScene::Destroy()
 {
-	pEntity2->Destroy();
-	monster->Destroy();
-	//range->Destroy();
-	//Explode->Destroy();
+	
 }
 
 void TestScene::LoadFromText()
@@ -86,35 +68,35 @@ void TestScene::LoadFromText()
 				switch (contenu[i])
 				{
 				case 'P': {
-					pEntity1 = CreateEntity<Player>();
-					pEntity1->SetPosition((i*204), (j*192), 0.5f, 0.f);
-					pEntity1->SetMass(100);
-					pEntity1->SetGravityDirection(sf::Vector2f(0, 1));
+					m_player = CreateEntity<Player>();
+					m_player->SetPosition((i*204), (j*192), 0.5f, 0.f);
+					m_player->SetMass(100);
+					m_player->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '+': {
-					explode = CreateEntity<Mob3>();
+					Mob3* explode = CreateEntity<Mob3>();
 					explode->SetPosition((i * 204), (j * 192));
 					explode->SetMass(100);
 					explode->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case 'O': {
-					range = CreateEntity<Mob2>();
+					Mob2* range = CreateEntity<Mob2>();
 					range->SetPosition((i * 204), (j * 192));
 					range->SetMass(0);
 					range->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '%': {
-					monster = CreateEntity<Mob1>();
+					Mob1* monster = CreateEntity<Mob1>();
 					monster->SetPosition((i * 204), (j * 192));
 					monster->SetMass(100);
 					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '$': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetPosition((i * 204), (j * 192));
 					break;
 				}
@@ -131,5 +113,5 @@ void TestScene::LoadFromText()
 
 Player* TestScene::GetPlayer()
 {
-	return pEntity1 && pEntity1->IsAlive() ? pEntity1 : nullptr;
+	return m_player && m_player->IsAlive() ? m_player : nullptr;
 }
