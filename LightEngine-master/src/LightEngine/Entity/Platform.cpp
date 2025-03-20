@@ -8,7 +8,7 @@
 #include <iostream>
 
 void Platform::OnInitialize() {
-	SpriteSheet* spriteSheet = new SpriteSheet(this, "Props1");
+	SpriteSheet* spriteSheet = new SpriteSheet(dynamic_cast<Entity*>(this), GET_MANAGER(ResourceManager)->GetSpriteSheet("Props1"));
 	spriteSheet->SetSprite("box");
 	m_sprite = spriteSheet;
 

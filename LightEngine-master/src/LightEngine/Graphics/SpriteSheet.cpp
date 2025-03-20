@@ -1,5 +1,6 @@
 #include "SpriteSheet.h"
 #include "../Managers/Managers.h"
+#include "../Entity/Entity.h"
 #include "Animation.h"
 #include "Sprite.h"
 #include "../json.hpp"
@@ -20,13 +21,22 @@ inline json loadFromFile(const std::string& _path) {
 }
 
 
-SpriteSheet::SpriteSheet(Entity* _entity, std::string _path)
+SpriteSheet::SpriteSheet(std::string _path)
 {
-	m_entity = _entity;
-
 	setTexture(*(GET_MANAGER(ResourceManager)->GetTexture(_path)));
 
 	Deserialize(loadFromFile("../../../res/" + _path + ".json"));
+}
+
+SpriteSheet::SpriteSheet(Entity* _entity, SpriteSheet* _copy)
+{
+	setTexture(*(_copy->getTexture()));
+	m_entity = _entity;
+
+	m_playing = _copy->m_playing;
+	m_animations = _copy->m_animations;
+	m_sprites = _copy->m_sprites;
+	m_animationName = _copy->m_animationName;
 }
 
 void SpriteSheet::AddAnimation(Animation* _animation)
