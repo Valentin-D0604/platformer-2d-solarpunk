@@ -2,30 +2,22 @@
 #include "../Scene/Scene.h"
 
 class PhysicsEntity;
-class Background;
 class DummyEntity;
 class Player;
 class Mob1;
 class Mob2;
 class Mob3;
-class Boss;
 
 class Platform;
+class Overlay;
 
 class TestScene : public Scene
 {
 public:
 
-	Player* pEntity1;
-	DummyEntity* pEntity2;
-	Mob1* monster;
-	Mob2* range;
-	Mob3* explode;
-	Boss* pBoss;
+	Player* m_player;
 
-	Platform* pPlatform;
-
-	Entity* pEntitySelected;
+	Overlay* m_overlay;
 
 	bool m_firstCreation = true;
 	enum Tag
@@ -34,10 +26,10 @@ public:
 		mob1,
 		mob2,
 		mob3,
-		boss,
 		PowerUp,
 		bullet,
-		platform,
+		platform
+
 	};
 
 	void OnInitialize() override;

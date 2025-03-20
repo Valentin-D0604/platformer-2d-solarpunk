@@ -34,6 +34,7 @@ public:
 	bool GoToDirection(int _x, int _y, float _speed = -1.f);
     bool GoToPosition(int _x, int _y, float _speed = -1.f);
     void SetPosition(float _x, float _y, float _ratioX = 0.5f, float _ratioY = 0.5f);
+    void SetPosition(sf::Vector2f _pos, float _ratioX = 0.5f, float _ratioY = 0.5f);
     virtual void Move(float _x, float _y);
 	void SetDirection(float _x, float _y, float _speed = -1.f);
 	void SetSpeed(float _speed) { m_Speed = _speed; }

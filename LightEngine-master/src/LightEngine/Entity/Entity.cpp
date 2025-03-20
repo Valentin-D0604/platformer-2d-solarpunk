@@ -44,6 +44,26 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 	}
 }
 
+void Entity::SetPosition(sf::Vector2f _pos, float _ratioX, float _ratioY)
+{
+	sf::IntRect rect = m_sprite->getTextureRect();
+	sf::Vector2f size = sf::Vector2f(rect.width, rect.height);
+
+	_pos.x -= size.x * _ratioX;
+	_pos.y -= size.y * _ratioY;
+
+	m_sprite->setPosition(_pos.x, _pos.y);
+
+	//#TODO Optimise
+	if (m_Target.m_IsSet)
+	{
+		sf::Vector2f position = GetPosition(0.5f, 0.5f);
+		m_Target.m_Distance = Utils::GetDistance(position.x, position.y, m_Target.m_Position.x, m_Target.m_Position.y);
+		GoToDirection(m_Target.m_Position.x, m_Target.m_Position.y);
+		m_Target.m_IsSet = true;
+	}
+}
+
 void Entity::Move(float _x, float _y)
 {
 	sf::Vector2f position = GetPosition(0, 0) + sf::Vector2f(_x, _y);

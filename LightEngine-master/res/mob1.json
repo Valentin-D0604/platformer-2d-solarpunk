@@ -1,0 +1,10 @@
+{
+    "frame_size": { "width": 400, "height": 400 },
+    "structure":  "single",
+    "animations": {
+
+        "walk": { "frames": 10,  "frame_time": 0.2, "loop": true},
+
+        "attack": {  "frames": 10, "frame_time": 0.2, "loop": false}
+    }
+}

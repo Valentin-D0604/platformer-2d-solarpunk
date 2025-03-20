@@ -48,6 +48,7 @@ void Player::OnInitialize() {
 	m_collider = new RectangleCollider(pos, {100, 100});
 	m_collider->SetGizmo(true);
 	m_physicsCollision = true;
+
 	m_pStateMachine = new StateMachine<Player>(this, State::Count);
 	Action<Player>* pIdle = m_pStateMachine->CreateAction<PlayerAction_Idle>(State::idle);
 	Action<Player>* pWalking = m_pStateMachine->CreateAction<PlayerAction_Walking>(State::walking);

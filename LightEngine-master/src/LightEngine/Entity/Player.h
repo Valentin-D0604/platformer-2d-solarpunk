@@ -65,12 +65,12 @@ class Player : public PhysicsEntity
 	{
 		// w,     j,      p ,    a,     i,     d,   f,	 L
 		{  0,     1,      1,     1,     1,     1,	1,	 0}, // walking
-		{  1,     0,      1,     1,     0,     1,	1,	 0}, // jumping
+		{  1,     1,      1,     1,     0,     1,	1,	 0}, // jumping
 		{  1,     1,      0,     0,     1,     0,	1,	 0}, // parrying
 		{  1,     1,      0,     0,     1,     0,	1,	 0}, // attacking
 		{  1,     1,      1,     1,     0,     1,	1,	 0}, // idle
 		{  1,     1,      0,     0,     1,     0,	1,	 0},  // dash
-		{  0,     1,      0,     0,     0,     1,	0,	 1},  // falling
+		{  0,     1,      1,     1,     0,     1,	0,	 1},  // falling
 		{  0,     0,      0,     0,     1,     0,	0,	 0}  // land
 	};
 public:

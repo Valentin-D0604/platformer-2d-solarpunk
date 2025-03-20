@@ -7,7 +7,7 @@
 
 //--------------------------------------------------------Walking------------------------------------------
 void PlayerAction_Walking::OnStart(Player* _player) {
-  if (!_player->m_jumping) dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("run");
+  if (!_player->m_jumping && !_player->m_dash) dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("run");
   sf::Vector2f pos = _player->GetPosition();
   if (_player->m_lastDir.x == -1) {
 	  dynamic_cast<SpriteSheet*>(_player->m_sprite)->setScale(-1, 1);
@@ -25,7 +25,7 @@ void PlayerAction_Walking::OnEnd(Player* _player) {  }
 
 //--------------------------------------------------------jumping-----------------------------------------
 void PlayerAction_jumping::OnStart(Player* _player) {
-	if (!_player->m_jumping && _player->m_jumpCount <= 1) {
+	if (!_player->m_jumping && _player->m_jumpCount <= 1 && !_player->m_dash) {
 		dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("jump");
 		_player->Jump();
 	}
@@ -42,8 +42,8 @@ void PlayerAction_jumping::OnEnd(Player* player) {
 //--------------------------------------------------------Shooting-----------------------------------------
 void PlayerAction_Shooting::OnStart(Player* _player) {
 	if (_player->m_ammo > 0 && _player->m_shootCooldown <= 0) {
-		if (!_player->m_jumping) dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("parry");
 		_player->Attack();
+		if (!_player->m_jumping && !_player->m_dash) dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("attack");
 	}
 }
 
@@ -54,8 +54,8 @@ void PlayerAction_Shooting::OnEnd(Player* _player) {}
 //--------------------------------------------------------Parrying-----------------------------------------
 void PlayerAction_Parrying::OnStart(Player* _player) {
 	if (_player->m_parryCooldown <= 0) {
-		if (!_player->m_jumping) dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("parry");
 		_player->parry();
+		if (!_player->m_jumping && !_player->m_dash) dynamic_cast<SpriteSheet*>(_player->m_sprite)->SetAnimation("parry");
 	}
 }
 

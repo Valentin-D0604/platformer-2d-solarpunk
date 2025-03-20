@@ -10,10 +10,10 @@
 #include "../Entity/Mob1.h"
 #include "../Entity/Mob2.h"
 #include "../Entity/Mob3.h"
-#include "../Entity/Boss.h"
 #include "../Entity/Platform.h"
 #include "../Entity/Background.h"
-
+#include "../Entity/Overlay.h"
+#include "../Entity/Props.h"
 
 #include <iostream>
 #include <fstream>
@@ -21,105 +21,304 @@
 
 void TestScene::OnInitialize()
 {
-	pEntitySelected = nullptr;
 	CreateView();
 	SetCameraZoom(1);
 
 	LoadFromText();
 
-	CreateBackgroundEntity<Background>()->SetPlayer(pEntity1);
+	CreateBackgroundEntity<Background>()->SetPlayer(m_player);
+	m_overlay = CreateEntity<Overlay>(); 
+	m_overlay->SetPlayer(m_player);
+	m_overlay->FadeInOut(5, 5);
 }
 
 void TestScene::OnEvent(const sf::Event& event)
 {
-
-	if (event.mouseButton.button == sf::Mouse::Button::Right)
-	{
-	//	TrySetSelectedEntity(pEntity2, event.mouseButton.x, event.mouseButton.y);
-	}
-
-	if (event.mouseButton.button == sf::Mouse::Button::Left)
-	{
-		if (pEntitySelected != nullptr)
-		{
-			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
-		}
-	}
 }
 
 void TestScene::OnUpdate()
 {
-	if (pEntitySelected != nullptr)
-	{
-		sf::Vector2f position = pEntitySelected->GetPosition();
-		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
-	}
-	if (pEntity1->IsAlive()) SetCameraCenter(pEntity1->GetPosition());
+
+	float fps = 1.f / GetDeltaTime();
+	std::cout << fps << std::endl;
+	if (m_player->IsAlive()) SetCameraCenter(m_player->GetPosition());
 	else {
 		SetCameraCenter({ 0,0 });
 		SetCameraZoom(5);
 		//Destroy();
-		OnInitialize(); // Need fix with delete
+	//	OnInitialize(); // Need fix with delete
 	}
 }
 
 void TestScene::Destroy()
 {
-	pEntity2->Destroy();
-	monster->Destroy();
-	//range->Destroy();
-	//Explode->Destroy();
+	
 }
 
 void TestScene::LoadFromText()
 {
 	int j = 0;
-	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\edit.txt", std::ios::in | std::ios::out);
+	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\ppppp.txt", std::ios::in | std::ios::out);
 	if (fichier)
 	{
 		std::string contenu;
 		while (std::getline(fichier, contenu))  // tant que l'on peut mettre la ligne dans "contenu"
 		{
 			j += 1;
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 142; i++) {
 				switch (contenu[i])
 				{
-				case 'P': {
-					pEntity1 = CreateEntity<Player>();
-					pEntity1->SetPosition((i*204), (j*192), 0.5f, 0.f);
-					pEntity1->SetMass(100);
-					pEntity1->SetGravityDirection(sf::Vector2f(0, 1));
+				case 'P': 
+				{
+					m_player = CreateEntity<Player>();
+					m_player->SetPosition((i*204), (j*192), 0.5f, 0.f);
+					m_player->SetMass(100);
+					m_player->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '+': {
-					explode = CreateEntity<Mob3>();
+					Mob3* explode = CreateEntity<Mob3>();
 					explode->SetPosition((i * 204), (j * 192));
 					explode->SetMass(100);
 					explode->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case 'O': {
-					range = CreateEntity<Mob2>();
+					Mob2* range = CreateEntity<Mob2>();
 					range->SetPosition((i * 204), (j * 192));
 					range->SetMass(0);
 					range->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '%': {
-					monster = CreateEntity<Mob1>();
+					Mob1* monster = CreateEntity<Mob1>();
 					monster->SetPosition((i * 204), (j * 192));
 					monster->SetMass(100);
 					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
-				case '$': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+				case '$': 
+				{
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetPosition((i * 204), (j * 192));
+				}
+
+				case '1': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Top1");
+					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
-				case '*': {
-					pBoss = CreateEntity<Boss>();
-					pBoss->SetPosition((i * 204), (j * 192));
+				case '2': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Top2");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '3': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Top3");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '4': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Middle1");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '5': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Middle2");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '6': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Middle3");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '7': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Bottom1");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '8': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Bottom2");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case '9': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile1_Bottom3");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'a': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Top1");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'b': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Top2");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'c': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Top3");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'd': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Middle1");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'e': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Middle2");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'f': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Middle3");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'g': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Bottom1");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'h': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Bottom2");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'i': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile2_Bottom3");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'j': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile3_Top1");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'k': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile3_Top4");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'l': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile3_Top2");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'm': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile3_Top3");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'n': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile3_Bottom4");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'o': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile3_Bottom1");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'p': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile3_Bottom2");
+					pPlatform->SetPosition((i * 200), (j * 200));
+
+					break;
+				}
+				case 'q': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("TileMap", "Tile3_Bottom3");
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				case 'C': {
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					pPlatform->SetTexture("Props1", "box");
+					pPlatform->GetSprite()->setScale(0.75, 0.75);
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
+				}
+				default:
+					break;
+				}
+			}
+		}
+	}
+	
+	int k = 0;
+	std::ifstream worldProps("..\\..\\..\\src\\LightEngine\\props.txt", std::ios::in | std::ios::out);
+	if (worldProps)
+	{
+		std::string contenu;
+		while (std::getline(worldProps, contenu))  // tant que l'on peut mettre la ligne dans "contenu"
+		{
+			k += 1;
+			for (int i = 0; i < 100; i++) {
+				switch (contenu[i])
+				{
+				case 'A': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props1", "airs");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'B': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props1", "signal");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'V': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props1", "tentacle2");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'T': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props1", "VineTentacle");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'H': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props2", "Wind_turbine");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'M': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props2", "Mossy_turbine");
+					props->SetPosition((i * 200), (k * 200));
 					break;
 				}
 				default:
@@ -135,5 +334,5 @@ void TestScene::LoadFromText()
 
 Player* TestScene::GetPlayer()
 {
-	return pEntity1 && pEntity1->IsAlive() ? pEntity1 : nullptr;
+	return m_player && m_player->IsAlive() ? m_player : nullptr;
 }
