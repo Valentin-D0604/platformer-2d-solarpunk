@@ -8,6 +8,7 @@ class Animation
 	int m_maxFrame;
 	float m_frameTime;
 	bool m_looping;
+	int m_line;
 
 	friend class SpriteSheet;
 };

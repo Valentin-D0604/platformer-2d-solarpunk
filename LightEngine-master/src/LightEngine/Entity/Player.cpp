@@ -38,15 +38,14 @@
 void Player::OnInitialize() {
 	m_isAlive = true;
 	SetTag(TestScene::Tag::player);
-	SpriteSheet* spriteSheet = new SpriteSheet(this, "test");
+	SpriteSheet* spriteSheet = new SpriteSheet(this, "Player");
 	
-	spriteSheet->SetAnimation(1);
+	spriteSheet->SetAnimation("idle");
 
 	m_sprite = spriteSheet;
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
-	m_collider = new RectangleCollider(pos,  {102,96});
+	m_collider = new RectangleCollider(pos, {100, 100});
 	m_collider->SetGizmo(true);
 	m_physicsCollision = true;
 	m_pStateMachine = new StateMachine<Player>(this, State::Count);
