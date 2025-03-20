@@ -74,6 +74,14 @@ void GameManager::Run()
 
 		HandleInput();
 
+		m_timeSinceFixed += m_deltaTime;
+
+		if (m_timeSinceFixed >= 1 / 60)
+		{
+			FixedUpdate();
+			m_timeSinceFixed = 0;
+		}
+
 		Update();
 		
 		Draw();
@@ -92,6 +100,11 @@ void GameManager::HandleInput()
 
 		mp_Scene->OnEvent(event);
 	}
+}
+
+void GameManager::Clear()
+{
+
 }
 
 void GameManager::Update()
@@ -131,41 +144,6 @@ void GameManager::Update()
 		it = m_entities.erase(it);
     }
 
-    //Collision
-    for (auto it1 = m_physicsEntities.begin(); it1 != m_physicsEntities.end(); ++it1)
-    {
-        auto it2 = it1;
-        ++it2;
-
-		PhysicsEntity* entity = *it1;
-		// Physics entities / physics entities
-        for (; it2 != m_physicsEntities.end(); ++it2)
-        {
-			PhysicsEntity* otherEntity = *it2;
-
-            if (entity->IsColliding(otherEntity))
-            {
-                entity->OnCollision(otherEntity);
-                otherEntity->OnCollision(entity);
-            }
-        }
-
-		if (!entity->m_physicsCollision)
-			continue;
-
-		// Physics entities / static entities
-		for (auto it3 = m_staticEntities.begin(); it3 != m_staticEntities.end(); ++it3)
-		{
-			StaticEntity* otherEntity = *it3;
-			if (entity->IsColliding(otherEntity))
-			{
-				entity->Repulse(otherEntity);
-				entity->OnCollision(otherEntity);
-				otherEntity->OnCollision(entity);
-			}
-		}
-    }
-
 	for (auto it = m_entitiesToDestroy.begin(); it != m_entitiesToDestroy.end(); ++it) 
 	{
 		delete *it;
@@ -195,6 +173,47 @@ void GameManager::Update()
 	m_entitiesToAdd.clear();
 
 	mp_Window->setView(*(mp_Scene->m_view));
+}
+
+void GameManager::FixedUpdate()
+{
+	for (auto it1 = m_entities.begin(); it1 != m_entities.end(); ++it1)
+	{
+		(*it1)->FixedUpdate();
+	}
+
+	for (auto it1 = m_physicsEntities.begin(); it1 != m_physicsEntities.end(); ++it1)
+	{
+		auto it2 = it1;
+		++it2;
+
+		PhysicsEntity* entity = *it1;
+		// Physics entities / physics entities
+		for (; it2 != m_physicsEntities.end(); ++it2)
+		{
+			PhysicsEntity* otherEntity = *it2;
+			if (entity->IsColliding(otherEntity))
+			{
+				entity->OnCollision(otherEntity);
+				otherEntity->OnCollision(entity);
+			}
+		}
+
+		if (!entity->m_physicsCollision)
+			continue;
+
+		// Physics entities / static entities
+		for (auto it3 = m_staticEntities.begin(); it3 != m_staticEntities.end(); ++it3)
+		{
+			StaticEntity* otherEntity = *it3;
+			if (entity->IsColliding(otherEntity))
+			{
+				entity->Repulse(otherEntity);
+				entity->OnCollision(otherEntity);
+				otherEntity->OnCollision(entity);
+			}
+		}
+	}
 }
 
 void GameManager::Draw()

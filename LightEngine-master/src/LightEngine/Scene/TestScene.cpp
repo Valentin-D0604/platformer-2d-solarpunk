@@ -19,11 +19,11 @@
 
 void TestScene::OnInitialize()
 {
-
-	LoadFromText();
 	pEntitySelected = nullptr;
 	CreateView();
-	SetCameraZoom(2);
+	SetCameraZoom(1);
+
+	LoadFromText();
 }
 
 void TestScene::OnEvent(const sf::Event& event)

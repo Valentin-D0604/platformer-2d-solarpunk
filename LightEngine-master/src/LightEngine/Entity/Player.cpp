@@ -67,6 +67,10 @@ void Player::OnCollision(Entity* other)
 		Collider* collide = plat->GetCollider();
 		collide->GetSide(m_collider, m_sideCollider);
 	}
+	std::cout << "Down: " << m_sideCollider.down;
+	std::cout << "Up: " << m_sideCollider.up;
+	std::cout << "Left: " << m_sideCollider.left;
+	std::cout << "Right: " << m_sideCollider.right << std::endl;
 }
 
 void Player::parry() {
@@ -340,15 +344,10 @@ void Player::PlayerCheckCollision() {
 	if (m_sideCollider.down) {
 		m_oldX = GetPosition().x-50;
 		m_oldY = GetPosition().y;
-		if (m_trying >= 5) {
-			SetGravityForce(0);
-			m_jumpCount = 0;
-			m_jumping = false;
-			m_trying = 0;
-		}
-		else {
-			m_trying += 1;
-		}
+
+		SetGravityForce(0);
+		m_jumpCount = 0;
+		m_jumping = false;
 	}
 	else if (!m_jumping) {
 		CheckState(State::falling);

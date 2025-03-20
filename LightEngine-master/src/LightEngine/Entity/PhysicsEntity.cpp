@@ -9,9 +9,11 @@
 #define GRAVITATIONNAL_CONSTANT 9.806f
 #define MAX_GRAVITATIONNAL_FORCE 500.0f
 
-void PhysicsEntity::Update()
+void PhysicsEntity::FixedUpdate()
 {
-	float dt = GetDeltaTime();
+	//float dt = GetDeltaTime();
+
+	float dt = 1.0f / 60.0f;
 
 	m_gravityForce += m_mass * dt * GRAVITATIONNAL_CONSTANT;
 
@@ -25,9 +27,16 @@ void PhysicsEntity::Update()
 	sf::Vector2f translation = m_velocity;
 	m_sprite->move(translation);
 
+	m_collider->SetPosition(GetPosition());
+
+	OnFixedUpdate();
+}
+
+void PhysicsEntity::Update()
+{
 	m_sprite->Update();
 
-	m_collider->SetPosition(GetPosition());
+	OnUpdate();
 
 	m_collider->Update();
 
