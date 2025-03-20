@@ -8,6 +8,7 @@
 #include "../Entity/Mob3.h"
 #include "../Entity/Bullet.h"
 #include "../Graphics/Sprite.h"
+#include "../Graphics/SpriteSheet.h"
 
 #include "../Graphics/Debug.h"
 #include "../Managers/Managers.h"
@@ -17,7 +18,12 @@
 void Explode::OnInitialize()
 {
 	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
+
+	SpriteSheet* spriteSheet = new SpriteSheet(this, GET_MANAGER(ResourceManager)->GetSpriteSheet("FX"));
+
+	dynamic_cast<SpriteSheet*>(spriteSheet)->SetAnimation("explosion"); //spriteSheet->SetAnimation("explosion");
+
+	m_sprite = spriteSheet;
 
 	SetTag(TestScene::Tag::mob1);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };

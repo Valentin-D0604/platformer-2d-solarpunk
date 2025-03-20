@@ -36,9 +36,11 @@ void PhysicsEntity::Update()
 {
 	m_sprite->Update();
 
-	OnUpdate();
+	//OnUpdate();
 
 	m_collider->Update();
+
+	OnUpdate();
 }
 
 void PhysicsEntity::SetMass(float _mass)

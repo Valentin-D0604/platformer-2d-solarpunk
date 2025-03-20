@@ -53,3 +53,18 @@ public:
 	void OnEnd(Player* _player) override;
 };
 
+class PlayerAction_Falling : public Action<Player>
+{
+public:
+	void OnStart(Player* _player) override;
+	void OnUpdate(Player* _player) override;
+	void OnEnd(Player* _player) override;
+};
+
+class PlayerAction_Landing : public Action<Player>
+{
+public:
+	void OnStart(Player* _player) override;
+	void OnUpdate(Player* _player) override;
+	void OnEnd(Player* _player) override;
+};
