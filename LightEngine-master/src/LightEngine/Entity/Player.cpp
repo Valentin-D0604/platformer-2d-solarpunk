@@ -56,6 +56,8 @@ void Player::OnInitialize() {
 	Action<Player>* pAttacking = m_pStateMachine->CreateAction<PlayerAction_Shooting>(State::attacking);
 	Action<Player>* pDash = m_pStateMachine->CreateAction<PlayerAction_Dash>(State::dash);
 	Action<Player>* pFall = m_pStateMachine->CreateAction<PlayerAction_Falling>(State::falling);
+	Action<Player>* pLand = m_pStateMachine->CreateAction<PlayerAction_Landing>(State::land);
+
     m_pStateMachine->SetState(State::idle);
 }
 
@@ -100,7 +102,6 @@ void Player::Jump()
 		SetGravityForce(-500);
 		m_jumpCount += 1;
 		m_jumpCooldown = 0.5f;
-		OnAnimationEnd("jump");
 	}
 }
 
@@ -135,6 +136,8 @@ const char* Player::GetStateName(State state) const
 	case parrying: return "parrying";
 	case attacking: return "attacking";
 	case dash: return "Dashing";
+	case falling: return "falling";
+	case land: return "landing";
 	default: return "Unknown";
 	}
 }
@@ -211,7 +214,7 @@ void Player::HandleInput()
 	 if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) || R1) {
 		CheckState(State::dash);
 	}
-	 if (joystickX < PositiveJoystickSensibility && joystickX > -PositiveJoystickSensibility && !X && !L2 && !R2 && !R1) {
+	 if (joystickX < PositiveJoystickSensibility && joystickX > -PositiveJoystickSensibility && !X && !L2 && !R2 && !R1 && m_state != land) {
 		 CheckState(State::idle);
 	 }
 	bool reversing = (inputX != 0 && inputX != m_Direction.x);
@@ -327,8 +330,17 @@ void Player::OnUpdate() {
 
 void Player::OnAnimationEnd(const std::string& _animationIndex)
 {
-	CheckState(State::walking);
+	if (_animationIndex == "jump")
+	{
+		CheckState(State::falling);
+	}
+
+	else if(_animationIndex == "land")
+	{ 
+		CheckState(State::idle);
+	}
 }
+	
 
 void Player::ResetCollide() {
 	m_sideCollider.down = false;
@@ -344,12 +356,11 @@ void Player::PlayerCheckCollision() {
 	if (m_sideCollider.down) {
 		m_oldX = GetPosition().x-50;
 		m_oldY = GetPosition().y;
-
 		SetGravityForce(0);
 		m_jumpCount = 0;
 		m_jumping = false;
 	}
-	else if (!m_jumping) {
+	else if (!m_jumping && !m_sideCollider.down) {
 		CheckState(State::falling);
 	}
 	if (m_sideCollider.left) {

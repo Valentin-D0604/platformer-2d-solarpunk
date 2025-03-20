@@ -33,6 +33,7 @@ class Player : public PhysicsEntity
 	float m_dashDuration = 4.f;
 	float m_jumpCooldown = 0.f;
 	float m_realoadTime = 2.f;
+	float m_landDuration = 1.f;
 	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------	
 	bool m_Parrying = false;
@@ -54,6 +55,7 @@ class Player : public PhysicsEntity
 		idle,
 		dash,
 		falling,
+		land,
 
 		Count
 	};
@@ -61,20 +63,21 @@ class Player : public PhysicsEntity
 	State m_state = State::idle;
 	int mTransitions[STATE_COUNT][STATE_COUNT] =
 	{
-		// w,     j,      p ,    a,     i,     d,   f
-		{  0,     1,      1,     1,     1,     1,	0}, // walking
-		{  1,     1,      1,     1,     0,     1,	1}, // jumping
-		{  1,     1,      0,     0,     1,     0,	0}, // parrying
-		{  1,     1,      0,     0,     1,     0,	0}, // attacking
-		{  1,     1,      1,     1,     0,     1,	1}, // idle
-		{  1,     1,      0,     0,     1,     0,	0},  // dash
-		{  0,     1,      0,     0,     0,     0,	0}  // falling
+		// w,     j,      p ,    a,     i,     d,   f,	 L
+		{  0,     1,      1,     1,     1,     1,	1,	 0}, // walking
+		{  1,     0,      1,     1,     0,     1,	1,	 0}, // jumping
+		{  1,     1,      0,     0,     1,     0,	1,	 0}, // parrying
+		{  1,     1,      0,     0,     1,     0,	1,	 0}, // attacking
+		{  1,     1,      1,     1,     0,     1,	1,	 0}, // idle
+		{  1,     1,      0,     0,     1,     0,	1,	 0},  // dash
+		{  0,     1,      0,     0,     0,     1,	0,	 1},  // falling
+		{  0,     0,      0,     0,     1,     0,	0,	 0}  // land
 	};
 public:
 	void OnInitialize() override;
 	void OnCollision(Entity* _other) override;
 	void OnUpdate() override;
-	virtual void OnAnimationEnd(const std::string& _animationIndex) override;
+	void OnAnimationEnd(const std::string& _animationIndex) override;
 
 	void ResetCollide();
 	void PlayerCheckCollision();
@@ -102,6 +105,7 @@ protected:
 	friend class PlayerAction_Idle;
 	friend class PlayerAction_Dash;
 	friend class PlayerAction_Falling;
+	friend class PlayerAction_Landing;
 };
 
 
