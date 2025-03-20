@@ -41,7 +41,7 @@ void TestScene::OnUpdate()
 
 	float fps = 1.f / GetDeltaTime();
 	std::cout << fps << std::endl;
-	if (pEntity1->IsAlive()) SetCameraCenter(pEntity1->GetPosition());
+	if (m_player->IsAlive()) SetCameraCenter(m_player->GetPosition());
 	else {
 		SetCameraCenter({ 0,0 });
 		SetCameraZoom(5);
@@ -69,6 +69,7 @@ void TestScene::LoadFromText()
 				switch (contenu[i])
 				{
 				case 'P': 
+				{
 					m_player = CreateEntity<Player>();
 					m_player->SetPosition((i*204), (j*192), 0.5f, 0.f);
 					m_player->SetMass(100);
@@ -96,176 +97,171 @@ void TestScene::LoadFromText()
 					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
-				case '$': {
+				case '$': 
+				{
 					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetPosition((i * 204), (j * 192));
-
-				case '+': {
-					explode = CreateEntity<Mob3>();
-					explode->SetPosition((i * 200), (j * 200));
-					explode->SetMass(100);
-					explode->SetGravityDirection(sf::Vector2f(0, 1));
-					break;
 				}
+
 				case '1': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Top1");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case '2': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Top2");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case '3': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Top3");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case '4': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Middle1");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case '5': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Middle2");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case '6': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Middle3");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case '7': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Bottom1");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case '8': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Bottom2");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case '9': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Bottom3");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'a': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Top1");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'b': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Top2");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'c': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Top3");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'd': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Middle1");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'e': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Middle2");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'f': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Middle3");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'g': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Bottom1");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'h': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Bottom2");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'i': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile2_Bottom3");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'j': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile3_Top1");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'k': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile3_Top4");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'l': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile3_Top2");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'm': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile3_Top3");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'n': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile3_Bottom4");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'o': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile3_Bottom1");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'p': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile3_Bottom2");
 					pPlatform->SetPosition((i * 200), (j * 200));
 
 					break;
 				}
 				case 'q': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile3_Bottom3");
 					pPlatform->SetPosition((i * 200), (j * 200));
 					break;
 				}
 				case 'C': {
-					pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("Props1", "box");
 					pPlatform->GetSprite()->setScale(0.75, 0.75);
 					pPlatform->SetPosition((i * 200), (j * 200));
