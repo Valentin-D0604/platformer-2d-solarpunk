@@ -57,14 +57,14 @@ void Hand::OnUpdate() {
     }
 }
 
-// Détection de collision (ex: le projectile spécial qui stun la main)
-void Hand::OnCollision(Entity* _collidedWith) {
-    if (_collidedWith->IsTag(TestScene::Tag::bullet)) {
-    }
+void Hand::OnCollision(Entity* _collidedWith) 
+{
+    if (_collidedWith->IsTag(TestScene::Tag::bullet))
+    {
+		_collidedWith->Destroy();
+        GetOwner()->TakeDamage(1);
+	}
 }
-
-// ----------------------  LOGIQUE ACTIONS ----------------------
-
 
 // ----------------------  FONCTIONS MOUVEMENT ----------------------
 // 

@@ -36,6 +36,8 @@ public:
 };
 class BossAction_Idle : public Action<Boss>
 {
+	float m_idleTimer = 5.0f;
+	bool AttackType = 0;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;

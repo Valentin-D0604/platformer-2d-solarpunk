@@ -1,61 +1,91 @@
 #include "BossAction.h"
 #include "../Scene/TestScene.h"
 #include "../Entity/Player.h"
+#include "../Managers/Managers.h"
 
-// ----------------------------------------- FRAPPE AU SOL -------------------------
-void BossAction_GroundSmash::OnStart(Boss* _owner) {
-    // The boss hands prepare for the ground smash
+
+// ----------------------------------------- IDLE -------------------------
+void BossAction_Idle::OnStart(Boss* _owner)
+{
+	m_idleTimer = 5.0f;
+	_owner->m_isIdle = true;
 }
 
-void BossAction_GroundSmash::OnUpdate(Boss* _owner) {
-    // Hands slam the ground, creating a delay after impact
-	TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
-	Player* player = scene->GetPlayer();
-	
-	// If the player is hit by the boss hands, the player takes damage
-
-	if (_owner->m_left->IsColliding(player) || _owner->m_right->IsColliding(player)) {
-		player->TakeDamage(1);
+void BossAction_Idle::OnUpdate(Boss* _owner)
+{
+	m_idleTimer -= GET_MANAGER(GameManager)->GetDeltaTime();
+	if (_owner->GetPosition() != _owner->m_position)
+	{
+		_owner->GoToPosition(_owner->m_position.x, _owner->m_position.y, 0.1f);
 	}
-
-	// If the player parry the boss hands, the hand he parried is stunned and the other one go back to idle
-
-	if (player->IsParry() && _owner->m_left->IsColliding(player)) {
+	if (m_idleTimer <= 0.0f)
+	{
+		if (AttackType == 0)
+		{
+			_owner->CheckState(BossActionType::groundSmash);
+			AttackType = 1;
+		}
+		else
+		{
+			_owner->CheckState(BossActionType::grabRock);
+			AttackType = 0;
+		}
 	}
-	
-	else if (player->IsParry() && _owner->m_right->IsColliding(player)) {
-	}
-
-	// If the boss hands have finished slamming the ground, the boss goes back to idle
 }
 
-void BossAction_GroundSmash::OnEnd(Boss* _owner) {
-	// The boss hands stop the ground smash and go back to idle
+void BossAction_Idle::OnEnd(Boss* _owner)
+{
+}
+
+// ----------------------------------------- GroundSmash -------------------------
+void BossAction_GroundSmash::OnStart(Boss* _owner)
+{
+	_owner->m_isGroundSmashing = true;
+}
+
+void BossAction_GroundSmash::OnUpdate(Boss* _owner) 
+{
+
+}
+
+void BossAction_GroundSmash::OnEnd(Boss* _owner) 
+{
+
+}
+
+// ----------------------------------------- GRAB ROCK -------------------------
+void BossAction_GrabRock::OnStart(Boss* _player)
+{
+	_player->m_GrabRock = true;
+}
+
+void BossAction_GrabRock::OnUpdate(Boss* _player)
+{
+
+}
+
+void BossAction_GrabRock::OnEnd(Boss* _player)
+{
 }
 
 // ----------------------------------------- LANCEMENT DE PROJECTILES -------------------------
-void BossAction_Throwing::OnStart(Boss* _owner) {
-	// one of the boss hand prepare to throw a projectile at the player
-
+void BossAction_Throwing::OnStart(Boss* _owner) 
+{
+	_owner->m_isThrowing = true;
 }
 
-void BossAction_Throwing::OnUpdate(Boss* _owner) {
-    TestScene* scene = dynamic_cast<TestScene*>(_owner->GetScene());
-    Player* player = scene->GetPlayer();
+void BossAction_Throwing::OnUpdate(Boss* _owner) 
+{
 
-	// If the player is hit by the boss hands, the player takes damage
-	if (_owner->m_left->IsColliding(player) || _owner->m_right->IsColliding(player)) {
-		player->TakeDamage(1);
-	}
-	// If the boss hands have finished throwing the projectile, the boss goes back to idle
 }
 
 void BossAction_Throwing::OnEnd(Boss* _owner) {
 	// The boss hands stop throwing the projectile
 }
 //------------------------------------------RETRAIT --------------------------------
-void BossAction_Retreat::OnStart(Boss* _owner) {
-	// The boss hands prepare to retreat
+void BossAction_Retreat::OnStart(Boss* _owner)
+{
+	_owner->m_isRetreating = true;
 }
 void BossAction_Retreat::OnUpdate(Boss* _owner) {
 	// The boss hands retreat
@@ -68,33 +98,4 @@ void BossAction_Retreat::OnUpdate(Boss* _owner) {
 }
 void BossAction_Retreat::OnEnd(Boss* _owner) {
 	// The boss hands stop retreating
-}
-// ----------------------------------------- IDLE -------------------------
-void BossAction_Idle::OnStart(Boss* _owner) 
-{
-	_owner->m_isIdle = true;
-}
-
-void BossAction_Idle::OnUpdate(Boss* _owner)
-{
-	if (_owner->GetPosition() != _owner->m_position)
-	{
-		_owner->GoToPosition(_owner->m_position.x,_owner->m_position.y,0.1f);
-	}
-}
-
-void BossAction_Idle::OnEnd(Boss* _owner)
-{}
-
-// ----------------------------------------- GRAB ROCK -------------------------
-void BossAction_GrabRock::OnStart(Boss* _player)
-{
-}
-
-void BossAction_GrabRock::OnUpdate(Boss* _player)
-{
-}
-
-void BossAction_GrabRock::OnEnd(Boss* _player)
-{
 }
