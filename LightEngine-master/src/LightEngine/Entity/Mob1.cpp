@@ -148,7 +148,7 @@ void Mob1::Attack()
 	if (player == nullptr) return;
 	if (!player->IsParry()) player->TakeDamage(1);
 	else (TakeDamage(1));
-	GoToPosition(GetPosition().x+m_Direction.x, GetPosition().y + m_Direction.y,200);
+	GoToPosition(GetPosition().x+(m_Direction.x*10), GetPosition().y + m_Direction.y,200);
 	m_shootCooldown = 2.f;
 }
 
