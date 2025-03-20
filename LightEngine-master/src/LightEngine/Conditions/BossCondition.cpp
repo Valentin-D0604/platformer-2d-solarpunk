@@ -1,13 +1,13 @@
 #include "BossCondition.h"
 
-bool BossCondition_IsSweeping::OnTest(Boss* _owner)
-{
-	return _owner->IsSweepping();
-}
-
 bool BossCondition_IsGroundSmashing::OnTest(Boss* _owner)
 {
 	return _owner->IsGroundSmashing();
+}
+
+bool BossCondition_IsRetreating::OnTest(Boss* _owner)
+{
+	return _owner->IsRetreating();
 }
 
 bool BossCondition_IsThrowing::OnTest(Boss* _owner)
@@ -15,12 +15,14 @@ bool BossCondition_IsThrowing::OnTest(Boss* _owner)
 	return _owner->IsThrowing();
 }
 
-bool BossCondition_IsStunned::OnTest(Boss* _owner)
-{
-	return _owner->IsStunned();
-}
-
 bool BossCondition_IsIdle::OnTest(Boss* _owner)
 {
-	return !_owner->IsSweepping() && !_owner->IsGroundSmashing() && !_owner->IsThrowing();
+	bool toreturn = false;
+	if (!_owner->IsGrabbingRock() || !_owner->IsGroundSmashing() || !_owner->IsRetreating() || !_owner->IsThrowing())	{toreturn = true;}
+	return toreturn;
+}
+
+bool BossCondition_IsGrabbingRock::OnTest(Boss* _owner)
+{
+	return _owner->IsGrabbingRock();
 }
