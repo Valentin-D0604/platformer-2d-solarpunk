@@ -4,6 +4,7 @@
 
 class BossAction_GroundSmash : public Action<Boss>
 {
+	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;
@@ -12,6 +13,7 @@ public:
 
 class BossAction_GrabRock : public Action<Boss>
 {
+	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;
@@ -21,6 +23,7 @@ public:
 
 class BossAction_Throwing : public Action<Boss>
 {
+	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;
@@ -29,6 +32,7 @@ public:
 
 class BossAction_Retreat : public Action<Boss>
 {
+	float m_Timer = 5.0f;
 public:
 	void OnStart(Boss* _player) override;
 	void OnUpdate(Boss* _player) override;

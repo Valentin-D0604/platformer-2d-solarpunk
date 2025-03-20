@@ -13,6 +13,7 @@ private:
     int m_animationIndex;
     float m_frameTimer;
     const float FRAME_DURATION = 0.1f;
+	bool timerisOn = false;
     float m_timer = 0.0f;
 
 public:

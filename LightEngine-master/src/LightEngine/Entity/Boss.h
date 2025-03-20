@@ -45,7 +45,6 @@ private:
 
 public:
     void OnInitialize() override;
-	void OnAnimationEnd(const std::string& _animationIndex) override;
     void Update() override;
 	void TakeDamage(int _damage);
 	BossActionType GetCurrentAction();

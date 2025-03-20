@@ -1,6 +1,9 @@
 {
-    "frame_size": { "width": 500, "height": 500 },
-    "Structure":  "single",
+  "frame_size": {
+    "width": 500,
+    "height": 500
+  },
+    "structure":  "single",
     "animations": {
 
         "idle": { "frames": 10,  "frame_time": 0.2, "loop": true},

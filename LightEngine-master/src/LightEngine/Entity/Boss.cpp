@@ -30,8 +30,7 @@ void Boss::OnInitialize()
 	
 	m_hp = 18;
 
-	m_sprite = new Sprite();
-	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("test")));
+	m_sprite = ((GET_MANAGER(ResourceManager)->GetSpriteSheet("body")));
 
 	SetTag(TestScene::Tag::boss);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
@@ -62,29 +61,6 @@ void Boss::OnInitialize()
 
 	m_pStateMachine->SetState(BossActionType::idle);
 }
-
-void Boss::OnAnimationEnd(const std::string& _animationIndex)
-{
-	//if (_animationIndex == "groundSmash") {
-	//	m_left->SetGroundSmashing(false);
-	//	m_right->SetGroundSmashing(false);
-	//}
-	//else if (_animationIndex == "throw") {
-	//	m_left->SetThrowing(false);
-	//}
-	//else if (_animationIndex == "retreat") {
-	//	m_left->SetRetreating(false);
-	//	m_right->SetRetreating(false);
-	//}
-	//else if (_animationIndex == "idle") {
-	//	m_isIdle = true;
-	//}
-	//else if (_animationIndex == "grabRock") {
-	//	m_GrabRock = false;
-	//}
-}
-
-
 void Boss::Update() 
 {
 	m_pStateMachine->Update();
