@@ -108,7 +108,9 @@ void BossAction_Retreat::OnStart(Boss* _owner)
 }
 void BossAction_Retreat::OnUpdate(Boss* _owner) 
 {
+	//Bullet* bullet new Bullet();
 
+	//bullet->SetPosition()
 	_owner->m_left->GoToPosition(0, 0);
 	_owner->m_right->GoToPosition(0, 0);
 	if (_owner->m_left->GetPosition().x == 0 && _owner->m_left->GetPosition().y == 0) {

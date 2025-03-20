@@ -31,8 +31,6 @@ void TestScene::OnInitialize()
 
 void TestScene::OnEvent(const sf::Event& event)
 {
-	if (event.type != sf::Event::EventType::MouseButtonPressed)
-		return;
 
 	if (event.mouseButton.button == sf::Mouse::Button::Right)
 	{
