@@ -4,7 +4,6 @@
 #include "Managers/Managers.h"
 #include "Managers/GameManager.h"
 
-#include "Scene/SampleScene.h"
 #include "Scene/TestScene.h"
 
 #include <cstdlib>

@@ -187,9 +187,6 @@ bool Collider::GetSide(Collider* _other, Side& _side)
 {
     if (_other->GetShapeTag() != ShapeTag::rectangle)
         return false;
-
-   // std::cout << "Other left: " << _other->GetPosition(0, 0).x << " (>=) " << "This Right: " << GetPosition(1, 0).x << std::endl;
-    //std::cout << "Other Right: " << _other->GetPosition(1, 0).x << " (<=) " << "This left: " << GetPosition(0, 0).x << std::endl;
     if (_other->GetPosition(0, 0).x >= GetPosition(1, 0).x)
     {
         _side.left |= true;

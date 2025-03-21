@@ -2,7 +2,6 @@
 #include "Player.h"
 
 #include "../Actions/BossAction.h"
-#include "../Conditions/BossCondition.h"
 #include "../Collision/RectangleCollider.h"
 
 #include "../Scene/TestScene.h"

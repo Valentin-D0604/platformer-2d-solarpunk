@@ -344,7 +344,6 @@ void Player::OnUpdate() {
 	CheckPlayerStates();
 	HandleInput();
 	PlayerMove();
-	std::cout << pos.x<< std::endl;
 	m_pStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
 	ResetCollide();

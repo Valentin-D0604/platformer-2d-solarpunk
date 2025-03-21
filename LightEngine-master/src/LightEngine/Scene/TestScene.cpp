@@ -6,12 +6,13 @@
 #include "../Graphics/Sprite.h"
 #include "../Managers/Managers.h"
 
-#include "../Entity/DummyEntity.h"
+
 #include "../Entity/Player.h"
 #include "../Entity/Mob1.h"
 #include "../Entity/Mob2.h"
 #include "../Entity/Mob3.h"
 #include "../Entity/Boss.h"
+#include "../Entity/DummyEntity.h"
 #include "../Entity/Platform.h"
 #include "../Entity/Background.h"
 #include "../Entity/Overlay.h"
