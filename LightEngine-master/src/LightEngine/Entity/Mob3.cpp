@@ -151,6 +151,7 @@ void Mob3::Attack()
 				damage->SetPosition(GetPosition().x, GetPosition().y, 0.75, 0.75);
 				m_canExplode = false;
 				m_Speed = 200;
+				m_shootCooldown = 3.f;
 			}
 			else {
 				if (!player->IsParry()) player->TakeDamage(1);

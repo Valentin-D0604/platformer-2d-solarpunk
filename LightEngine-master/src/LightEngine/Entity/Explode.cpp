@@ -36,7 +36,7 @@ void Explode::OnCollision(Entity* _other)
 	if (m_DamageCooldown <= 0) {
 		if (_other->IsTag(TestScene::Tag::player)) {
 			Player* player = dynamic_cast<Player*>(_other);
-			if(!player->IsParry()) player->TakeDamage(2);
+			if (!player->IsParry()) { player->TakeDamage(1); player->TakeDamage(1);}
 		}
 		if (_other->IsTag(TestScene::Tag::mob1)) {
 			Mob1* mob1 = dynamic_cast<Mob1*>(_other);

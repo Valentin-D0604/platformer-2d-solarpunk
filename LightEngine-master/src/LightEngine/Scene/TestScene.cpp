@@ -25,7 +25,7 @@ void TestScene::OnInitialize()
 {
 	CreateView();
 	SetCameraZoom(1);
-
+	
 	LoadFromText();
 	Entity* back = CreateBackgroundEntity<Entity>();
 	back->GetSprite()->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("IMG_0103")));	
@@ -68,7 +68,7 @@ void TestScene::LoadFromText()
 		while (std::getline(worldProps, contenu))  // tant que l'on peut mettre la ligne dans "contenu"
 		{
 			k += 1;
-			for (int i = 0; i < 142; i++) {
+			for (int i = 0; i < 122; i++) {
 				switch (contenu[i])
 				{
 				case 'A': {

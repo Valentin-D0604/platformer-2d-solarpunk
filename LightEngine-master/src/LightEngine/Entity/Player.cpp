@@ -102,7 +102,6 @@ void Player::Jump()
 {
 
 	if (m_jumpCooldown <= 0 && m_jumpCount <= m_maxJumps) {
-		std::cout << m_jumpCount;
 		SetGravityForce(-800);
 		m_jumpCount += 1;
 		m_jumpCooldown = 0.5f;
@@ -147,11 +146,11 @@ const char* Player::GetStateName(State state) const
 }
 
 void Player::TakeDamage(int damage) {
-	if (this == nullptr) return;
+	//if (this == nullptr) return;
 	if (damage > 0) {
-		for (int x = 0; x < damage; x++) {
-			m_life -= damage;
-			life[m_life]->Destroy();
+		m_life -= damage;
+		for (int x = 0; x <= damage; x++) {
+			if (m_life > 0) life[m_life]->Destroy();
 		}
 	}
 	else {
@@ -290,9 +289,9 @@ void Player::CheckPlayerStates()
 		SetMass(170);
 		m_dashDuration = 2.f;
 	}
-	if (pos.y >= 2100 && pos.x < 2300) {
+	if (pos.y >= 2100 && pos.x < 21000) {
 		m_life -= 1;
-		SetPosition(m_oldX -200, m_oldY);
+		SetPosition(m_oldX -400, m_oldY);
 		if (!m_sideCollider.down) SetPosition(pos.x - 200, m_oldY);
 	}
 }
@@ -345,6 +344,7 @@ void Player::OnUpdate() {
 	CheckPlayerStates();
 	HandleInput();
 	PlayerMove();
+	std::cout << pos.x<< std::endl;
 	m_pStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
 	ResetCollide();
