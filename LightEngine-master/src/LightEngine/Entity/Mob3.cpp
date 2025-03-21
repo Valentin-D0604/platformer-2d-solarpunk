@@ -127,8 +127,8 @@ void Mob3::OnUpdate()
 
 void Mob3::OnDestroy()
 {
-	//int rando = rand() % 2;
-	//if (rando == 0) return;
+	int rando = rand() % 2;
+	if (rando == 0) return;
 	Collectable* buff = CreateEntity<Collectable>();
 	buff->InitCollec(GetPosition(), { 0,1 }, this);
 	buff->SetMass(10);

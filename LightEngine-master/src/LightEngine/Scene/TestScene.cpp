@@ -24,14 +24,13 @@
 void TestScene::OnInitialize()
 {
 	CreateView();
-	SetCameraZoom(5);
+	SetCameraZoom(1);
 
 	LoadFromText();
-
-	//CreateBackgroundEntity<Background>()->SetPlayer(m_player);
-	//m_overlay = CreateEntity<Overlay>(); 
-	//m_overlay->SetPlayer(m_player);
-	//m_overlay->FadeInOut(5, 5);
+	Entity* back = CreateBackgroundEntity<Entity>();
+	back->GetSprite()->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("IMG_0103")));	
+	back->SetPosition({ 23000,2650 });
+	CreateBackgroundEntity<Background>()->SetPlayer(m_player);
 }
 
 void TestScene::OnEvent(const sf::Event& event)
@@ -51,17 +50,12 @@ void TestScene::OnUpdate()
 	else {
 		SetCameraCenter({ 0,0 });
 		SetCameraZoom(5);
-		//Destroy();
-	//	OnInitialize(); // Need fix with delete
 	}
 }
 
 void TestScene::Destroy()
 {
 	pEntity2->Destroy();
-	//monster->Destroy();
-	//range->Destroy();
-	//Explode->Destroy();
 }
 
 void TestScene::LoadFromText()
@@ -138,7 +132,7 @@ void TestScene::LoadFromText()
 				{
 					m_player = CreateEntity<Player>();
 					m_player->SetPosition((i*200), (j*200), 0.5f, 0.f);
-					m_player->SetMass(100);
+					m_player->SetMass(170);
 					m_player->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}

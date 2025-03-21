@@ -41,7 +41,6 @@ void BossAction_Idle::OnEnd(Boss* _owner)
 // ----------------------------------------- GroundSmash -------------------------
 void BossAction_GroundSmash::OnStart(Boss* _owner)
 {
-	if (_owner->GetDistanceToPlayer() > 800) return;
 	m_Timer = 4.0f;
 	_owner->m_isGroundSmashing = true;
 	_owner->SetAnimation("slam");
@@ -61,7 +60,6 @@ void BossAction_GroundSmash::OnEnd(Boss* _owner)
 // ----------------------------------------- GRAB ROCK -------------------------
 void BossAction_GrabRock::OnStart(Boss* _player)
 {
-	if (_player->GetDistanceToPlayer() > 800) return;
 	m_Timer = 4.0f;
 	_player->m_GrabRock = true;
 	_player->SetAnimation("grab");
@@ -86,7 +84,6 @@ void BossAction_GrabRock::OnEnd(Boss* _player)
 // ----------------------------------------- LANCEMENT DE PROJECTILES -------------------------
 void BossAction_Throwing::OnStart(Boss* _owner) 
 {
-	if (_owner->GetDistanceToPlayer() > 800) return;
 	m_Timer = 4.0f;
 	_owner->m_isThrowing = true;
 	_owner->SetAnimation("throw");
@@ -108,7 +105,6 @@ void BossAction_Throwing::OnEnd(Boss* _owner)
 //------------------------------------------RETRAIT --------------------------------
 void BossAction_Retreat::OnStart(Boss* _owner)
 {
-	if (_owner->GetDistanceToPlayer() > 800) return;
 	m_Timer = 4.0f;
 	_owner->m_isRetreating = true;
 	_owner->SetAnimation("retreat");

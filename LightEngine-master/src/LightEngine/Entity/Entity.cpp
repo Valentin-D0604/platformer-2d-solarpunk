@@ -10,6 +10,7 @@
 
 void Entity::Initialize()
 {
+	m_sprite = new Sprite;
 	m_Direction = sf::Vector2f(0.0f, 0.0f);
 	
 	m_Target.m_IsSet = false;

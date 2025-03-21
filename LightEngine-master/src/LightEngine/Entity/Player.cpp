@@ -103,8 +103,7 @@ void Player::Jump()
 
 	if (m_jumpCooldown <= 0 && m_jumpCount <= m_maxJumps) {
 		std::cout << m_jumpCount;
-		SetMass(100);
-		SetGravityForce(-500);
+		SetGravityForce(-800);
 		m_jumpCount += 1;
 		m_jumpCooldown = 0.5f;
 	}
@@ -287,8 +286,8 @@ void Player::CheckPlayerStates()
 	}
 	if (m_dashDuration <= 0) {
 		m_dash = false;
-		SetMass(100);
-		m_friction = 400.f;
+		m_friction = 600.f;
+		SetMass(170);
 		m_dashDuration = 2.f;
 	}
 	if (pos.y >= 2100 && pos.x < 2300) {

@@ -5,7 +5,7 @@
 #include "HUD.h"
 #include "../Utils/StateMachine.h"
 
-#define MAX_SPEED 400
+#define MAX_SPEED 500
 #define PARRY_DURATION 2.f
 
 
@@ -17,7 +17,7 @@ class Player : public PhysicsEntity
 	int m_oldX, m_oldY;
 	//sf::Vector2f m_velocity;
 	float m_acceleration = 600.0f;
-	float m_friction = 400.0f;
+	float m_friction = 600.0f;
 	float turnResistance = 800.0f; 
 	sf::Vector2f m_lastDir = { 1,0 };
 	bool m_goingRight = false;
