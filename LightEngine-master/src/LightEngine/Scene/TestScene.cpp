@@ -42,7 +42,6 @@ void TestScene::OnUpdate()
 {
 
 	float fps = 1.f / GetDeltaTime();
-	std::cout << fps << std::endl;
 	
 	if (m_player->IsAlive())
 	{
@@ -344,6 +343,7 @@ void TestScene::LoadFromText()
 		std::cout << "Impossible d'ouvrir le fichier !" << std::endl;
 	}
 }
+
 
 Player* TestScene::GetPlayer()
 {

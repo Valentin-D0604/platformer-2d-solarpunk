@@ -157,7 +157,6 @@ float Mob2::GetDistanceToPlayer()
 
 void Mob2::TakeDamage(int _damage) {
 	m_life -= _damage;
-	std::cout << m_life;
 }
 
 void Mob2::ResetCollide() {

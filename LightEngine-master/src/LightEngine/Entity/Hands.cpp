@@ -81,7 +81,6 @@ void Hand::PlayAnimation(const std::vector<sf::Vector2f> positions) {
     }
 	sf::Vector2f position = GetOwner()->GetPosition(0,0);
     SetPosition(positions[m_animationIndex].x + position.x, positions[m_animationIndex].y + position.y);
-	std::cout << positions[m_animationIndex].x + position.x << std::endl;
 }
 
 void Hand::SetOwner(Boss* _owner)

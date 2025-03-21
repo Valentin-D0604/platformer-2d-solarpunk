@@ -76,7 +76,7 @@ void GameManager::Run()
 
 		m_timeSinceFixed += m_deltaTime;
 
-		if (m_timeSinceFixed >= 1 / 60)
+		if (m_timeSinceFixed >= 1.f / 60.f)
 		{
 			FixedUpdate();
 			m_timeSinceFixed = 0;
@@ -109,6 +109,7 @@ void GameManager::Clear()
 
 void GameManager::Update()
 {
+	std::cout << "Update" << std::endl;
 	mp_Scene->OnUpdate();
 
     //Update
@@ -177,6 +178,7 @@ void GameManager::Update()
 
 void GameManager::FixedUpdate()
 {
+	std::cout << "FixedUpdate" << std::endl;
 	for (auto it1 = m_entities.begin(); it1 != m_entities.end(); ++it1)
 	{
 		(*it1)->FixedUpdate();

@@ -22,7 +22,7 @@ void PhysicsEntity::FixedUpdate()
 	float distance = dt * m_Speed;
 
 	m_velocity = distance * m_Direction; // Character Input movement
-	m_velocity += m_gravityDirection * m_gravityForce * GetDeltaTime(); // Gravity
+	m_velocity += m_gravityDirection * m_gravityForce * dt; // Gravity
 
 	sf::Vector2f translation = m_velocity;
 	m_sprite->move(translation);

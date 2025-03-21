@@ -116,7 +116,6 @@ void Boss::OnUpdate()
 	}
 	m_pStateMachine->Update();
 
-	std::cout << "Boss State" << m_pStateMachine->GetCurrentState() << std::endl;
 	
 	if (m_left != nullptr) {
 		m_left->OnUpdate();

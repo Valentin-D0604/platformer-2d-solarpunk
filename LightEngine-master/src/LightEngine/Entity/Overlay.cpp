@@ -42,8 +42,6 @@ void Overlay::OnUpdate()
 		return;
 
 	SetPosition(m_player->GetPosition() + sf::Vector2f(-1000, -500));
-
-	std::cout << "Position: " << GetPosition().x << ", " << GetPosition().y << " // Opacity" << m_currentAlpha << "//" << color.a << std::endl;
 }
 
 void Overlay::SetPlayer(Entity* _player)
