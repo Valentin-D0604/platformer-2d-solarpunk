@@ -50,7 +50,7 @@ void TestScene::OnUpdate()
 	}
 	else {
 		SetCameraCenter({ 0,0 });
-		SetCameraZoom(5);
+		SetCameraZoom(4);
 	}
 }
 
