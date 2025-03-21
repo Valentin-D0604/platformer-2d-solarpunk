@@ -49,7 +49,7 @@ void SpriteSheet::SetAnimation(const std::string& _name)
 	m_animationFrame = 0;
 	m_animationName = _name;
 
-	sf::Vector2i pos = sf::Vector2i(m_animationFrame * m_animations[_name]->m_size.x, m_animations[m_animationName]->m_line * m_animations[_name]->m_size.y);
+ 	sf::Vector2i pos = sf::Vector2i(m_animationFrame * m_animations[_name]->m_size.x, m_animations[m_animationName]->m_line * m_animations[_name]->m_size.y);
 	sf::Vector2i size = sf::Vector2i(m_animations[_name]->m_size.x, m_animations[_name]->m_size.y);
 	setTextureRect(sf::IntRect(pos, size));
 

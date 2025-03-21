@@ -66,14 +66,14 @@ void TestScene::Destroy()
 void TestScene::LoadFromText()
 {
 	int j = 0;
-	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\ppppp.txt", std::ios::in | std::ios::out);
+	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\MapLegend.txt", std::ios::in | std::ios::out);
 	if (fichier)
 	{
 		std::string contenu;
 		while (std::getline(fichier, contenu))  // tant que l'on peut mettre la ligne dans "contenu"
 		{
 			j += 1;
-			for (int i = 0; i < 142; i++) {
+			for (int i = 0; i < 122; i++) {
 				switch (contenu[i])
 				{
 				case 'P': 
