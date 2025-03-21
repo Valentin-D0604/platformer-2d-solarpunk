@@ -85,7 +85,7 @@ void SpriteSheet::Deserialize(const nlohmann::ordered_json& _json)
 		}
 	}
 
-	else if (_json["structure"] == "single" || _json["structure"] == "byLine")
+	else if (_json["structure"] == "single" || _json["structure"] == "byRow")
 	{
 		int i = 0;
 		m_playing = true;

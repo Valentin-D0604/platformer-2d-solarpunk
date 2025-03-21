@@ -23,7 +23,7 @@
 void TestScene::OnInitialize()
 {
 	CreateView();
-	SetCameraZoom(5);
+	SetCameraZoom(1);
 
 	LoadFromText();
 
@@ -41,7 +41,7 @@ void TestScene::OnUpdate()
 {
 
 	float fps = 1.f / GetDeltaTime();
-	std::cout << fps << std::endl;
+//	std::cout << fps << std::endl;
 	if (m_player->IsAlive()) SetCameraCenter(m_player->GetPosition());
 	else {
 		SetCameraCenter({ 0,0 });
@@ -61,8 +61,65 @@ void TestScene::Destroy()
 
 void TestScene::LoadFromText()
 {
+	int k = 0;
+	std::ifstream worldProps("..\\..\\..\\src\\LightEngine\\props.txt", std::ios::in | std::ios::out);
+	if (worldProps)
+	{
+		std::string contenu;
+		while (std::getline(worldProps, contenu))  // tant que l'on peut mettre la ligne dans "contenu"
+		{
+			k += 1;
+			for (int i = 0; i < 142; i++) {
+				switch (contenu[i])
+				{
+				case 'A': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props1", "airs");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'B': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props1", "signal");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'V': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props1", "tentacle2");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'T': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props1", "VineTentacle");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'H': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props2", "Wind_turbine");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				case 'M': {
+					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
+					props->SetTexture("Props2", "Mossy_turbine");
+					props->SetPosition((i * 200), (k * 200));
+					break;
+				}
+				default:
+					break;
+				}
+			}
+		}
+	}
+	else {
+		std::cout << "Impossible d'ouvrir le fichier !" << std::endl;
+	}
+
 	int j = 0;
-	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\ppppp.txt", std::ios::in | std::ios::out);
+	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\Map Legend.txt", std::ios::in | std::ios::out);
 	if (fichier)
 	{
 		std::string contenu;
@@ -75,7 +132,7 @@ void TestScene::LoadFromText()
 				case 'P': 
 				{
 					m_player = CreateEntity<Player>();
-					m_player->SetPosition((i*204), (j*192), 0.5f, 0.f);
+					m_player->SetPosition((i*200), (j*200), 0.5f, 0.f);
 					m_player->SetMass(100);
 					m_player->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
@@ -89,14 +146,14 @@ void TestScene::LoadFromText()
 				}
 				case 'O': {
 					Mob2* range = CreateEntity<Mob2>();
-					range->SetPosition((i * 204), (j * 192));
+					range->SetPosition((i * 200), (j * 200));
 					range->SetMass(0);
 					range->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
 				}
 				case '%': {
 					Mob1* monster = CreateEntity<Mob1>();
-					monster->SetPosition((i * 204), (j * 192));
+					monster->SetPosition((i * 200), (j * 200));
 					monster->SetMass(100);
 					monster->SetGravityDirection(sf::Vector2f(0, 1));
 					break;
@@ -104,10 +161,11 @@ void TestScene::LoadFromText()
 				case '$': 
 				{
 					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
-					pPlatform->SetPosition((i * 204), (j * 192));
+					pPlatform->SetPosition((i * 200), (j * 200));
+					break;
 				}
-
-				case '1': {
+				case '1': 
+				{
 					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetTexture("TileMap", "Tile1_Top1");
 					pPlatform->SetPosition((i * 200), (j * 200));
@@ -283,62 +341,6 @@ void TestScene::LoadFromText()
 		}
 	}
 	
-	int k = 0;
-	std::ifstream worldProps("..\\..\\..\\src\\LightEngine\\props.txt", std::ios::in | std::ios::out);
-	if (worldProps)
-	{
-		std::string contenu;
-		while (std::getline(worldProps, contenu))  // tant que l'on peut mettre la ligne dans "contenu"
-		{
-			k += 1;
-			for (int i = 0; i < 100; i++) {
-				switch (contenu[i])
-				{
-				case 'A': {
-					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
-					props->SetTexture("Props1", "airs");
-					props->SetPosition((i * 200), (k * 200));
-					break;
-				}
-				case 'B': {
-					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
-					props->SetTexture("Props1", "signal");
-					props->SetPosition((i * 200), (k * 200));
-					break;
-				}
-				case 'V': {
-					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
-					props->SetTexture("Props1", "tentacle2");
-					props->SetPosition((i * 200), (k * 200));
-					break;
-				}
-				case 'T': {
-					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
-					props->SetTexture("Props1", "VineTentacle");
-					props->SetPosition((i * 200), (k * 200));
-					break;
-				}
-				case 'H': {
-					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
-					props->SetTexture("Props2", "Wind_turbine");
-					props->SetPosition((i * 200), (k * 200));
-					break;
-				}
-				case 'M': {
-					Props* props = CreateEntity<Props>(); // size.x = 204 size.y = 192 mais hitbox 200,200
-					props->SetTexture("Props2", "Mossy_turbine");
-					props->SetPosition((i * 200), (k * 200));
-					break;
-				}
-				default:
-					break;
-				}
-			}
-		}
-	}
-	else {
-		std::cout << "Impossible d'ouvrir le fichier !" << std::endl;
-	}
 }
 
 Player* TestScene::GetPlayer()

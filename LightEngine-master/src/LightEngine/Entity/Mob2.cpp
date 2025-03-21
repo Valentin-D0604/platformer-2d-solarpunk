@@ -119,8 +119,8 @@ void Mob2::OnUpdate()
 
 void Mob2::OnDestroy()
 {
-	int rando = rand() % 2;
-	if (rando == 0) return;
+	//int rando = rand() % 2;
+	//if (rando == 0) return;
 	Collectable* buff = CreateEntity<Collectable>();
 	buff->InitCollec(GetPosition(), { 0,1 }, this);
 	buff->SetMass(10);
@@ -156,7 +156,6 @@ float Mob2::GetDistanceToPlayer()
 
 void Mob2::TakeDamage(int _damage) {
 	m_life -= _damage;
-	std::cout << m_life;
 }
 
 void Mob2::ResetCollide() {

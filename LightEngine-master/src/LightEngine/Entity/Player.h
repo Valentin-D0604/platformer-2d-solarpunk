@@ -1,6 +1,8 @@
 #pragma once
 #include "PhysicsEntity.h"
 #include "Bullet.h"
+#include "Collectable.h"
+#include "HUD.h"
 #include "../Utils/StateMachine.h"
 
 #define MAX_SPEED 400
@@ -45,6 +47,7 @@ class Player : public PhysicsEntity
 	
 	Side m_sideCollider;
 
+	std::vector<HUD*> life;
 	StateMachine<Player>* m_pStateMachine;
 
 	enum State

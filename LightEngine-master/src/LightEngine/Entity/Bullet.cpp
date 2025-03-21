@@ -19,7 +19,6 @@ void Bullet::InitBullet(sf::Vector2f _position, sf::Vector2f _direction,Entity* 
 	Utils::Normalize(_direction);
 	m_pos = _position;
 	m_dir = _direction;
-	std::cout << m_dir.x << std::endl;
 	if (m_dir.x >= 0) { m_sprite->setScale(0.1, 0.1); }
 	if (m_dir.x < 0) { m_sprite->setScale(-0.1, 0.1);}
 	SetPosition(_position.x, _position.y);
