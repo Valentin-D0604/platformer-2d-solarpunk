@@ -16,19 +16,19 @@ void Overlay::OnUpdate()
 {
 	if (m_targetAlpha == 0)
 	{
-		m_currentAlpha -= (GET_MANAGER(GameManager)->GetDeltaTime() / m_outDuration);
+		m_currentAlpha -= 255 * (GET_MANAGER(GameManager)->GetDeltaTime() / m_outDuration);
 	}
 
-	else if (m_targetAlpha == 1)
+	else if (m_targetAlpha == 255)
 	{
-		m_currentAlpha += (GET_MANAGER(GameManager)->GetDeltaTime() / m_inDuration);
+		m_currentAlpha += 255 * (GET_MANAGER(GameManager)->GetDeltaTime() / m_inDuration);
 	}
 	
-	sf::Color color = sf::Color(100, 0, 0, m_currentAlpha);
+	sf::Color color = sf::Color(0, 0, 0, m_currentAlpha);
 	color.a = m_currentAlpha;
 	m_sprite->setColor(color);
 
-	if (m_nextOut && m_currentAlpha >= 1)
+	if (m_nextOut && m_currentAlpha >= 255)
 	{
 		m_targetAlpha = 0;
 	}
@@ -42,8 +42,6 @@ void Overlay::OnUpdate()
 		return;
 
 	SetPosition(m_player->GetPosition() + sf::Vector2f(-1000, -500));
-
-	std::cout << "Position: " << GetPosition().x << ", " << GetPosition().y << " // Opacity" << m_currentAlpha << "//" << color.a << std::endl;
 }
 
 void Overlay::SetPlayer(Entity* _player)
@@ -53,7 +51,7 @@ void Overlay::SetPlayer(Entity* _player)
 
 void Overlay::FadeIn(float _duration)
 {
-	m_targetAlpha = 1;
+	m_targetAlpha = 255;
 	m_inDuration = _duration;
 }
 
@@ -69,5 +67,5 @@ void Overlay::FadeInOut(float _inDuration, float _outDuration)
 	m_inDuration = _inDuration;
 	m_outDuration = _outDuration;
 
-	m_targetAlpha = 1;
+	m_targetAlpha = 255;
 }

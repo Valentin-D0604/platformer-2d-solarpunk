@@ -26,10 +26,10 @@ void TestScene::OnInitialize()
 
 	LoadFromText();
 
-	CreateBackgroundEntity<Background>()->SetPlayer(m_player);
-	m_overlay = CreateEntity<Overlay>(); 
-	m_overlay->SetPlayer(m_player);
-	m_overlay->FadeInOut(5, 5);
+	//CreateBackgroundEntity<Background>()->SetPlayer(m_player);
+	//m_overlay = CreateEntity<Overlay>(); 
+	//m_overlay->SetPlayer(m_player);
+	//m_overlay->FadeInOut(5, 5);
 }
 
 void TestScene::OnEvent(const sf::Event& event)
@@ -38,7 +38,6 @@ void TestScene::OnEvent(const sf::Event& event)
 
 void TestScene::OnUpdate()
 {
-
 	float fps = 1.f / GetDeltaTime();
 	std::cout << fps << std::endl;
 	if (m_player->IsAlive()) SetCameraCenter(m_player->GetPosition());
@@ -101,6 +100,7 @@ void TestScene::LoadFromText()
 				{
 					Platform* pPlatform = CreateEntity<Platform>(); // size.x = 204 size.y = 192 mais hitbox 200,200
 					pPlatform->SetPosition((i * 204), (j * 192));
+					break;
 				}
 
 				case '1': {

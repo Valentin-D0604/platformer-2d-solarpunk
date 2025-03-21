@@ -15,7 +15,6 @@ class Entity;
 class SpriteSheet: public Sprite
 {
 	Entity* m_entity;
-	sf::Texture* m_texture;
 	std::unordered_map<std::string, Animation*> m_animations;
 	std::unordered_map<std::string, sf::IntRect> m_sprites;
 	std::string m_animationName;

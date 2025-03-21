@@ -21,5 +21,6 @@ int main()
 
 	pInstance->Run();
 
+	delete GET_MANAGER(ResourceManager);
 	return 0;
 }

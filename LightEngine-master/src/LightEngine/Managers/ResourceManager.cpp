@@ -10,23 +10,26 @@ ResourceManager::ResourceManager() {
 	Resources::m_resources = this;
 }
 
-
 ResourceManager::~ResourceManager()
 {
 	m_Textures.erase(m_Textures.begin(), m_Textures.end());
 	m_Fonts.erase(m_Fonts.begin(), m_Fonts.end());
 	m_SoundBuffers.erase(m_SoundBuffers.begin(), m_SoundBuffers.end());
+	m_Musics.erase(m_Musics.begin(), m_Musics.end());
 }
 
 void ResourceManager::LoadTexture(std::string _name) {
 	AddTexture(_name, OS::getFileInDirectory(TEMP_RES_PATH, _name + ".png"));
 }
+
 void ResourceManager::UnloadTexture(std::string _name) {
 	m_Textures.erase(_name);
 }
+
 void ResourceManager::AddTexture(std::string _name, std::string _path) {
 	bool success = m_Textures[_name].loadFromFile(_path);
 }
+
 sf::Texture* ResourceManager::GetTexture(std::string _name) {
 	bool success = m_Textures.find(_name) != m_Textures.end();
 	if (!success) {

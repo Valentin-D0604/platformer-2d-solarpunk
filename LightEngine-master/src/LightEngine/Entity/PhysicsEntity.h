@@ -19,6 +19,7 @@ public:
 	bool IsColliding(StaticEntity* _other);
 	void Repulse(StaticEntity* _other);
 	virtual void OnCollision(Entity* _collidedWith) {};
+	virtual void Move(float _x, float _y) override;
 
 protected:
 	float m_gravityForce;
