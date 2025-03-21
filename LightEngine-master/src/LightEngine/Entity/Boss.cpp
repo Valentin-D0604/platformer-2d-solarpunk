@@ -138,6 +138,7 @@ void Boss::TakeDamage(int _damage)
 	m_hp -= _damage;
 	if (m_hp <= 0)
 	{
+		Debug::DrawText(GetPosition().x, GetPosition().y, "Boss is dead You Win", sf::Color::Red);
 		m_left->Destroy();
 		m_right->Destroy();
 		Destroy();
