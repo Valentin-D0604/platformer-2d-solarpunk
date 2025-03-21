@@ -24,7 +24,7 @@
 void TestScene::OnInitialize()
 {
 	CreateView();
-	SetCameraZoom(1);
+	SetCameraZoom(5);
 
 	LoadFromText();
 
@@ -125,7 +125,7 @@ void TestScene::LoadFromText()
 	}
 
 	int j = 0;
-	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\Map Legend.txt", std::ios::in | std::ios::out);
+	std::ifstream fichier("..\\..\\..\\src\\LightEngine\\MapLegend.txt", std::ios::in | std::ios::out);
 	if (fichier)
 	{
 		std::string contenu;
