@@ -183,7 +183,7 @@ void GameManager::FixedUpdate()
 	{
 		(*it1)->FixedUpdate();
 	}
-
+	int collisionCount = 0;
 	for (auto it1 = m_physicsEntities.begin(); it1 != m_physicsEntities.end(); ++it1)
 	{
 		auto it2 = it1;

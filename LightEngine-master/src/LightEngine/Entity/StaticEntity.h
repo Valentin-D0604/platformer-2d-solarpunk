@@ -9,6 +9,7 @@ protected:
 
 	virtual void OnInitialize() {};
 	virtual void OnCollision(Entity* _other) {};
+	virtual void Move(float _x, float _y) override;
 
 private:
 	virtual void FixedUpdate();

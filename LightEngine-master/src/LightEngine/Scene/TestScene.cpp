@@ -28,10 +28,10 @@ void TestScene::OnInitialize()
 
 	LoadFromText();
 
-	CreateBackgroundEntity<Background>()->SetPlayer(m_player);
-	m_overlay = CreateEntity<Overlay>(); 
-	m_overlay->SetPlayer(m_player);
-	m_overlay->FadeInOut(5, 5);
+	//CreateBackgroundEntity<Background>()->SetPlayer(m_player);
+	//m_overlay = CreateEntity<Overlay>(); 
+	//m_overlay->SetPlayer(m_player);
+	//m_overlay->FadeInOut(5, 5);
 }
 
 void TestScene::OnEvent(const sf::Event& event)
@@ -40,7 +40,6 @@ void TestScene::OnEvent(const sf::Event& event)
 
 void TestScene::OnUpdate()
 {
-
 	float fps = 1.f / GetDeltaTime();
 	
 	if (m_player->IsAlive())

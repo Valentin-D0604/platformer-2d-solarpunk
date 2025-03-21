@@ -11,6 +11,8 @@
 
 class ResourceManager : IResourceProvider{
 public:
+	~ResourceManager();
+
 	void LoadTexture(std::string _name);
 	void UnloadTexture(std::string _name);
 	sf::Texture* GetTexture(std::string _name);
@@ -33,7 +35,6 @@ public:
 
 private:
 	ResourceManager();
-	~ResourceManager();
 
 	std::map<std::string, sf::Texture> m_Textures;
 	std::map<std::string, sf::Font> m_Fonts;

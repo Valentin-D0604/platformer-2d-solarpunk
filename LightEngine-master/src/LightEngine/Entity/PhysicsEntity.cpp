@@ -11,8 +11,6 @@
 
 void PhysicsEntity::FixedUpdate()
 {
-	//float dt = GetDeltaTime();
-
 	float dt = 1.0f / 60.0f;
 
 	m_gravityForce += m_mass * dt * GRAVITATIONNAL_CONSTANT;
@@ -35,8 +33,6 @@ void PhysicsEntity::FixedUpdate()
 void PhysicsEntity::Update()
 {
 	m_sprite->Update();
-
-	//OnUpdate();
 
 	m_collider->Update();
 
@@ -73,7 +69,6 @@ void PhysicsEntity::Repulse(StaticEntity* _other)
 {
 	if (m_collider->GetShapeTag() == ShapeTag::rectangle)
 	{
-		m_collider->SetPosition(GetPosition());
 		sf::FloatRect movingBounds(m_collider->GetPosition(0, 0), m_collider->GetPosition(1, 1) - m_collider->GetPosition(0, 0));
 		sf::FloatRect staticBounds(_other->m_collider->GetPosition(0, 0), _other->m_collider->GetPosition(1, 1) - _other->m_collider->GetPosition(0, 0));
 
@@ -97,7 +92,12 @@ void PhysicsEntity::Repulse(StaticEntity* _other)
 		{
 			Move(0, fromTop ? -minOverlapY : minOverlapY);
 		}
-		m_collider->SetPosition(GetPosition());
 	}
+}
+
+void PhysicsEntity::Move(float _x, float _y)
+{
+	Entity::Move(_x, _y);
+	m_collider->SetPosition(GetPosition());
 }
 
