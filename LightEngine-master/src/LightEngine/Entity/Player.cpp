@@ -1,5 +1,6 @@
 #include "../Entity/Player.h"
 #include "../Collision/RectangleCollider.h"
+#include "HUD.h"
 
 #include "../Actions/PlayerAction.h"
 
@@ -46,7 +47,6 @@ void Player::OnInitialize() {
 
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	m_collider = new RectangleCollider(pos, {100, 100});
-	m_collider->SetGizmo(true);
 	m_physicsCollision = true;
 
 	m_pStateMachine = new StateMachine<Player>(this, State::Count);
@@ -60,6 +60,14 @@ void Player::OnInitialize() {
 	Action<Player>* pLand = m_pStateMachine->CreateAction<PlayerAction_Landing>(State::land);
 
     m_pStateMachine->SetState(State::idle);
+
+	for (int i = 0; i < m_life; i++) {
+		HUD* hud = CreateEntity<HUD>();
+	//	hud->SetPosition(GetPosition().x, GetPosition().y - 300);
+		hud->InitText("Pv_Full", { GetPosition().x + (200 * i), GetPosition().y - 300 });
+		hud->SetPos(i);
+		life.push_back(hud);
+	}
 }
 
 void Player::OnCollision(Entity* other)
@@ -140,7 +148,22 @@ const char* Player::GetStateName(State state) const
 }
 
 void Player::TakeDamage(int damage) {
-	m_life -= damage;
+	if (this == nullptr) return;
+	if (damage > 0) {
+		for (int x = 0; x < damage; x++) {
+			m_life -= damage;
+			life[m_life]->Destroy();
+		}
+	}
+	else {
+		m_life -= damage;
+		for (int i = 0; i < damage; i++) {
+			HUD* hud = CreateEntity<HUD>();
+			hud->InitText("Pv_Full", { GetPosition().x + (200 * (i+m_life)), GetPosition().y - 300 });
+			hud->SetPos((i+m_life));
+			life.push_back(hud);
+		}
+	}
 }
 
 void Player::AddBuff(int bonus)
@@ -148,13 +171,13 @@ void Player::AddBuff(int bonus)
 	if (m_life < m_maxLife && m_ammo < m_maxAmmo) {
 		int buff = rand() % 2;
 		if (buff == 0) m_ammo += bonus;
-		if (buff == 1) m_life += bonus;
+		if (buff == 1) TakeDamage(-1);
 	}
 	else if(m_life > m_maxLife && m_ammo < m_maxAmmo) {
 		m_ammo += bonus;
 	}
 	else if (m_ammo > m_maxAmmo && m_life < m_maxLife) {
-		m_life += bonus;
+		TakeDamage(-1);
 	}
 	else {
 		return;
@@ -185,11 +208,18 @@ void Player::HandleInput()
 	bool R2 = BOUTON_R2;
 	bool L2 = BOUTON_L2;
 	bool R1 = BOUTON_R1;
-
+	bool O = BOUTON_O;
+	bool T = BOUTON_T;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || joystickX > PositiveJoystickSensibility) {
 		inputX = 1.0f;
 		m_lastDir = { 1,0 };
 		CheckState(State::walking);
+	}
+	if (O) {
+			dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("land");
+	}
+	if (T) {
+		 dynamic_cast<SpriteSheet*>(m_sprite)->SetAnimation("idle");
 	}
 	 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || joystickX < -PositiveJoystickSensibility) {
 		inputX = -1.0f;
@@ -311,7 +341,6 @@ void Player::OnUpdate() {
 	if (!m_isAlive) return;
 	sf::Vector2f pos = GetPosition();
 	float dt = GetDeltaTime();
-
 	PlayerCheckCollision();
 	DecreaseCD(dt);
 	CheckPlayerStates();
@@ -319,9 +348,6 @@ void Player::OnUpdate() {
 	PlayerMove();
 	m_pStateMachine->Update();
 	const char* stateName = GetStateName((Player::State)m_pStateMachine->GetCurrentState());
-	std::string life = std::to_string(m_life);
-	Debug::DrawText(GetPosition().x, GetPosition().y - 175, stateName, 1.f, 1.f, sf::Color::Red);
-	Debug::DrawText(GetPosition().x, GetPosition().y - 225, life, 0.5f, 0.5f, sf::Color::Red);
 	ResetCollide();
 }
 

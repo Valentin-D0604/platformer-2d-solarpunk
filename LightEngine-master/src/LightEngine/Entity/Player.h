@@ -1,6 +1,8 @@
 #pragma once
 #include "PhysicsEntity.h"
 #include "Bullet.h"
+#include "Collectable.h"
+#include "HUD.h"
 #include "../Utils/StateMachine.h"
 
 #define MAX_SPEED 400
@@ -34,6 +36,7 @@ class Player : public PhysicsEntity
 	float m_jumpCooldown = 0.f;
 	float m_realoadTime = 2.f;
 	float m_landDuration = 1.f;
+	float m_TbagTime = 0.2f;
 	float m_parryTime = PARRY_DURATION;
 	//-----------abilities--------	
 	bool m_Parrying = false;
@@ -44,6 +47,7 @@ class Player : public PhysicsEntity
 	
 	Side m_sideCollider;
 
+	std::vector<HUD*> life;
 	StateMachine<Player>* m_pStateMachine;
 
 	enum State

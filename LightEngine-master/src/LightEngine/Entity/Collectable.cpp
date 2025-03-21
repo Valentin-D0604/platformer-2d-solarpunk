@@ -23,10 +23,11 @@ void Collectable::InitCollec(sf::Vector2f position, sf::Vector2f direction, Enti
 void Collectable::OnInitialize() {
 	m_sprite = new Sprite();
 	m_sprite->setTexture(*(GET_MANAGER(ResourceManager)->GetTexture("collectable")));
-
+	m_sprite->setScale(0.025, 0.025);
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
 	m_collider = new RectangleCollider(pos, size);
+	m_physicsCollision = true;
 	SetTag(TestScene::Tag::PowerUp);
 }
 
@@ -37,9 +38,6 @@ void Collectable::OnUpdate() {
 
 void Collectable::OnCollision(Entity* other) {
 	Player* player = dynamic_cast<Player*>(other);
-	if (other->IsTag(TestScene::Tag::player)) {
-		if (other != m_caster && !player->IsParry()) player->TakeDamage(1); // playe take damage
-	}
 	if (other != m_caster && other->IsTag(TestScene::Tag::player)) {
 		player->AddBuff(1);
 		Destroy();

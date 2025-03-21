@@ -2,6 +2,7 @@
 #include "../Scene/TestScene.h"
 #include "../Entity/Player.h"
 #include "../Entity/Bullet.h"
+#include "../Graphics/SpriteSheet.h"
 
 #include "../Utils/Utils.h"
 
@@ -9,6 +10,8 @@
 //-----------------------------------------walking-------------------------
 void Mob3Action_Walking::OnStart(Mob3* _owner)
 {
+	if (_owner->m_canExplode) dynamic_cast<SpriteSheet*>(_owner->m_sprite)->SetAnimation("stumble");
+	else dynamic_cast<SpriteSheet*>(_owner->m_sprite)->SetAnimation("walk");
 }
 
 void Mob3Action_Walking::OnUpdate(Mob3* _owner)
@@ -28,6 +31,8 @@ void Mob3Action_Walking::OnEnd(Mob3* _owner)
 //----------------------------------------Chasing-------------------------
 void Mob3Action_Chasing::OnStart(Mob3* _owner)
 {
+	if (_owner->m_canExplode) dynamic_cast<SpriteSheet*>(_owner->m_sprite)->SetAnimation("stumble");
+	else dynamic_cast<SpriteSheet*>(_owner->m_sprite)->SetAnimation("walk");
 }
 
 void Mob3Action_Chasing::OnUpdate(Mob3* _owner)
@@ -45,6 +50,7 @@ void Mob3Action_Chasing::OnEnd(Mob3* _owner)
 //-----------------------------------------Attacking-------------------------
 void Mob3Action_Attacking::OnStart(Mob3* _owner)
 {
+	if (!_owner->m_canExplode)dynamic_cast<SpriteSheet*>(_owner->m_sprite)->SetAnimation("attack");
 }
 
 void Mob3Action_Attacking::OnUpdate(Mob3* _owner)

@@ -21,7 +21,7 @@ void Explode::OnInitialize()
 
 	SpriteSheet* spriteSheet = new SpriteSheet(this, GET_MANAGER(ResourceManager)->GetSpriteSheet("FX"));
 
-	dynamic_cast<SpriteSheet*>(spriteSheet)->SetAnimation("explosion"); //spriteSheet->SetAnimation("explosion");
+	spriteSheet->SetAnimation("explosion");
 
 	m_sprite = spriteSheet;
 
@@ -56,8 +56,10 @@ void Explode::OnCollision(Entity* _other)
 
 void Explode::OnUpdate()
 {
-	m_duration -= GetDeltaTime();
-	if (m_duration <= 0) {
-		Destroy();
-	}
+}
+
+
+void Explode::OnAnimationEnd(const std::string& _animationIndex)
+{
+	Destroy();
 }

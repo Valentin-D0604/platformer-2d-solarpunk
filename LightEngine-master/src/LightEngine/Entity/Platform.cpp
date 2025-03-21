@@ -31,5 +31,4 @@ void Platform::SetTexture(const char* _spritesheet,const char* _sprite)
 	sf::Vector2f size = sf::Vector2f(m_sprite->getTexture()->getSize());
 	sf::Vector2 pos = GetPosition();
 	m_collider = new RectangleCollider({ pos.x, pos.y }, { 200, 200 });
-	m_collider->SetGizmo(true);
 }

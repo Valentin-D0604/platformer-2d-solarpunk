@@ -9,7 +9,7 @@ class Bullet : public PhysicsEntity
 	float m_speed = 500.f;
 	float m_changeDirection = 0.f;
 	float m_lifeTime = 5.f;
-	float m_spawnTime = 1.f;
+	float m_spawnTime = 0.5f;
 public:
 	void InitBullet(sf::Vector2f _position,sf::Vector2f _direction,Entity* _caster);
 	void OnInitialize() override;

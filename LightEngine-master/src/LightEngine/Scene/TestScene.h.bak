@@ -15,8 +15,12 @@ class TestScene : public Scene
 {
 public:
 
+<<<<<<< HEAD
+	Player* pEntity1;
 	DummyEntity* pEntity2;
+=======
 	Player* m_player;
+>>>>>>> dev
 
 	Overlay* m_overlay;
 

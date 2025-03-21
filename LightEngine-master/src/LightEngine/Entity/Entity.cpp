@@ -29,8 +29,9 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 	sf::IntRect rect = m_sprite->getTextureRect();
 	sf::Vector2f size = sf::Vector2f(rect.width , rect.height);
 
-	x -= size.x * ratioX;
-	y -= size.y * ratioY;
+	sf::Vector2f spriteScale = m_sprite->getScale();
+	x -= size.x * ratioX * spriteScale.x;
+	y -= size.y * ratioY * spriteScale.y;
 
 	m_sprite->setPosition(x, y);
 
@@ -75,8 +76,9 @@ sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 	sf::Vector2f size = sf::Vector2f(m_sprite->getTextureRect().width , m_sprite->getTextureRect().height);
 	sf::Vector2f position = m_sprite->getPosition();
 
-	position.x += size.x * ratioX;
-	position.y += size.y * ratioY;
+	sf::Vector2f spriteScale = m_sprite->getScale();
+	position.x += size.x * ratioX * spriteScale.x;
+	position.y += size.y * ratioY * spriteScale.y;
 
 	return position;
 }
