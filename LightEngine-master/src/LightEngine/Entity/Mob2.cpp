@@ -25,7 +25,6 @@ void Mob2::OnInitialize()
 	sf::Vector2f pos = GetPosition(0.5,0.5);
 	m_collider = new RectangleCollider(pos, { 102,96 });
 	m_pStateMachine = new StateMachine<Mob2>(this, State::Count);
-	m_collider->SetGizmo(true);
 	m_physicsCollision = true;
 	//idle
 	{

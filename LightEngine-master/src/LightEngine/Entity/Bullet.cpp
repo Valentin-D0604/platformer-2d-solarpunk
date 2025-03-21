@@ -30,7 +30,6 @@ void Bullet::OnInitialize() {
 	sf::Vector2f pos = { GetPosition().x,GetPosition().y };
 	sf::Vector2f size = { 50,50 };
 	m_collider = new RectangleCollider(pos, size);
-	m_collider->SetGizmo(true);
 	SetTag(TestScene::Tag::bullet);
 }
 

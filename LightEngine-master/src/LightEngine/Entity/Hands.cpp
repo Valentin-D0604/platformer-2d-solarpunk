@@ -101,5 +101,4 @@ void Hand::SetOwner(Boss* _owner)
         SetPosition(GetPosition().x + 411, GetPosition().y + 302);
     }
     m_collider = new RectangleCollider(GetPosition(), { 100, 100 });
-    m_collider->SetGizmo(true);
 }
