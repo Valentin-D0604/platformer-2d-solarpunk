@@ -12,6 +12,7 @@ class Mob1 : public PhysicsEntity
 	float m_shootCooldown = 2.f;
 	float m_walkingTimer = 3.f;
 	//------------------------
+
 	StateMachine<Mob1>* m_pStateMachine;
 	Side m_sideCollider;
 	enum State
